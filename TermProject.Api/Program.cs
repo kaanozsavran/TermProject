@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using TermProject.Api.Data;
+using TermProject.Api.Services;
+using TermProject.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +46,7 @@ options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 });
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IUserService, UserService>(); // UserService entegresi.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
