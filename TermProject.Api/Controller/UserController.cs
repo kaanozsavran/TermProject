@@ -17,7 +17,7 @@ namespace TermProject.Api.Controller
             _userService = userService;
         }
 
-        [HttpPost("login")]
+        [HttpPost("login")] //for login
         public IActionResult Login([FromBody] LoginRequestDTO loginRequestDTO)
         {
 

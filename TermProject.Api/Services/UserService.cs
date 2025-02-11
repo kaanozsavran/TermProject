@@ -16,7 +16,7 @@ namespace TermProject.Api.Services
         public UserService(NotelandDbContext dbcontext, IConfiguration configuration)
         {
             _dbcontext = dbcontext;
-            secretkey = configuration.GetValue<string>("JwtSettings:SecretKey");
+            secretkey = configuration.GetValue<string>("JwtSettings:SecretKey"); //JWT 
         }
 
         public LoginResponseDTO Login(LoginRequestDTO loginRequestDTO)
