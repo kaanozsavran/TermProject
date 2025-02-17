@@ -49,6 +49,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>(); // UserService entegresi.
 builder.Services.AddScoped<IUniversityService, UniversityService>(); // UniversityService entegresi.
 builder.Services.AddScoped<IFacultyService, FacultyService>(); // FacultyService entegresi.
+builder.Services.AddScoped<IDepartmentService, DepartmentService>(); // DepartmentService entegresi.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

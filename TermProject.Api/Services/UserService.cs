@@ -112,7 +112,7 @@ namespace TermProject.Api.Services
                 FacultyID = await GetFacultyIDByNameAsync(registerRequestDTO.FacultyName),
                 DepartmentID = await GetDepartmentIDByNameAsync(registerRequestDTO.DepartmentName),
                 Role = "student"
-            };
+            };  
 
             await _dbcontext.AddAsync(user);
             await _dbcontext.SaveChangesAsync();
