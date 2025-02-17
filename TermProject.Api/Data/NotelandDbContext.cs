@@ -11,13 +11,13 @@ namespace TermProject.Api.Data
         {
         }
 
-        public DbSet<Courses> CoursesModel { get; set; }
-        public DbSet<Departments> DepartmentsModel { get; set; }
+        public DbSet<Courses> Courses { get; set; }
+        public DbSet<Departments> Departments { get; set; }
 
-        public DbSet<Faculties> FacultiesModel { get; set; }
-        public DbSet<Notes> NotesModel { get; set; }
-        public DbSet<Universities> UniversitiesModel { get; set; }
-        public DbSet<Users> UsersModel { get; set; }
+        public DbSet<Faculties> Faculties { get; set; }
+        public DbSet<Notes> Notes { get; set; }
+        public DbSet<Universities> Universities { get; set; }
+        public DbSet<Users> Users { get; set; }
 
     }
 }

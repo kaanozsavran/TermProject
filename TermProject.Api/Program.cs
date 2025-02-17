@@ -47,6 +47,7 @@ options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>(); // UserService entegresi.
+builder.Services.AddScoped<IUniversityService, UniversityService>(); // UniversityService entegresi.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

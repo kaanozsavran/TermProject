@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TermProject.Api.Models.DTO;
+using TermProject.Api.Models.DTO.UserDTO;
 using TermProject.Api.Services;
 using TermProject.Api.Services.Interfaces;
 
@@ -18,10 +18,9 @@ namespace TermProject.Api.Controller
         }
 
         [HttpPost("login")] //for login
-        public IActionResult Login([FromBody] LoginRequestDTO loginRequestDTO)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
         {
-
-            var loginResponse = _userService.Login(loginRequestDTO);
+            var loginResponse = await _userService.Login(loginRequestDTO); // await ekleyin
 
             if (string.IsNullOrEmpty(loginResponse.Token))
             {
@@ -29,6 +28,13 @@ namespace TermProject.Api.Controller
             }
 
             return Ok(loginResponse);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDTO registerRequestDTO)
+        {
+            var user = await _userService.Register(registerRequestDTO);
+            return Ok(user);
         }
     }
 }

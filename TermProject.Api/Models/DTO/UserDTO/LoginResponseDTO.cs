@@ -1,4 +1,4 @@
-﻿namespace TermProject.Api.Models.DTO
+﻿namespace TermProject.Api.Models.DTO.UserDTO
 {
     public class LoginResponseDTO
     {

@@ -12,7 +12,7 @@ namespace TermProject.Api.Models
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public string Role { get; set; }
-        public bool IsUniversityStudent { get; set; }
+        
         [ForeignKey("Universities")]
         public int UniversityID { get; set; }
         [ForeignKey("Faculties")]

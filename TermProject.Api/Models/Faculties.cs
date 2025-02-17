@@ -9,7 +9,5 @@ namespace TermProject.Api.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int FacultyID { get; set; }
         public string FacultyName { get; set; }
-        [ForeignKey("Universities")]
-        public int UniversityID { get; set; }
     }
 }
