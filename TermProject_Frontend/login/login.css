@@ -1,0 +1,65 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.left-banner {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-right: 0%;
+    /* Sağa doğru taşma ekler */
+}
+
+.left-banner img {
+    max-width: 80%;
+    height: auto;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.password-toggle {
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    padding: 5px;
+    z-index: 10;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.forgot-password {
+    color: black;
+    /* Yazı rengi siyah */
+    text-decoration: none;
+    /* Altındaki çizgi rengi kalksın */
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+    /* Üzerine gelindiğinde altını çizebilir */
+}
+
+
+.sloganphoto {
+    width: 115% !important;
+    /* Görseli biraz büyüt */
+    height: 100%;
+    object-fit: cover;
+}
