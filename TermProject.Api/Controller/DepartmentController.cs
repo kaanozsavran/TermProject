@@ -16,7 +16,7 @@ namespace TermProject.Api.Controller
             _departmentService = departmentService;
         }
 
-        [HttpGet("faculty/{facultyId}")]
+        [HttpGet("faculty/{facultyId}")] //faculty id'ya bağlı department çekebilmek için.
         public async Task<IActionResult> GetDepartmentsByFacultyId(int facultyId)
         {
             var department =await _departmentService.GetDepartmentsByFacultyId(facultyId);
