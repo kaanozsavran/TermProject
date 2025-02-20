@@ -5,11 +5,10 @@ body {
 .left-banner {
     height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     overflow: hidden;
-    margin-right: 0%;
-    /* Sağa doğru taşma ekler */
+
 }
 
 .left-banner img {
@@ -29,8 +28,8 @@ body {
 .sloganphoto {
     width: 115% !important;
     /* Görseli biraz büyüt */
-    height: 100%;
-    object-fit: cover;
+    height: 100vh !important;
+    object-fit: fill;
 }
 
 .password-toggle {
@@ -53,21 +52,15 @@ body {
 
 .forgot-password {
     color: black;
-    /* Yazı rengi siyah */
     text-decoration: none;
-    /* Altındaki çizgi rengi kalksın */
 }
 
 .forgot-password:hover {
     text-decoration: underline;
-    /* Üzerine gelindiğinde altını çizebilir */
 }
-
-
 
 .register:hover {
     text-decoration: underline !important;
-    /* Üzerine gelindiğinde altını çizebilir */
 }
 
 .loginButton:hover {
