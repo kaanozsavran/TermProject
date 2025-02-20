@@ -14,7 +14,7 @@ namespace TermProject.Api.Controller
         {
             _courseService = courseService;
         }
-        [HttpGet("department/{departmentId}")] //Department id'ya bağlı dersleri çekebilmek için.
+        [HttpGet("department/{departmantId}")] //Department id'ya bağlı dersleri çekebilmek için.
         public async Task<IActionResult> GetCourseList(int departmantId) 
         {
             var courses = await _courseService.GetCourseList(departmantId);

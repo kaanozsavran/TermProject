@@ -119,5 +119,120 @@ namespace TermProject.Api.Services
             return user;
         }
 
+        public async Task DeleteAccount(int id)
+        {
+            var user = await _dbcontext.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                throw new Exception("Kullanıcı bulunamadı.");
+            }
+
+            _dbcontext.Users.Remove(user);
+            await _dbcontext.SaveChangesAsync();
+        }
+
+        public async Task<string> GetUniversityNameByIDAsync(int id)
+        {
+            var university = await _dbcontext.Universities.FirstOrDefaultAsync(u => u.UniversityID == id);
+            if (university != null)
+            {
+                return university.UniversityName;
+            }
+            else
+            {
+                throw new ArgumentException("University ID is not found!", nameof(id));
+            }
+        }
+
+        public async Task<string> GetFacultyNameByIDAsync(int id)
+        {
+            var faculty = await _dbcontext.Faculties.FirstOrDefaultAsync(f => f.FacultyID == id);
+            if (faculty != null)
+            {
+                return faculty.FacultyName;
+            }
+            else
+            {
+                throw new ArgumentException("Faculty ID is not found!", nameof(id));
+            }
+        }
+
+        public async Task<string> GetDepartmentNameByIDAsync(int id)
+        {
+            var department = await _dbcontext.Departments.FirstOrDefaultAsync(d => d.DepartmentID == id);
+            if (department != null)
+            {
+                return department.DepartmentName;
+            }
+            else
+            {
+                throw new ArgumentException("Department ID is not found!", nameof(id));
+            }
+        }
+
+        public async Task<UserInformationDTO> GetUserById(int userid)
+        {
+            var user = _dbcontext.Users.Find(userid);
+            if (user == null)
+            {
+                throw new Exception("Kullanıcı bulunamadı.");
+            }
+            UserInformationDTO userinfo = new UserInformationDTO
+            {
+                FullName = user.FullName,
+                Email = user.Email,
+                DepartmentName = await GetDepartmentNameByIDAsync(user.DepartmentID),
+                FacultyName = await GetFacultyNameByIDAsync(user.FacultyID),
+                UniversityName = await GetUniversityNameByIDAsync(user.UniversityID)
+
+            };
+            if(userinfo == null)
+            {
+                throw new ArgumentException("Kullanıcı bilgileri bulunamadı.", nameof(userinfo));
+            }
+            return userinfo;
+        }
+
+        public async Task UpdateUserInfo(int userid, UserUpdateInfoDTO dto)
+        {
+            var user = await _dbcontext.Users.FindAsync(userid);
+            if (user == null)
+            {
+                throw new Exception("Kullanıcı bulunamadı.");
+            }
+
+            // Full Name ve Email güncelleme
+            user.FullName = dto.FullName;
+            user.Email = dto.Email;
+
+            // Şifre kontrolü (Eğer şifreler eşleşmiyorsa hata fırlat)
+            if (!string.IsNullOrEmpty(dto.Password) && dto.Password == dto.PasswordAgain)
+            {
+                user.PasswordHash = dto.Password; // Gerçek projede hashleme eklemelisin!
+            }
+            else if (!string.IsNullOrEmpty(dto.Password) || !string.IsNullOrEmpty(dto.PasswordAgain))
+            {
+                throw new Exception("Şifreler uyuşmuyor!");
+            }
+
+            // Üniversite ID'sini bulma
+            var universityId = await GetUniversityIDByNameAsync(dto.UniversityName);
+
+            // Fakülte ID'sini bulma
+            var facultyId = await GetFacultyIDByNameAsync(dto.FacultyName);
+
+            // Bölüm ID'sini bulma
+            var departmentId = await GetDepartmentIDByNameAsync(dto.DepartmentName);
+
+            // Üniversite, Fakülte ve Bölüm ID'lerini kullanıcıya ata
+            user.UniversityID = universityId;
+            user.FacultyID = facultyId;
+            user.DepartmentID = departmentId;
+
+            // Değişiklikleri kaydet
+            await _dbcontext.SaveChangesAsync();
+        }
+
     }
 }

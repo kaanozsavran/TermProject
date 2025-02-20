@@ -36,5 +36,23 @@ namespace TermProject.Api.Controller
             var user = await _userService.Register(registerRequestDTO);
             return Ok(user);
         }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+             await _userService.DeleteAccount(id);
+            return Ok("Hesabınız başarıyla silindi!");
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetUserInfo(int userid)
+        {
+           var userinfo =  await _userService.GetUserById(userid);
+            return Ok(userinfo);
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateUserInfo(int userid, [FromBody] UserUpdateInfoDTO userUpdateDTO)
+        {
+            await _userService.UpdateUserInfo(userid, userUpdateDTO);
+            return Ok("Kullanıcı bilgileriniz başarıyla güncellendi!");
+        }
     }
 }

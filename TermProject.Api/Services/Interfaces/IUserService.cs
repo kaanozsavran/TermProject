@@ -7,6 +7,10 @@ namespace TermProject.Api.Services.Interfaces
     {
         public Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO);
         public Task<Users> Register(RegisterRequestDTO registerRequestDTO);
+        public Task DeleteAccount(int id);
+
+        public Task<UserInformationDTO> GetUserById(int userid);
+        public Task UpdateUserInfo(int userid, UserUpdateInfoDTO dto);
 
     }
 }
