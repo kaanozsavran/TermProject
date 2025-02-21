@@ -8,6 +8,17 @@ using TermProject.Api.Services;
 using TermProject.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
+// CORS politikasýný tanýmla
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.WithOrigins("http://127.0.0.1:5500")  // Frontend URL'sini buraya yaz
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 // Add services to the container.
 builder.Services.AddDbContext<NotelandDbContext>(option => // DbContext entegre
@@ -86,6 +97,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowSpecificOrigin"); // CORS'u aktif et
+
 app.UseAuthentication(); // Authentication
 app.UseAuthorization();
 
