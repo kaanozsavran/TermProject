@@ -85,27 +85,6 @@ function fetchDepartments(facultyId) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function togglePassword() {
     const passwordInput = document.getElementById("password");
     const toggleIcon = document.getElementById("toggleIcon");
@@ -118,5 +97,43 @@ function togglePassword() {
         passwordInput.type = "password";
         toggleIcon.classList.remove("bi-eye");
         toggleIcon.classList.add("bi-eye-slash");
+    }
+}
+// Şifreleri doğrulama fonksiyonu
+function validatePasswords() {
+    const password = document.getElementById("password").value;
+    const passwordAgain = document.getElementById("passwordAgain").value;
+    const passwordError = document.getElementById("passwordError");
+
+    // İkinci şifre alanı boş değilse kontrol et
+    if (passwordAgain) {
+        if (password !== passwordAgain) {
+            passwordError.style.display = "block"; // Hata mesajını göster
+        } else {
+            passwordError.style.display = "none"; // Hata mesajını gizle
+        }
+    } else {
+        passwordError.style.display = "none"; // İkinci şifre alanı boşsa hata mesajını gizle
+    }
+
+}
+
+// İlk şifre alanında her değişiklikte doğrulamayı yap
+document.getElementById("password").addEventListener("input", validatePasswords);
+document.getElementById("passwordAgain").addEventListener("input", validatePasswords);
+
+
+function togglePasswordAgain() {
+    const passwordAgainInput = document.getElementById("passwordAgain");
+    const toggleIconAgain = document.getElementById("toggleIconAgain");
+
+    if (passwordAgainInput.type === "password") {
+        passwordAgainInput.type = "text";
+        toggleIconAgain.classList.remove("bi-eye-slash");
+        toggleIconAgain.classList.add("bi-eye");
+    } else {
+        passwordAgainInput.type = "password";
+        toggleIconAgain.classList.remove("bi-eye");
+        toggleIconAgain.classList.add("bi-eye-slash");
     }
 }

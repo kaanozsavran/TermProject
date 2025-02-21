@@ -55,9 +55,11 @@
                                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                 <input type="password" class="form-control" id="passwordAgain"
                                     placeholder="Şifrenizi tekrardan giriniz." required>
-                                <button class="password-toggle" type="button" onclick="togglePassword()">
-                                    <i id="toggleIcon" class="bi bi-eye-slash"></i>
+                                <button class="password-toggle" type="button" onclick="togglePasswordAgain()">
+                                    <i id="toggleIconAgain" class="bi bi-eye-slash"></i>
                                 </button>
+                            </div>
+                            <div id="passwordError" class="text-danger" style="display: none;">Şifreler eşleşmiyor!
                             </div>
                         </div>
                         <div class="mb-3">
@@ -89,7 +91,8 @@
                             style="background-color: #42999b; color: white; font-weight: bold;">Kayıt Ol</button>
                         <div class="text-center mt-3">
                             <span>Zaten hesabın var mı? </span>
-                            <a href="#" class="fw-bold login" style="text-decoration: none; color: #42999b;">Giriş
+                            <a href="../login/login.html" class="fw-bold login"
+                                style="text-decoration: none; color: #42999b;">Giriş
                                 Yap</a>
                         </div>
                     </form>
