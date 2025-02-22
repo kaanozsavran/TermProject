@@ -69,7 +69,7 @@ body {
     /* Yükseklik merkezle */
     left: 50%;
     /* Genişlik merkezle */
-    transform: translate(-120%, 150%);
+    transform: translate(-143%, 160%);
     /* Butonu ortalamak için */
     background-color: #42999b;
     /* Buton arka plan rengi */
@@ -78,14 +78,16 @@ body {
     border: none;
     /* Kenar çizgisi yok */
     padding: 10px 20px;
+    text-decoration: none;
+    /* Alt çizgiyi kaldır */
     /* İç boşluk */
     font-size: 18px;
     /* Yazı boyutu */
-    width: 200px;
+    width: 165px;
     /* Genişliği artırın (örneğin 200px olarak ayarlayın) */
-    height: 60px;
+    height: 50px;
     /* Yükseklik (istenen değeri ayarlayın) */
-    border-radius: 5px;
+    border-radius: 8px;
     /* Kenar yuvarlama (istenen değeri ayarlayın) */
     font-weight: bolder;
     cursor: pointer;
