@@ -34,3 +34,65 @@ body {
     color: white;
     /* Hover durumunda metin rengi */
 }
+
+.slogan-section {
+    position: relative;
+    width: 100%;
+    /* Genişliği %100 yap */
+    height: 400px;
+    /* İsteğe bağlı olarak yüksekliği ayarlayın */
+    overflow: hidden;
+    /* Taşma durumunu gizlemek için */
+}
+
+.banner {
+    position: absolute;
+    /* Konumlandırmayı kesinleştir */
+    top: 50%;
+    /* Yüksekliğin ortasında konumlandır */
+    left: 50%;
+    /* Genişliğin ortasında konumlandır */
+    width: 100%;
+    /* Genişliği %100 yap */
+    height: 100%;
+    /* Yüksekliği %100 yap */
+    object-fit: cover;
+    /* Görselin orantılı olarak kaplamasını sağlar */
+    transform: translate(-50%, -50%);
+    /* Görseli ortalamak için */
+}
+
+.explore-btn {
+    position: absolute;
+    /* Butonu tam görselin üzerine yerleştirmek için */
+    top: 50%;
+    /* Yükseklik merkezle */
+    left: 50%;
+    /* Genişlik merkezle */
+    transform: translate(-120%, 150%);
+    /* Butonu ortalamak için */
+    background-color: #42999b;
+    /* Buton arka plan rengi */
+    color: white;
+    /* Yazı rengi */
+    border: none;
+    /* Kenar çizgisi yok */
+    padding: 10px 20px;
+    /* İç boşluk */
+    font-size: 18px;
+    /* Yazı boyutu */
+    width: 200px;
+    /* Genişliği artırın (örneğin 200px olarak ayarlayın) */
+    height: 60px;
+    /* Yükseklik (istenen değeri ayarlayın) */
+    border-radius: 5px;
+    /* Kenar yuvarlama (istenen değeri ayarlayın) */
+    font-weight: bolder;
+    cursor: pointer;
+    /* İşaretçi değişimi */
+}
+
+.explore-btn:hover {
+    background-color: #2b7a7c;
+    /* Üzerine gelince arka plan rengi değişimi */
+}
