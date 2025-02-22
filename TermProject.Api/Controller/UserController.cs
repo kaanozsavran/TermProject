@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TermProject.Api.Models.DTO.UserDTO;
 using TermProject.Api.Services;
@@ -18,6 +19,7 @@ namespace TermProject.Api.Controller
         }
 
         [HttpPost("login")] //for login
+
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
         {
             var loginResponse = await _userService.Login(loginRequestDTO); // await ekleyin
@@ -29,6 +31,43 @@ namespace TermProject.Api.Controller
 
             return Ok(loginResponse);
         }
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
+        //{
+        //    if (loginRequestDTO == null || string.IsNullOrEmpty(loginRequestDTO.Email) || string.IsNullOrEmpty(loginRequestDTO.Password))
+        //    {
+        //        return BadRequest("Geçersiz giriş bilgileri.");
+        //    }
+
+        //    var response = await _userService.Login(loginRequestDTO);
+
+        //    if (response.APIUser == null)
+        //    {
+        //        return Unauthorized("Kullanıcı adı veya şifre hatalı.");
+        //    }
+
+        //    // Başarılı giriş sonrası kullanıcı bilgileri ve token döndürülüyor
+        //    return Ok(new
+        //    {
+        //        User = response.APIUser,
+        //        Message = "Giriş başarılı."
+        //    });
+        //}
+        //[HttpGet("check-session")]
+        //public IActionResult CheckSession()
+        //{
+        //    // Token cookie'sinin varlığını kontrol et
+        //    if (Request.Cookies.ContainsKey("token"))
+        //    {
+        //        // Cookie mevcut
+        //        return Ok(new { message = "Oturum aktif." });
+        //    }
+        //    else
+        //    {
+        //        // Cookie yok
+        //        return Unauthorized(new { message = "Oturum kapalı." });
+        //    }
+        //}
 
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDTO registerRequestDTO)
@@ -37,18 +76,23 @@ namespace TermProject.Api.Controller
             return Ok(user);
         }
         [HttpDelete]
+        [Authorize]
         public async Task<IActionResult> DeleteUser(int id)
         {
              await _userService.DeleteAccount(id);
             return Ok("Hesabınız başarıyla silindi!");
         }
         [HttpGet]
+        [Authorize]
+
         public async Task<IActionResult> GetUserInfo(int userid)
         {
            var userinfo =  await _userService.GetUserById(userid);
             return Ok(userinfo);
         }
         [HttpPut]
+        [Authorize]
+
         public async Task<IActionResult> UpdateUserInfo(int userid, [FromBody] UserUpdateInfoDTO userUpdateDTO)
         {
             await _userService.UpdateUserInfo(userid, userUpdateDTO);

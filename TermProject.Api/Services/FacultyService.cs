@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TermProject.Api.Data;
+using TermProject.Api.Models;
 using TermProject.Api.Services.Interfaces;
 
 namespace TermProject.Api.Services
@@ -12,14 +13,23 @@ namespace TermProject.Api.Services
         {
             _dbcontext = dbcontext;
         }
-        public async Task<List<string>> GetAllFacultiesNames()
+        public async Task<List<Faculties>> GetAllFacultiesNames()
         {
-            // Veritabanından fakülte isimlerini çekiyoruz
-            var facultyNames = await _dbcontext.Faculties
-                .Select(u => u.FacultyName) // Sadece fakülte isimlerini seçiyoruz
-                .ToListAsync(); // Sonuçları liste olarak döndürüyoruz
-
-            return facultyNames; // fakülte isimlerini döndürüyoruz        }
+            return await _dbcontext.Faculties
+           .Select(f => new Faculties { FacultyID = f.FacultyID, FacultyName = f.FacultyName })
+           .ToListAsync();
+        }
+        public async Task<string> GetFacultyNameByIDAsync(int id)
+        {
+            var faculty = await _dbcontext.Faculties.FirstOrDefaultAsync(f => f.FacultyID == id);
+            if (faculty != null)
+            {
+                return faculty.FacultyName;
+            }
+            else
+            {
+                throw new ArgumentException("Faculty ID is not found!", nameof(id));
+            }
         }
     }
 }

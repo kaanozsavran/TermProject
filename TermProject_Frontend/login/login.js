@@ -1,3 +1,43 @@
+// Giriş Yapma Fonksiyonu
+document.querySelector("form").addEventListener("submit", function (event) {
+    event.preventDefault(); // Formun varsayılan gönderimini engelle
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const requestData = {
+        email,
+        password
+    };
+
+    fetch('https://localhost:44310/api/User/login', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestData)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Giriş başarısız! Lütfen e-posta ve şifrenizi kontrol edin.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const apiUser = data.apiUser;
+            const token = data.token; // Token'ı alıyoruz ama konsola yazdırmıyoruz
+            localStorage.setItem('token', token); //kaldırılabılır
+
+            // Giriş başarılı olduğunda yönlendirme yapabilirsiniz
+            window.location.href = "../dashboard/dashboard.html"; // Dashboard sayfasına yönlendir
+        })
+        .catch(error => {
+            console.error("Giriş hatası:", error);
+            alert(error.message); // Hata mesajını kullanıcıya göster
+        });
+});
+
+// Şifre göster/gizle fonksiyonunu çağır
 function togglePassword() {
     const passwordInput = document.getElementById("password");
     const toggleIcon = document.getElementById("toggleIcon");

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TermProject.Api.Services.Interfaces;
 
@@ -15,6 +16,8 @@ namespace TermProject.Api.Controller
             _courseService = courseService;
         }
         [HttpGet("department/{departmantId}")] //Department id'ya bağlı dersleri çekebilmek için.
+        [Authorize]
+        
         public async Task<IActionResult> GetCourseList(int departmantId) 
         {
             var courses = await _courseService.GetCourseList(departmantId);

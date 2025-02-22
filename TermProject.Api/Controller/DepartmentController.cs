@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TermProject.Api.Models;
 using TermProject.Api.Services.Interfaces;
@@ -17,6 +18,7 @@ namespace TermProject.Api.Controller
         }
 
         [HttpGet("faculty/{facultyId}")] //faculty id'ya bağlı department çekebilmek için.
+
         public async Task<IActionResult> GetDepartmentsByFacultyId(int facultyId)
         {
             var department =await _departmentService.GetDepartmentsByFacultyId(facultyId);
