@@ -1,16 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./home.css">
-    <title>NoteLand</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="icon" href="../img/noteland-logo.png">
+    <link rel="stylesheet" href="home.css">
+    <title>NoteLand - Anasayfa</title>
 </head>
 
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="../img/noteland-logo.png" alt="Logo" width="40" height="40">
+                <span class="titleName fw-bold">Note<span style="color:#42999b;">Land</span></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <form class="d-flex ms-3" style="width: 300px;">
+                    <div class="input-group">
+                        <input class="form-control" type="search" placeholder="Ara" aria-label="Search">
+                        <button class="input-group-text" type="submit"><i class="bi bi-search "></i></button>
+                    </div>
+                </form>
 
-    <script src="./home.js"></script>
+
+                <ul class="navbar-nav ms-3">
+                    <li class="nav-item"><a class="nav-link" href="#">Anasayfa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Notlar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Not Ekle</a></li>
+                </ul>
+                <div class="ms-auto">
+                    <a href="#" class="btn btn-outline-custom">Giriş / Üye Ol</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main -->
+    <main class="container text-center mt-5">
+        <!-- Slogan Bölümü -->
+        <div class="slogan-section py-5">
+            <img src="slogan.jpg" alt="NoteLand Slogan" class="img-fluid">
+            <button class="btn btn-primary mt-3">Hemen Keşfet</button>
+        </div>
+
+        <!-- İstatistik Kartları -->
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>Toplam Üniversite</h5>
+                    <p><i class="bi bi-building"></i> 100+</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>Üye Sayısı</h5>
+                    <p><i class="bi bi-people"></i> +1000</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>Toplam Not</h5>
+                    <p><i class="bi bi-journal-text"></i> +2450</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- En Yüksek Not Alan Profiller -->
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>Kullanıcı 1</h5>
+                    <p>⭐ 4.9 Puan</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>Kullanıcı 2</h5>
+                    <p>⭐ 4.8 Puan</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <h5>Kullanıcı 3</h5>
+                    <p>⭐ 4.7 Puan</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p>&copy; 2025 NoteLand - Tüm Hakları Saklıdır.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="home.js"></script>
 </body>
 
 </html>

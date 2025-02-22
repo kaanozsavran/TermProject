@@ -1,0 +1,36 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Logo ve yazı arasındaki boşluk */
+    height: 56px;
+    /* Bootstrap varsayılan navbar yüksekliği */
+}
+
+.navbar-brand img {
+    width: 60px;
+    height: 60px;
+}
+
+.titleName {
+    margin-left: -20px;
+}
+
+.btn-outline-custom {
+    color: white;
+    /* Metin rengi */
+    background-color: #42999b;
+    /* Kenar rengi */
+}
+
+.btn-outline-custom:hover {
+    background-color: #2b7a7c;
+    /* Hover durumunda arka plan rengi */
+    color: white;
+    /* Hover durumunda metin rengi */
+}
