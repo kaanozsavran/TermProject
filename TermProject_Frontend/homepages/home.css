@@ -39,7 +39,7 @@ body {
     position: relative;
     width: 100%;
     /* Genişliği %100 yap */
-    height: 400px;
+    height: 535px;
     /* İsteğe bağlı olarak yüksekliği ayarlayın */
     overflow: hidden;
     /* Taşma durumunu gizlemek için */
@@ -97,4 +97,8 @@ body {
 .explore-btn:hover {
     background-color: #2b7a7c;
     /* Üzerine gelince arka plan rengi değişimi */
+}
+
+.stat-icon {
+    color: #42999b !important;
 }

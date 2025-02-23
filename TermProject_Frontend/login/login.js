@@ -29,7 +29,7 @@ document.querySelector("form").addEventListener("submit", function (event) {
             localStorage.setItem('token', token); //kaldırılabılır
 
             // Giriş başarılı olduğunda yönlendirme yapabilirsiniz
-            window.location.href = "../dashboard/dashboard.html"; // Dashboard sayfasına yönlendir
+            window.location.href = "../homepages/home.html"; // Dashboard sayfasına yönlendir
         })
         .catch(error => {
             console.error("Giriş hatası:", error);
