@@ -16,7 +16,7 @@ namespace TermProject.Api.Controller
             _statisticsService = statisticsService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetStatistics()
+        public async Task<IActionResult> GetStatistics() //for university,notes and users statistics
         {
             var statistics = await _statisticsService.GetStatisticsAsync();
             return Ok(statistics);
