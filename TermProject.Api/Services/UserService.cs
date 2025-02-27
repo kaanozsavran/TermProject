@@ -14,12 +14,15 @@ namespace TermProject.Api.Services
     public class UserService : IUserService
     {
         private readonly NotelandDbContext _dbcontext;
+        private readonly IWebHostEnvironment _environment;
         private string secretkey;
 
-        public UserService(NotelandDbContext dbcontext, IConfiguration configuration)
+        public UserService(NotelandDbContext dbcontext, IConfiguration configuration, IWebHostEnvironment environment)
         {
             _dbcontext = dbcontext;
             secretkey = configuration.GetValue<string>("JwtSettings:SecretKey"); //JWT 
+            _environment = environment;
+
         }
 
         public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)
@@ -284,5 +287,33 @@ namespace TermProject.Api.Services
             await _dbcontext.SaveChangesAsync();
         }
 
+
+        public async Task<(bool Success, string Message)> UploadProfilePictureAsync(int userId, IFormFile profilePicture)
+        {
+            var user = await _dbcontext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return (false, "Kullanıcı bulunamadı.");
+            }
+
+            // Dosya adı oluşturma (örneğin: userId_guid.jpg)
+            var fileName = $"{userId}_{Guid.NewGuid()}{Path.GetExtension(profilePicture.FileName)}";
+            var filePath = Path.Combine(_environment.WebRootPath, "images", "profile-pictures", fileName);
+
+            // Dosyayı sunucuya kaydet
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await profilePicture.CopyToAsync(stream);
+            }
+
+            // Kullanıcının profil fotoğrafı yolunu güncelle
+            user.ProfilePicturePath = $"/images/profile-pictures/{fileName}";
+            await _dbcontext.SaveChangesAsync();
+
+            return (true, "Profil fotoğrafı başarıyla eklendi!");
+
+
+
+        }
     }
 }

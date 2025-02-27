@@ -79,7 +79,7 @@ namespace TermProject.Api.Controller
         [Authorize]
         public async Task<IActionResult> DeleteUser(int id)
         {
-             await _userService.DeleteAccount(id);
+            await _userService.DeleteAccount(id);
             return Ok("Hesabınız başarıyla silindi!");
         }
         [HttpGet]
@@ -87,7 +87,7 @@ namespace TermProject.Api.Controller
 
         public async Task<IActionResult> GetUserInfo(int userid)
         {
-           var userinfo =  await _userService.GetUserById(userid);
+            var userinfo = await _userService.GetUserById(userid);
             return Ok(userinfo);
         }
         [HttpPut]
@@ -97,6 +97,24 @@ namespace TermProject.Api.Controller
         {
             await _userService.UpdateUserInfo(userid, userUpdateDTO);
             return Ok("Kullanıcı bilgileriniz başarıyla güncellendi!");
+        }
+        [HttpPost("{userId}/upload-profile-picture")]
+        public async Task<IActionResult> UploadProfilePicture(int userId, [FromForm] UploadProfilePictureDto uploadProfilePictureDto)
+        {
+            if (uploadProfilePictureDto.ProfilePicture == null || uploadProfilePictureDto.ProfilePicture.Length == 0)
+            {
+                return BadRequest("Dosya yüklenemedi.");
+            }
+
+            // Servis üzerinden işlemi gerçekleştiriyoruz
+            var result = await _userService.UploadProfilePictureAsync(userId, uploadProfilePictureDto.ProfilePicture);
+
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok(result.Message);
         }
     }
 }

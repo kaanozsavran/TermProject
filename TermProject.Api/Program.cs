@@ -6,8 +6,7 @@ using System.Text;
 using TermProject.Api.Data;
 using TermProject.Api.Services;
 using TermProject.Api.Services.Interfaces;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Microsoft.OpenApi.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 // CORS politikasýný tanýmla
@@ -65,6 +64,7 @@ builder.Services.AddScoped<IFacultyService, FacultyService>(); // FacultyService
 builder.Services.AddScoped<IDepartmentService, DepartmentService>(); // DepartmentService entegresi.
 builder.Services.AddScoped<ICourseService, CourseService>(); // CourseService entegresi.
 builder.Services.AddScoped<IStatisticsService, StatisticsService>(); // StatisticsService entegresi.
+builder.Services.AddScoped<INoteService, NoteService>(); // StatisticsService entegresi.
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -99,6 +99,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Statik dosyalarýn sunulmasý ic?in middleware'i ekle
+app.UseStaticFiles(); // wwwroot klaso?ru?nden statik dosyalarý sunmak ic?in
 
 app.UseHttpsRedirection();
 app.UseCors("AllowSpecificOrigin"); // CORS'u aktif et

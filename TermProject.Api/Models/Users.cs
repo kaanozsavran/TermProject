@@ -21,7 +21,8 @@ namespace TermProject.Api.Models
         [ForeignKey("Departments")]
 
         public int DepartmentID { get; set; }
-        
-       
+
+        public string? ProfilePicturePath { get; set; }
+
     }
 }
