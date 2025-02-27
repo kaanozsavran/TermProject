@@ -6,6 +6,8 @@ using System.Text;
 using TermProject.Api.Data;
 using TermProject.Api.Services;
 using TermProject.Api.Services.Interfaces;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 // CORS politikasýný tanýmla
@@ -54,6 +56,8 @@ options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             new List<string>()
         }
     });
+    // Dosya Yükleme Desteði Ýçin Swagger Konfigürasyonu
+    options.OperationFilter<SwaggerFileOperationFilter>();
 });
 
 builder.Services.AddControllers();
@@ -63,6 +67,8 @@ builder.Services.AddScoped<IFacultyService, FacultyService>(); // FacultyService
 builder.Services.AddScoped<IDepartmentService, DepartmentService>(); // DepartmentService entegresi.
 builder.Services.AddScoped<ICourseService, CourseService>(); // CourseService entegresi.
 builder.Services.AddScoped<IStatisticsService, StatisticsService>(); // StatisticsService entegresi.
+builder.Services.AddScoped<INoteService, NoteService>(); // NoteService entegresi.
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
