@@ -43,8 +43,46 @@
         </div>
     </nav>
 
-    <main>
+    <main class="container mt-4 d-flex">
+        <!-- Sol Menü -->
+        <aside class="col-md-3">
+            <div class="card p-3">
+                <h5 class="text-center">Filtrele</h5>
+                <div class="mb-3">
+                    <label class="form-label">Üniversite</label>
+                    <select class="form-select" id="university">
+                        <option value="">Seçiniz</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Fakülte</label>
+                    <select class="form-select" id="faculty">
+                        <option value="">Seçiniz</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Departman</label>
+                    <select class="form-select" id="department">
+                        <option value="">Seçiniz</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Ders</label>
+                    <select class="form-select" id="course">
+                        <option value="">Seçiniz</option>
+                    </select>
+                </div>
+                <button class="btn btn-outline-custom w-100" onclick="fetchNotes()">Ara</button>
+            </div>
+        </aside>
 
+        <!-- Sağ İçerik Alanı -->
+        <section class="col-md-9 ps-4">
+            <h4 class="mb-3">Derse Ait Notlar</h4>
+            <div id="notesContainer" class="row row-cols-1 row-cols-md-2 g-4">
+                <!-- Notlar buraya gelecek -->
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
