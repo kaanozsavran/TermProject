@@ -7,5 +7,7 @@
         public string? Description { get; set; }
         public string FilePath { get; set; }
         public DateTime UploadDate { get; set; }
+        public int CourseID { get; set; } // Ders ID'si eklendi
+
     }
 }

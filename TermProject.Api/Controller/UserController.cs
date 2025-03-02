@@ -76,7 +76,7 @@ namespace TermProject.Api.Controller
             return Ok(user);
         }
         [HttpDelete]
-        [Authorize]
+        
         public async Task<IActionResult> DeleteUser(int id)
         {
             await _userService.DeleteAccount(id);

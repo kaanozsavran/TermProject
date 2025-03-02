@@ -85,6 +85,22 @@ namespace TermProject.Api.Services
 
             return notes;
         }
+        public async Task<List<NoteResponseDTO>> GetNotesByCourseIdAsync(int courseId)
+        {
+            var notes = await _context.Notes
+                .Where(n => n.CourseID == courseId)
+                .Select(n => new NoteResponseDTO
+                {
+                    NoteID = n.NoteID,
+                    Title = n.Title,
+                    Description = n.Description,
+                    FilePath = n.FilePath,
+                    UploadDate = n.UploadDate,
+                    CourseID = n.CourseID // Ders ID'si eklendi
+                })
+                .ToListAsync();
 
+            return notes;
+        }
     }
 }

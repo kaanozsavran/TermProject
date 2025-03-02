@@ -6,6 +6,8 @@ namespace TermProject.Api.Services.Interfaces
     {
         public Task<bool> AddNoteAsync(NoteInformationDTO createNoteDto);
         Task<List<NoteResponseDTO>> GetUserNotesAsync(int userId); // Kullanıcıya ait notları getir
+        Task<List<NoteResponseDTO>> GetNotesByCourseIdAsync(int courseId); // Ders ID'sine göre notları getir
+
 
     }
 }

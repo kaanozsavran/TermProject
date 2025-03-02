@@ -52,3 +52,4 @@ function togglePassword() {
         toggleIcon.classList.add("bi-eye-slash");
     }
 }
+
