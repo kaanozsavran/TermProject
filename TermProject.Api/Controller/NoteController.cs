@@ -36,6 +36,18 @@ namespace TermProject.Api.Controller
 
             return Ok("Not başarıyla eklendi.");
         }
+        [HttpGet("user-notes/{userId}")]
+        public async Task<IActionResult> GetUserNotes(int userId)
+        {
+            var notes = await _noteService.GetUserNotesAsync(userId);
+
+            if (notes == null || !notes.Any())
+            {
+                return NotFound("Kullanıcıya ait not bulunamadı.");
+            }
+
+            return Ok(notes);
+        }
 
     }
 }

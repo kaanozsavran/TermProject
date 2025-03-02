@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using TermProject.Api.Data;
 using TermProject.Api.Models;
 using TermProject.Api.Models.DTO.NoteDTO;
@@ -67,6 +68,22 @@ namespace TermProject.Api.Services
 
             return result > 0;
 
+        }
+        public async Task<List<NoteResponseDTO>> GetUserNotesAsync(int userId)
+        {
+            var notes = await _context.Notes
+                .Where(n => n.UserID == userId)
+                .Select(n => new NoteResponseDTO
+                {
+                    NoteID = n.NoteID,
+                    Title = n.Title,
+                    Description = n.Description,
+                    FilePath = n.FilePath,
+                    UploadDate = n.UploadDate
+                })
+                .ToListAsync();
+
+            return notes;
         }
 
     }
