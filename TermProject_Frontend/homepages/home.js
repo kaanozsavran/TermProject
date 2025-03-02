@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
     try {
-        const response = await fetch("https://localhost:44310/api/Statistics"); // API URL'ni kontrol et
+        const response = await fetch("https://localhost:7149/api/Statistics"); // API URL'ni kontrol et
         const data = await response.json();
 
         // HTML'deki ilgili alanları al

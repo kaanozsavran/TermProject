@@ -10,7 +10,7 @@ document.querySelector("form").addEventListener("submit", function (event) {
         password
     };
 
-    fetch('https://localhost:44310/api/User/login', {
+    fetch('https://localhost:7149/api/User/login', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

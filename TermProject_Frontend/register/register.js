@@ -1,9 +1,9 @@
 // API endpoint'leri
-const apiUrlUniversity = 'https://localhost:44310/api/University';
-const apiUrlFaculty = 'https://localhost:44310/api/Faculty';
-const apiUrlFacultyName = id => `https://localhost:44310/api/Faculty/getFacultyName/${id}`;
-const apiUrlDepartment = facultyId => `https://localhost:44310/api/Department/faculty/${facultyId}`;
-const apiUrlRegister = 'https://localhost:44310/api/User';
+const apiUrlUniversity = 'https://localhost:7149/api/University';
+const apiUrlFaculty = 'https://localhost:7149/api/Faculty';
+const apiUrlFacultyName = id => `https://localhost:7149/api/Faculty/getFacultyName/${id}`;
+const apiUrlDepartment = facultyId => `https://localhost:7149/api/Department/faculty/${facultyId}`;
+const apiUrlRegister = 'https://localhost:7149/api/User';
 
 // Üniversiteleri Fetch Et
 function fetchUniversities() {
