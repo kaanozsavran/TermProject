@@ -83,7 +83,7 @@ namespace TermProject.Api.Controller
             return Ok("Hesabınız başarıyla silindi!");
         }
         [HttpGet]
-        [Authorize]
+        
 
         public async Task<IActionResult> GetUserInfo(int userid)
         {
