@@ -69,6 +69,46 @@ namespace TermProject.Api.Services
             return result > 0;
 
         }
+
+        public async Task<int> GetUniversityIDByNameAsync(string name)
+        {
+            var university = await _context.Universities.FirstOrDefaultAsync(u => u.UniversityName == name);
+            if (university != null)
+            {
+                return university.UniversityID;
+            }
+            else
+            {
+                throw new ArgumentException("University name is not found!", nameof(name));
+            }
+        }
+
+        public async Task<int> GetFacultyIDByNameAsync(string name)
+        {
+            var faculty = await _context.Faculties.FirstOrDefaultAsync(u => u.FacultyName == name);
+            if (faculty != null)
+            {
+                return faculty.FacultyID;
+            }
+            else
+            {
+                throw new ArgumentException("Faculty is not found!", nameof(name));
+            }
+        }
+
+        public async Task<int> GetDepartmentIDByNameAsync(string name)
+        {
+            var department = await _context.Departments.FirstOrDefaultAsync(u => u.DepartmentName == name);
+            if (department != null)
+            {
+                return department.DepartmentID; // Bu satırı düzeltmek gerekti.
+            }
+            else
+            {
+                throw new ArgumentException("Department is not found!", nameof(name));
+            }
+        }
+
         public async Task<List<NoteResponseDTO>> GetUserNotesAsync(int userId)
         {
             var notes = await _context.Notes

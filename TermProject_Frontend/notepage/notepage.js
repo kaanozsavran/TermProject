@@ -73,8 +73,8 @@ function fetchDepartments(facultyId) {
             departmentSelect.innerHTML = '<option value="">Departman Seçin</option>'; // Varsayılan seçenek
             departments.forEach(department => {
                 const option = document.createElement('option');
-                option.value = department.departmentID; // Departman ID'sini kullan
-                option.textContent = department.departmentName; // Departman adını göster
+                option.value = department; // Departman ID'sini kullan
+                option.textContent = department; // Departman adını göster
                 departmentSelect.appendChild(option);
                 departmentMap[department.departmentID] = department.departmentName; // Departman adını haritaya ekle
             });
