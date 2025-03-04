@@ -53,13 +53,7 @@ namespace TermProject.Api.Controller
         public async Task<IActionResult> GetNotesByCourseId(int courseId)
         {
             var notes = await _noteService.GetNotesByCourseIdAsync(courseId);
-
-            if (notes == null || !notes.Any())
-            {
-                return NotFound("Derse ait not bulunamadı.");
-            }
-
-            return Ok(notes);
+            return Ok(notes); // Notları JSON formatında döndür
         }
     }
 }

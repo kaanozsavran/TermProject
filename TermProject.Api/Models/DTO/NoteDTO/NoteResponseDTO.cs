@@ -7,7 +7,13 @@
         public string? Description { get; set; }
         public string FilePath { get; set; }
         public DateTime UploadDate { get; set; }
-        public int CourseID { get; set; } // Ders ID'si eklendi
+        //public string UniversityName { get; set; }
+
+        //public string FacultyName { get; set; }
+
+        //public string DepartmentName { get; set; }
+        //public string CourseName { get; set; }
+        public int UserID { get; set; }
 
     }
 }

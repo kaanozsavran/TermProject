@@ -9,5 +9,6 @@ namespace TermProject.Api.Services.Interfaces
         Task<List<NoteResponseDTO>> GetNotesByCourseIdAsync(int courseId); // Ders ID'sine göre notları getir
 
 
+
     }
 }

@@ -61,28 +61,27 @@ function fetchDepartments(facultyId) {
 
     fetch(apiUrlDepartment(facultyId))
         .then(response => {
-            console.log('Departman Yanıtı:', response);
             if (!response.ok) {
                 throw new Error('Departman verileri alınamadı.');
             }
             return response.json();
         })
         .then(departments => {
-            console.log('Departman Verileri:', departments);
             const departmentSelect = document.getElementById('department');
             departmentSelect.innerHTML = '<option value="">Departman Seçin</option>'; // Varsayılan seçenek
             departments.forEach(department => {
                 const option = document.createElement('option');
-                option.value = department; // Departman ID'sini kullan
-                option.textContent = department; // Departman adını göster
+                option.value = department.departmentId; // Departman ID'sini kullan
+                option.textContent = department.departmentName; // Departman adını göster
                 departmentSelect.appendChild(option);
-                departmentMap[department.departmentID] = department.departmentName; // Departman adını haritaya ekle
             });
         })
         .catch(error => {
             console.error('Departmanlar alınırken hata oluştu:', error);
         });
 }
+
+
 
 // Seçilen Departmana Göre Kursları Fetch Et
 function fetchCourses(departmentId) {
@@ -100,8 +99,8 @@ function fetchCourses(departmentId) {
             courseSelect.innerHTML = '<option value="">Kurs Seçin</option>'; // Varsayılan seçenek
             courses.forEach(course => {
                 const option = document.createElement('option');
-                option.value = course.courseID; // Course ID'sini kullan
-                option.textContent = course.courseName; // Course adını göster
+                option.value = course; // Course ID'sini kullan
+                option.textContent = course; // Course adını göster
                 courseSelect.appendChild(option);
             });
         })

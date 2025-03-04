@@ -3,11 +3,12 @@ using System;
 using TermProject.Api.Data;
 using TermProject.Api.Models;
 using TermProject.Api.Models.DTO.NoteDTO;
+using TermProject.Api.Models.DTO.UserDTO;
 using TermProject.Api.Services.Interfaces;
 
 namespace TermProject.Api.Services
 {
-    public class NoteService :INoteService
+    public class NoteService : INoteService
     {
         private readonly NotelandDbContext _context;
         private readonly IWebHostEnvironment _environment;
@@ -108,6 +109,18 @@ namespace TermProject.Api.Services
                 throw new ArgumentException("Department is not found!", nameof(name));
             }
         }
+        public async Task<int> GetCourseIDByNameAsync(string name)
+        {
+            var course = await _context.Courses.FirstOrDefaultAsync(u => u.CourseName == name);
+            if (course != null)
+            {
+                return course.CourseID; // Bu satırı düzeltmek gerekti.
+            }
+            else
+            {
+                throw new ArgumentException("Department is not found!", nameof(name));
+            }
+        }
 
         public async Task<List<NoteResponseDTO>> GetUserNotesAsync(int userId)
         {
@@ -125,8 +138,63 @@ namespace TermProject.Api.Services
 
             return notes;
         }
+        //public async Task<List<NoteResponseDTO>> GetNotesByCourseIdAsync(int courseId)
+        //{
+        //    var notes = await _context.Notes
+        //.Where(n => n.CourseID == courseId)
+        //.Include(n => n.Course) // Course tablosuyla ilişkilendir
+        //    .ThenInclude(c => c.Department) // Department'a erişmek için
+        //        .ThenInclude(d => d.Faculty) // Faculty'ye erişmek için
+        //            .ThenInclude(f => f.University) // University'ye erişmek için
+        //.ToListAsync();
+
+        //    if (notes == null || !notes.Any())
+        //    {
+        //        throw new Exception("Bu kursa ait not bulunamadı.");
+        //    }
+
+        //    var noteList = new List<NoteResponseDTO>();
+
+        //    foreach (var n in notes)
+        //    {
+        //        noteList.Add(new NoteResponseDTO
+        //        {
+        //            NoteID = n.NoteID,
+        //            Title = n.Title,
+        //            Description = n.Description,
+        //            FilePath = n.FilePath,
+        //            UploadDate = n.UploadDate,
+        //            CourseName = n.Course.CourseName, // Course tablosundan al
+        //            DepartmentName = n.Course.Department.DepartmentName, // Doğru ilişkiyle al
+        //            FacultyName = n.Course.Department.Faculty.FacultyName, // Doğru ilişkiyle al
+        //            UniversityName = n.Course.Department.Faculty.University.UniversityName // Doğru ilişkiyle al
+        //        });
+        //    }
+
+        //    return noteList;
+
+        //var notes = await _context.Notes
+        //    .Where(n => n.CourseID == courseId)
+        //    .Select(n => new NoteResponseDTO
+        //    {
+        //        NoteID = n.NoteID,
+        //        Title = n.Title,
+        //        Description = n.Description,
+        //        FilePath = n.FilePath,
+        //        UploadDate = n.UploadDate,
+        //        DepartmentName = await GetDepartmentNameByIDAsync(user.DepartmentID),
+        //        FacultyName = await GetFacultyNameByIDAsync(user.FacultyID),
+        //        UniversityName = await GetUniversityNameByIDAsync(user.UniversityID),
+        //        UniversityName = await GetUniversityNameByIDAsync(user.UniversityID)
+        //    })
+        //    .ToListAsync();
+
+        //return notes;
+        //}
+        // Belirtilen courseId'ye bağlı notları çekme
         public async Task<List<NoteResponseDTO>> GetNotesByCourseIdAsync(int courseId)
         {
+            // Belirtilen courseId ile notları bul
             var notes = await _context.Notes
                 .Where(n => n.CourseID == courseId)
                 .Select(n => new NoteResponseDTO
@@ -136,11 +204,13 @@ namespace TermProject.Api.Services
                     Description = n.Description,
                     FilePath = n.FilePath,
                     UploadDate = n.UploadDate,
-                    CourseID = n.CourseID // Ders ID'si eklendi
+                    UserID = n.UserID
                 })
                 .ToListAsync();
 
-            return notes;
+            return notes; // List<NoteResponseDTO> döndür
         }
+
+
     }
 }
