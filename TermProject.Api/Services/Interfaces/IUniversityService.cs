@@ -1,7 +1,9 @@
-﻿namespace TermProject.Api.Services.Interfaces
+﻿using TermProject.Api.Models.DTO.UniversityDTO;
+
+namespace TermProject.Api.Services.Interfaces
 {
     public interface IUniversityService
     {
-        public Task<List<string>> GetAllUniversityNames(); //list
+        public Task<List<UniversitiesInformationDTO>> GetAllUniversityNames(); //list
     }
 }

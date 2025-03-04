@@ -20,8 +20,8 @@ function fetchUniversities() {
 
             universities.forEach(university => {
                 const option = document.createElement('option');
-                option.value = university;
-                option.textContent = university;
+                option.value = university.universityID;
+                option.textContent = university.universityName;
                 universitySelect.appendChild(option);
             });
         })
@@ -76,8 +76,8 @@ function fetchDepartments(facultyId) {
 
             departments.forEach(department => {
                 const option = document.createElement('option');
-                option.value = department;
-                option.textContent = department;
+                option.value = department.departmentID;
+                option.textContent = department.departmentName;
                 departmentSelect.appendChild(option);
             });
         })

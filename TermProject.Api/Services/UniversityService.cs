@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TermProject.Api.Data;
+using TermProject.Api.Models.DTO.UniversityDTO;
 using TermProject.Api.Services.Interfaces;
 
 namespace TermProject.Api.Services
@@ -12,14 +13,15 @@ namespace TermProject.Api.Services
         {
             _dbcontext = dbcontext;
         }
-        public async Task<List<string>> GetAllUniversityNames()
+        public async Task<List<UniversitiesInformationDTO>> GetAllUniversityNames()
         {
-            // Veritabanından üniversite isimlerini çekiyoruz
-            var universityNames = await _dbcontext.Universities
-                .Select(u => u.UniversityName) // Sadece üniversite isimlerini seçiyoruz
-                .ToListAsync(); // Sonuçları liste olarak döndürüyoruz
-
-            return universityNames; // Üniversite isimlerini döndürüyoruz
+            return await _dbcontext.Universities
+                .Select(u => new UniversitiesInformationDTO
+                {
+                    UniversityId = u.UniversityID,
+                    UniversityName = u.UniversityName
+                })
+                .ToListAsync();
         }
     }
 }

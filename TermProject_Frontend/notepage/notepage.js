@@ -21,8 +21,8 @@ function fetchUniversities() {
             const universitySelect = document.getElementById('university');
             universities.forEach(university => {
                 const option = document.createElement('option');
-                option.value = university; // Üniversite ID'sini kullan
-                option.textContent = university; // Üniversite adını göster
+                option.value = university.universityID; // Üniversite ID'sini kullan
+                option.textContent = university.universityName; // Üniversite adını göster
                 universitySelect.appendChild(option);
             });
         })
