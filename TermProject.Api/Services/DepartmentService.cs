@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TermProject.Api.Data;
+using TermProject.Api.Models.DTO.DepartmentDTO;
 using TermProject.Api.Services.Interfaces;
 
 namespace TermProject.Api.Services
@@ -12,9 +13,17 @@ namespace TermProject.Api.Services
         {
             _dbcontext = dbcontext;
         }
-        public async Task<List<string>> GetDepartmentsByFacultyId(int facultyId)
+        public async Task<List<DepartmentInformationDTO>> GetDepartmentsByFacultyId(int facultyId)
         {
-            var departments =await _dbcontext.Departments.Where(d=>d.FacultyID == facultyId).Select(d=>d.DepartmentName).ToListAsync();
+            var departments = await _dbcontext.Departments
+        .Where(d => d.FacultyID == facultyId)
+        .Select(d => new DepartmentInformationDTO
+        {
+            DepartmentId = d.DepartmentID,
+            DepartmentName = d.DepartmentName
+        })
+        .ToListAsync();
+
             return departments;
         }
     }

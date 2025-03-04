@@ -21,11 +21,8 @@ namespace TermProject.Api.Controller
 
         public async Task<IActionResult> GetDepartmentsByFacultyId(int facultyId)
         {
-            var department =await _departmentService.GetDepartmentsByFacultyId(facultyId);
-            if (department == null || !department.Any()) { 
-                return NotFound("Bu fakülteye bağlı bir bölüm bulunamadı.");
-            }
-            return Ok(department);
+            var departments = await _departmentService.GetDepartmentsByFacultyId(facultyId);
+            return Ok(departments);
         }
     }
 }
