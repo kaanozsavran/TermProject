@@ -20,7 +20,7 @@ function fetchUniversities() {
 
             universities.forEach(university => {
                 const option = document.createElement('option');
-                option.value = university.universityID;
+                option.value = university.universityId;
                 option.textContent = university.universityName;
                 universitySelect.appendChild(option);
             });
@@ -76,7 +76,7 @@ function fetchDepartments(facultyId) {
 
             departments.forEach(department => {
                 const option = document.createElement('option');
-                option.value = department.departmentID;
+                option.value = department.departmentId;
                 option.textContent = department.departmentName;
                 departmentSelect.appendChild(option);
             });
@@ -153,18 +153,28 @@ function registerUser() {
     }
     const facultyName = facultyMap[facultyID] || ""; // Fakülte ismini haritadan al
 
+
+
+    var e1 = document.getElementById("university");
+    var e2 = document.getElementById("faculty");
+    var e3 = document.getElementById("department");
+
+
+
+
     const requestData = {
         fullName,
         email,
         password,
-        universityName: university,
-        facultyName: facultyName,
-        departmentName: department
+        universityId: parseInt(e1.value),
+        facultyId: parseInt(e2.value),
+        departmentId: parseInt(e3.value)
     };
     console.log(faculty);
 
     console.log("Gönderilen veri:", requestData);
-
+    console.log(JSON.stringify(requestData));
+    debugger;
     fetch(apiUrlRegister, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

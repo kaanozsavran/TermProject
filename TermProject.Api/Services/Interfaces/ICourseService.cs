@@ -1,7 +1,9 @@
-﻿namespace TermProject.Api.Services.Interfaces
+﻿using TermProject.Api.Models.DTO.CourseDTO;
+
+namespace TermProject.Api.Services.Interfaces
 {
     public interface ICourseService
     {
-        public Task<List<string>> GetCourseList(int departmentId);
+        public Task<List<CourseInformationDTO>> GetCourseList(int departmentId);
     }
 }

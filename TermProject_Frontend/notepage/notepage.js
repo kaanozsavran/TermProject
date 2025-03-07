@@ -21,7 +21,7 @@ function fetchUniversities() {
             const universitySelect = document.getElementById('university');
             universities.forEach(university => {
                 const option = document.createElement('option');
-                option.value = university.universityID; // Üniversite ID'sini kullan
+                option.value = university.universityId; // Üniversite ID'sini kullan
                 option.textContent = university.universityName; // Üniversite adını göster
                 universitySelect.appendChild(option);
             });
@@ -99,8 +99,8 @@ function fetchCourses(departmentId) {
             courseSelect.innerHTML = '<option value="">Kurs Seçin</option>'; // Varsayılan seçenek
             courses.forEach(course => {
                 const option = document.createElement('option');
-                option.value = course; // Course ID'sini kullan
-                option.textContent = course; // Course adını göster
+                option.value = course.courseID; // Course ID'sini kullan
+                option.textContent = course.courseName; // Course adını göster
                 courseSelect.appendChild(option);
             });
         })

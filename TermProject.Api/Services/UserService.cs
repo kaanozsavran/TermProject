@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -153,23 +154,45 @@ namespace TermProject.Api.Services
 
 
 
-
+        
         public async Task<Users> Register(RegisterRequestDTO registerRequestDTO)
         {
-            Users user = new Users()
+            //Users user = new Users()
+            //{
+            //    FullName = registerRequestDTO.FullName,
+            //    Email = registerRequestDTO.Email,
+            //    PasswordHash = registerRequestDTO.Password,
+            //    UniversityID = await GetUniversityIDByNameAsync(registerRequestDTO.UniversityName),
+            //    FacultyID = await GetFacultyIDByNameAsync(registerRequestDTO.FacultyName),
+            //    DepartmentID = await GetDepartmentIDByNameAsync(registerRequestDTO.DepartmentName),
+            //    Role = "student"
+            //};  
+            //burası vardı oncesınde
+            //await _dbcontext.AddAsync(user);
+            //await _dbcontext.SaveChangesAsync();
+            //return user;
+            try
             {
-                FullName = registerRequestDTO.FullName,
-                Email = registerRequestDTO.Email,
-                PasswordHash = registerRequestDTO.Password,
-                UniversityID = await GetUniversityIDByNameAsync(registerRequestDTO.UniversityName),
-                FacultyID = await GetFacultyIDByNameAsync(registerRequestDTO.FacultyName),
-                DepartmentID = await GetDepartmentIDByNameAsync(registerRequestDTO.DepartmentName),
-                Role = "student"
-            };  
+                Users user = new Users()
+                {
+                    
+                    FullName = registerRequestDTO.FullName,
+                    Email = registerRequestDTO.Email,
+                    PasswordHash = registerRequestDTO.Password,
+                    UniversityID = registerRequestDTO.UniversityId,
+                    FacultyID = registerRequestDTO.FacultyId,
+                    DepartmentID = registerRequestDTO.DepartmentId,
+                    Role = "student"
+                };
 
-            await _dbcontext.AddAsync(user);
-            await _dbcontext.SaveChangesAsync();
-            return user;
+                await _dbcontext.Users.AddAsync(user);
+                await _dbcontext.SaveChangesAsync();
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Kullanıcı kaydı sırasında hata oluştu: {ex.Message}");
+            }
         }
 
         public async Task DeleteAccount(int id)
