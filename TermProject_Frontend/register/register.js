@@ -156,7 +156,7 @@ function registerUser() {
 
 
     var e1 = document.getElementById("university");
-    var e2 = document.getElementById("faculty");
+    var e2 = document.getElementById("faculty");   //added var getbyid
     var e3 = document.getElementById("department");
 
 
@@ -166,7 +166,7 @@ function registerUser() {
         fullName,
         email,
         password,
-        universityId: parseInt(e1.value),
+        universityId: parseInt(e1.value), //dto isimlerine dikkat et çekerken
         facultyId: parseInt(e2.value),
         departmentId: parseInt(e3.value)
     };
