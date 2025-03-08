@@ -4,6 +4,6 @@ namespace TermProject.Api.Services.Interfaces
 {
     public interface ICourseService
     {
-        public Task<List<CourseInformationDTO>> GetCourseList(int departmentId);
+        public Task<List<CourseInformationDTO>> GetCourseList(int departmentId); //for service with courseinfodto
     }
 }

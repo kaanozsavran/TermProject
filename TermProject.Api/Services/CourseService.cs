@@ -14,7 +14,7 @@ namespace TermProject.Api.Services
             _dbcontext = dbcontext;
         }
 
-        public async Task<List<CourseInformationDTO>> GetCourseList(int departmentId)
+        public async Task<List<CourseInformationDTO>> GetCourseList(int departmentId) // get course list 
         {
             var courses = await _dbcontext.Courses.Where(c => c.DepartmentID == departmentId).Select(c => new CourseInformationDTO 
             { CourseID = c.CourseID, CourseName = c.CourseName }).ToListAsync();
