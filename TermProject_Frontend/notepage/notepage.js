@@ -143,7 +143,9 @@ function fetchNotes(courseId) {
                     </div>
                 </div>`;
                 notesContainer.innerHTML += noteCard;
+
             });
+
         })
         .catch(error => {
             notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${error.message}</div></div>`;

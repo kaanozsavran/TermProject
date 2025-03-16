@@ -194,6 +194,7 @@ namespace TermProject.Api.Services
         // Belirtilen courseId'ye bağlı notları çekme
         public async Task<List<NoteResponseDTO>> GetNotesByCourseIdAsync(int courseId)
         {
+            
             // Belirtilen courseId ile notları bul
             var notes = await _context.Notes
                 .Where(n => n.CourseID == courseId)

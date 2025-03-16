@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Yükleme ve Görüntüleme</title>
+    <style>
+        #pdf-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 500px;
+            border: 1px solid #ddd;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+        }
+
+        .download-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+            text-decoration: none;
+        }
+
+        #pdf-container:hover .download-btn {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>PDF Yükle ve Görüntüle</h2>
+    <input type="file" id="fileInput" />
+    <button onclick="uploadFile()">Yükle</button>
+
+    <div id="pdf-container" style="display: none;">
+        <iframe id="pdfViewer"></iframe>
+        <a id="downloadLink" class="download-btn" download>İndir</a>
+    </div>
+
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            if (fileInput.files.length === 0) {
+                alert("Lütfen bir dosya seçin.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            try {
+                const response = await fetch("http://localhost:5000/api/files/upload", {
+                    method: "POST",
+                    headers: {
+                        "apiKey": "123456789"
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showPdf(data.fileUrl);
+                } else {
+                    alert(data.message || "Dosya yüklenirken hata oluştu.");
+                }
+            } catch (error) {
+                console.error("Hata:", error);
+                alert("Bağlantı hatası oluştu.");
+            }
+        }
+
+        function showPdf(url) {
+            document.getElementById("pdfViewer").src = url;
+            document.getElementById("downloadLink").href = url;
+            document.getElementById("pdf-container").style.display = "block";
+        }
+    </script>
+</body>
+
+</html>
