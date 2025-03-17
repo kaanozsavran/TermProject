@@ -34,3 +34,12 @@ body {
     color: white;
     /* Hover durumunda metin rengi */
 }
+
+
+.alertify-notifier .ajs-message.ajs-error {
+    background-color: #42999b;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}

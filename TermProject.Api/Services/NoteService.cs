@@ -205,7 +205,8 @@ namespace TermProject.Api.Services
                     Description = n.Description,
                     FilePath = n.FilePath,
                     UploadDate = n.UploadDate,
-                    UserID = n.UserID
+                    UserID = n.UserID,
+                    UserName = _context.Users.FirstOrDefault(u => u.UserID == n.UserID).FullName // Kullanıcı adını ekle
                 })
                 .ToListAsync();
 

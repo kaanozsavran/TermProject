@@ -143,8 +143,11 @@ function fetchNotes(courseId, courseName) {
                     <div class='card p-3'>
                         <h5>${note.title}</h5>
                         <p>${note.description || 'Açıklama yok.'}</p>
-                        <a href="${note.filePath}" class="btn btn-primary" download>İndir</a>
-                        <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
+                        <a href="${note.filePath}" class="btn btn-outline-custom w-25" download>İndir</a>
+                        <div class="note-footer d-flex justify-content-between align-items-center">
+                            <p><strong>Yükleyen:</strong> ${note.userName}</p>
+                            <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
+                        </div>
                     </div>
                 </div>`;
                 notesContainer.innerHTML += noteCard;
@@ -188,6 +191,7 @@ document.getElementById('department').addEventListener('change', function () {
 //     const selectedCourseName = this.options[this.selectedIndex].text;
 //     document.getElementById('noteHeader').textContent = `${selectedCourseName} Dersine Ait Notlar`;
 // });
+console.log(alertify);
 
 
 // "Ara" butonuna tıklanınca notları getir ve başlığı güncelle
@@ -196,7 +200,9 @@ document.getElementById('searchButton').addEventListener('click', function () {
     const selectedCourseId = courseSelect.value;
 
     if (!selectedCourseId) {
-        alert("Lütfen bir kurs seçin!");
+
+        alertify.error('Lütfen Kurs Seçiniz!');
+
         return;
     }
 
