@@ -68,7 +68,7 @@ function fetchDepartments(facultyId) {
         })
         .then(departments => {
             const departmentSelect = document.getElementById('department');
-            departmentSelect.innerHTML = '<option value="">Departman Seçin</option>'; // Varsayılan seçenek
+            departmentSelect.innerHTML = '<option value="">Departman Seçiniz...</option>'; // Varsayılan seçenek
             departments.forEach(department => {
                 const option = document.createElement('option');
                 option.value = department.departmentId; // Departman ID'sini kullan
@@ -96,7 +96,7 @@ function fetchCourses(departmentId) {
         })
         .then(courses => {
             const courseSelect = document.getElementById('course');
-            courseSelect.innerHTML = '<option value="">Kurs Seçin</option>'; // Varsayılan seçenek
+            courseSelect.innerHTML = '<option value="">Ders Seçiniz...</option>'; // Varsayılan seçenek
             courses.forEach(course => {
                 const option = document.createElement('option');
                 option.value = course.courseID; // Course ID'sini kullan
@@ -110,11 +110,16 @@ function fetchCourses(departmentId) {
 }
 
 // Seçilen Kursa Göre Notları Fetch Et
-function fetchNotes(courseId) {
+function fetchNotes(courseId, courseName) {
     if (!courseId) return; // Eğer kurs seçilmediyse işlem yapma
 
     const token = localStorage.getItem('token'); // JWT token'ı al
     const notesContainer = document.getElementById("notesContainer");
+    const noteHeader = document.getElementById("noteHeader");
+
+    // Başlığı güncelle
+    noteHeader.textContent = `${courseName} Dersine Ait Notlar`;
+
     notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${courseId} dersi için notlar yükleniyor...</div></div>`;
 
     fetch(apiUrlNotes(courseId), {
@@ -172,7 +177,32 @@ document.getElementById('department').addEventListener('change', function () {
 });
 
 // Kurs seçildiğinde notları getir
-document.getElementById('course').addEventListener('change', function () {
-    const courseId = this.value;
-    fetchNotes(courseId);
+// document.getElementById('course').addEventListener('change', function () {
+//     const courseId = this.value;
+//     fetchNotes(courseId);
+// });
+
+
+// Kurs seçildiğinde başlığı güncelle
+// document.getElementById('course').addEventListener('change', function () {
+//     const selectedCourseName = this.options[this.selectedIndex].text;
+//     document.getElementById('noteHeader').textContent = `${selectedCourseName} Dersine Ait Notlar`;
+// });
+
+
+// "Ara" butonuna tıklanınca notları getir ve başlığı güncelle
+document.getElementById('searchButton').addEventListener('click', function () {
+    const courseSelect = document.getElementById('course');
+    const selectedCourseId = courseSelect.value;
+
+    if (!selectedCourseId) {
+        alert("Lütfen bir kurs seçin!");
+        return;
+    }
+
+    const selectedOption = courseSelect.options[courseSelect.selectedIndex];
+    const selectedCourseName = selectedOption ? selectedOption.text : "Bilinmeyen Ders"; // Hata önleme
+
+    fetchNotes(selectedCourseId, selectedCourseName);
 });
+
