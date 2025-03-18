@@ -209,6 +209,7 @@ namespace TermProject.Api.Services
                     UserName = _context.Users.FirstOrDefault(u => u.UserID == n.UserID).FullName // Kullanıcı adını ekle
                 })
                 .ToListAsync();
+           
 
             return notes; // List<NoteResponseDTO> döndür
         }

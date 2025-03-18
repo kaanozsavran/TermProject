@@ -137,6 +137,13 @@ function fetchNotes(courseId, courseName) {
         })
         .then(data => {
             notesContainer.innerHTML = ''; // Önceki içeriği temizle
+
+            // Eğer gelen veri boşsa "Not bulunamadı" mesajını göster
+            if (!data || data.length === 0) {
+                notesContainer.innerHTML = `<div class='col'><div class='card p-3 text-center' style="background:white ;color:#42999b;"><strong>Bu derse ait not bulunamadı.</strong></div></div>`;
+                return;
+            }
+
             data.forEach(note => {
                 const noteCard = `
                 <div class='col'>
