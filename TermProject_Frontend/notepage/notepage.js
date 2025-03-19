@@ -151,6 +151,7 @@ function fetchNotes(courseId, courseName) {
                         <h5>${note.title}</h5>
                         <p>${note.description || 'Açıklama yok.'}</p>
                         <a href="${note.filePath}" class="btn btn-outline-custom w-25" download>İndir</a>
+                        
                         <div class="note-footer d-flex justify-content-between align-items-center">
                             <p><strong>Yükleyen:</strong> ${note.userName}</p>
                             <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
