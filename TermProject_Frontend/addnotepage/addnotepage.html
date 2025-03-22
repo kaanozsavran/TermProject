@@ -63,12 +63,17 @@
                     const typedarray = new Uint8Array(this.result);
 
                     pdfjsLib.getDocument(typedarray).promise.then(pdf => {
-                        pdf.getPage(1).then(page => {  // 📌 Sadece ilk sayfayı alıyoruz
-                            const scale = 1.5;
+                        pdf.getPage(1).then(page => {  // 📌 İlk sayfayı al
+                            const scale = 0.8; // ✅ Ölçeği küçült
                             const viewport = page.getViewport({ scale });
 
                             const canvas = document.getElementById("pdfCanvas");
                             const context = canvas.getContext("2d");
+
+                            // Belirli bir genişlik ve yükseklik belirle
+                            canvas.style.width = "100%";
+                            canvas.style.maxWidth = "150px"; // ✅ Maksimum genişliği belirle
+                            canvas.style.height = "auto";
 
                             canvas.width = viewport.width;
                             canvas.height = viewport.height;
@@ -86,6 +91,7 @@
                 alert("Lütfen geçerli bir PDF dosyası seçin.");
             }
         });
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="addnotepage.js"></script>
