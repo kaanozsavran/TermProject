@@ -110,6 +110,7 @@ function fetchCourses(departmentId) {
 }
 
 // Seçilen Kursa Göre Notları Fetch Et
+//cgpt'den kontrol edersın sonra pdf ıcın bırkac degısıklık denemıstın.s
 function fetchNotes(courseId, courseName) {
     if (!courseId) return; // Eğer kurs seçilmediyse işlem yapma
 
