@@ -1,35 +1,80 @@
-// API endpoint'i
-const apiUrl = 'https://localhost:44310/api/University';
+const url = "../dummy.pdf";
 
-// Fetch ile veri al
-fetch(apiUrl)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+(async function () {
+
+    // Specified the workerSrc property
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+
+    // Create the PDF document
+    const doc = await pdfjsLib.getDocument(url).promise;
+
+    const minPage = 1;
+    const maxPage = doc._pdfInfo.numPages;
+    let currentPage = 1;
+
+    // Get page 1
+    await getPage(doc, currentPage);
+
+    // Display the page number
+    document.getElementById("pageNumber").innerHTML = `Page ${currentPage} of ${maxPage}`;
+
+    // The previous button click event
+    document.getElementById("previous").addEventListener("click", async () => {
+
+        if (currentPage > minPage) {
+
+            // Get the previous page
+            await getPage(doc, currentPage--);
+
+            // Display the page number
+            document.getElementById("pageNumber").innerHTML = `Page ${currentPage} of ${maxPage}`;
+
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log("API'den Gelen Veri:", data); // Veriyi kontrol et
 
-        // <select> elementini bul
-        const universitySelect = document.getElementById('university-select');
-
-        if (universitySelect) {
-            console.log("university-select bulundu, seçenekler ekleniyor...");
-
-            // Gelen her üniversite için bir <option> oluştur
-            data.forEach(university => {
-                const option = document.createElement('option');
-                option.value = university;  // Option'un value değeri
-                option.textContent = university; // Görünen metin
-                universitySelect.appendChild(option);
-            });
-        } else {
-            console.error("university-select elementi bulunamadı! ID'yi kontrol et.");
-        }
-    })
-    .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
     });
 
+    // The next button click event
+    document.getElementById("next").addEventListener("click", async () => {
+
+        if (currentPage < maxPage) {
+
+            // Get the next page
+            await getPage(doc, currentPage++);
+
+            // Display the page number
+            document.getElementById("pageNumber").innerHTML = `Page ${currentPage} of ${maxPage}`;
+
+        }
+
+    });
+
+})();
+
+
+async function getPage(doc, pageNumber) {
+
+    if (pageNumber >= 1 && pageNumber <= doc._pdfInfo.numPages) {
+
+        // Fetch the page
+        const page = await doc.getPage(pageNumber);
+
+        // Set the viewport
+        const viewport = page.getViewport({ scale: 1.5 });
+
+        // Set the canvas dimensions to the PDF page dimensions
+        const canvas = document.getElementById("canvas");
+        const context = canvas.getContext("2d");
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        // Render the PDF page into the canvas context
+        return await page.render({
+            canvasContext: context,
+            viewport: viewport
+        }).promise;
+
+    } else {
+        console.log("Please specify a valid page number");
+    }
+
+}

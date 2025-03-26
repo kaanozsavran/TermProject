@@ -45,6 +45,9 @@ namespace TermProject.Api.Services
             // Dosya adı oluştur (Örn: 12_xxxx.pdf)
             var fileName = $"{createNoteDto.UserID}_{Guid.NewGuid()}{Path.GetExtension(createNoteDto.File.FileName)}";
             var filePath = Path.Combine(directoryPath, fileName);
+            // LOG: Konsolda kaydedilen yolu kontrol et
+            Console.WriteLine($"Dosya şu dizine kaydediliyor: {filePath}");
+            Console.WriteLine($"_environment.WebRootPath: {_environment.WebRootPath}");
 
             // Dosya kaydetme işlemi
             using (var stream = new FileStream(filePath, FileMode.Create))

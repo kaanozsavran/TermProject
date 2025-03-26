@@ -2,18 +2,37 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>PDF Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 </head>
 
 <body>
-    <select id="university-select">
-        <option value="">Üniversite Seçin</option> <!-- Varsayılan değer -->
-    </select>
-
-
-    <script src="example.js"></script>
+    <canvas id="my_canvas"></canvas>
 </body>
+<script>
+    // PDF.js kütüphanesinin gerekli özelliklerini ayarlayın
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+    // PDF dosyasını yükleyin
+    pdfjsLib.getDocument('dummy.pdf').promise.then(doc => {
+        console.log("This file has " + doc.numPages + " pages");
+
+        doc.getPage(1).then(page => {
+            var myCanvas = document.getElementById("my_canvas");
+            var context = myCanvas.getContext("2d");
+
+            var viewport = page.getViewport({ scale: 1 }); // Küçük harf ile 'getViewport' kullanın
+            myCanvas.width = viewport.width;
+            myCanvas.height = viewport.height;
+
+            page.render({
+                canvasContext: context,
+                viewport: viewport
+            });
+        });
+    }).catch(error => {
+        console.error('Error loading PDF:', error);
+    });
+</script>
 
 </html>

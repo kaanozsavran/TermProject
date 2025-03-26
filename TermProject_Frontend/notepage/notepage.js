@@ -111,16 +111,73 @@ function fetchCourses(departmentId) {
 
 // Seçilen Kursa Göre Notları Fetch Et
 //cgpt'den kontrol edersın sonra pdf ıcın bırkac degısıklık denemıstın.s
-function fetchNotes(courseId, courseName) {
-    if (!courseId) return; // Eğer kurs seçilmediyse işlem yapma
+// function fetchNotes(courseId, courseName) {
+//     if (!courseId) return; // Eğer kurs seçilmediyse işlem yapma
 
-    const token = localStorage.getItem('token'); // JWT token'ı al
+//     const token = localStorage.getItem('token'); // JWT token'ı al
+//     const notesContainer = document.getElementById("notesContainer");
+//     const noteHeader = document.getElementById("noteHeader");
+
+//     // Başlığı güncelle
+//     noteHeader.textContent = `${courseName} Dersine Ait Notlar`;
+
+//     notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${courseId} dersi için notlar yükleniyor...</div></div>`;
+
+//     fetch(apiUrlNotes(courseId), {
+//         method: 'GET',
+//         headers: {
+//             'Authorization': `Bearer ${token}`,
+//             'Content-Type': 'application/json'
+//         },
+//     })
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Notları çekerken bir hata oluştu.');
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             notesContainer.innerHTML = ''; // Önceki içeriği temizle
+
+//             // Eğer gelen veri boşsa "Not bulunamadı" mesajını göster
+//             if (!data || data.length === 0) {
+//                 notesContainer.innerHTML = `<div class='col'><div class='card p-3 text-center' style="background:white ;color:#42999b;"><strong>Bu derse ait not bulunamadı.</strong></div></div>`;
+//                 return;
+//             }
+
+//             data.forEach(note => {
+//                 const noteCard = `
+//                 <div class='col'>
+//                     <div class='card p-3'>
+//                         <h5>${note.title}</h5>
+//                         <p>${note.description || 'Açıklama yok.'}</p>
+//                         <a href="${note.filePath}" class="btn btn-outline-custom w-25" download>İndir</a>
+
+//                         <div class="note-footer d-flex justify-content-between align-items-center">
+//                             <p><strong>Yükleyen:</strong> ${note.userName}</p>
+//                             <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
+//                         </div>
+//                     </div>
+//                 </div>`;
+//                 notesContainer.innerHTML += noteCard;
+
+//             });
+
+//         })
+//         .catch(error => {
+//             notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${error.message}</div></div>`;
+//             console.error('Hata:', error);
+//         });
+// }
+
+function fetchNotes(courseId, courseName) {
+    if (!courseId) return;
+
+    const token = localStorage.getItem('token');
     const notesContainer = document.getElementById("notesContainer");
     const noteHeader = document.getElementById("noteHeader");
 
-    // Başlığı güncelle
     noteHeader.textContent = `${courseName} Dersine Ait Notlar`;
-
     notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${courseId} dersi için notlar yükleniyor...</div></div>`;
 
     fetch(apiUrlNotes(courseId), {
@@ -137,29 +194,35 @@ function fetchNotes(courseId, courseName) {
             return response.json();
         })
         .then(data => {
-            notesContainer.innerHTML = ''; // Önceki içeriği temizle
+            notesContainer.innerHTML = '';
 
-            // Eğer gelen veri boşsa "Not bulunamadı" mesajını göster
             if (!data || data.length === 0) {
                 notesContainer.innerHTML = `<div class='col'><div class='card p-3 text-center' style="background:white ;color:#42999b;"><strong>Bu derse ait not bulunamadı.</strong></div></div>`;
                 return;
             }
 
             data.forEach(note => {
+                const noteId = `pdf-canvas-${note.id}`; // PDF için benzersiz ID
                 const noteCard = `
-                <div class='col'>
-                    <div class='card p-3'>
-                        <h5>${note.title}</h5>
-                        <p>${note.description || 'Açıklama yok.'}</p>
-                        <a href="${note.filePath}" class="btn btn-outline-custom w-25" download>İndir</a>
-                        
-                        <div class="note-footer d-flex justify-content-between align-items-center">
-                            <p><strong>Yükleyen:</strong> ${note.userName}</p>
-                            <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
-                        </div>
+            <div class='col'>
+                <div class='card p-3'>
+                    <h5>${note.title}</h5>
+                    <p>${note.description || 'Açıklama yok.'}</p>
+
+        <canvas id="${noteId}" style=" width: 100%; max-height: 300px;"></canvas> <!-- PDF önizleme -->
+
+                    <a href="${note.filePath}" class="btn btn-outline-custom w-25" download>İndir</a>
+                    
+                    <div class="note-footer d-flex justify-content-between align-items-center">
+                        <p><strong>Yükleyen:</strong> ${note.userName}</p>
+                        <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
                     </div>
-                </div>`;
+                </div>
+            </div>`;
+
                 notesContainer.innerHTML += noteCard;
+                // PDF'yi render et
+                renderPDF(note.filePath, noteId);
 
             });
 
@@ -169,6 +232,31 @@ function fetchNotes(courseId, courseName) {
             console.error('Hata:', error);
         });
 }
+// PDF.js kütüphanesinin gerekli özelliklerini ayarlayın
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+function renderPDF(pdfUrl, canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+
+    pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+        return pdf.getPage(1); // İlk sayfayı al
+    }).then(page => {
+        const viewport = page.getViewport({ scale: 1.5 });
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        const renderContext = {
+            canvasContext: ctx,
+            viewport: viewport
+        };
+
+        return page.render(renderContext).promise;
+    }).catch(error => {
+        console.error("PDF yüklenirken hata oluştu:", error);
+    });
+}
+
 
 // Sayfa Yüklendiğinde Üniversite ve Fakülte Bilgilerini Getir
 document.addEventListener("DOMContentLoaded", function () {
