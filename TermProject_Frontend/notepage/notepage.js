@@ -1,4 +1,4 @@
-// API endpoint'leri
+// API endpoint'leri swagger'dan çekilen
 const apiUrlUniversity = 'https://localhost:7149/api/University';
 const apiUrlFaculty = 'https://localhost:7149/api/Faculty';
 const apiUrlDepartment = facultyId => `https://localhost:7149/api/Department/faculty/${facultyId}`;
@@ -81,8 +81,6 @@ function fetchDepartments(facultyId) {
         });
 }
 
-
-
 // Seçilen Departmana Göre Kursları Fetch Et
 function fetchCourses(departmentId) {
     if (!departmentId) return; // Eğer departman seçilmediyse işlem yapma
@@ -108,67 +106,6 @@ function fetchCourses(departmentId) {
             console.error('Kurslar alınırken hata oluştu:', error);
         });
 }
-
-// Seçilen Kursa Göre Notları Fetch Et
-//cgpt'den kontrol edersın sonra pdf ıcın bırkac degısıklık denemıstın.s
-// function fetchNotes(courseId, courseName) {
-//     if (!courseId) return; // Eğer kurs seçilmediyse işlem yapma
-
-//     const token = localStorage.getItem('token'); // JWT token'ı al
-//     const notesContainer = document.getElementById("notesContainer");
-//     const noteHeader = document.getElementById("noteHeader");
-
-//     // Başlığı güncelle
-//     noteHeader.textContent = `${courseName} Dersine Ait Notlar`;
-
-//     notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${courseId} dersi için notlar yükleniyor...</div></div>`;
-
-//     fetch(apiUrlNotes(courseId), {
-//         method: 'GET',
-//         headers: {
-//             'Authorization': `Bearer ${token}`,
-//             'Content-Type': 'application/json'
-//         },
-//     })
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Notları çekerken bir hata oluştu.');
-//             }
-//             return response.json();
-//         })
-//         .then(data => {
-//             notesContainer.innerHTML = ''; // Önceki içeriği temizle
-
-//             // Eğer gelen veri boşsa "Not bulunamadı" mesajını göster
-//             if (!data || data.length === 0) {
-//                 notesContainer.innerHTML = `<div class='col'><div class='card p-3 text-center' style="background:white ;color:#42999b;"><strong>Bu derse ait not bulunamadı.</strong></div></div>`;
-//                 return;
-//             }
-
-//             data.forEach(note => {
-//                 const noteCard = `
-//                 <div class='col'>
-//                     <div class='card p-3'>
-//                         <h5>${note.title}</h5>
-//                         <p>${note.description || 'Açıklama yok.'}</p>
-//                         <a href="${note.filePath}" class="btn btn-outline-custom w-25" download>İndir</a>
-
-//                         <div class="note-footer d-flex justify-content-between align-items-center">
-//                             <p><strong>Yükleyen:</strong> ${note.userName}</p>
-//                             <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
-//                         </div>
-//                     </div>
-//                 </div>`;
-//                 notesContainer.innerHTML += noteCard;
-
-//             });
-
-//         })
-//         .catch(error => {
-//             notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${error.message}</div></div>`;
-//             console.error('Hata:', error);
-//         });
-// }
 
 function fetchNotes(courseId, courseName) {
     if (!courseId) return;
@@ -209,7 +146,9 @@ function fetchNotes(courseId, courseName) {
                     <h5>${note.title}</h5>
                     <p>${note.description || 'Açıklama yok.'}</p>
 
-        <canvas id="${noteId}" style=" width: 100%; max-height: 300px;"></canvas> <!-- PDF önizleme -->
+            <canvas id="${noteId}" style=" width: 100%; max-height: 300px;"></canvas> <!-- PDF önizleme -->
+            <!-- <iframe src="https://localhost:7149${note.filePath}" style="width: 100%; height: 300px;" frameborder="0"></iframe> 
+            PDF önizlemesi iframe kullanarak, eğer pdf.js ile çözemezsen bu da bir seçenek.-->
 
                     <a href="${note.filePath}" class="btn btn-outline-custom w-25" download>İndir</a>
                     
@@ -282,14 +221,12 @@ document.getElementById('department').addEventListener('change', function () {
 //     fetchNotes(courseId);
 // });
 
-
 // Kurs seçildiğinde başlığı güncelle
 // document.getElementById('course').addEventListener('change', function () {
 //     const selectedCourseName = this.options[this.selectedIndex].text;
 //     document.getElementById('noteHeader').textContent = `${selectedCourseName} Dersine Ait Notlar`;
 // });
 console.log(alertify);
-
 
 // "Ara" butonuna tıklanınca notları getir ve başlığı güncelle
 document.getElementById('searchButton').addEventListener('click', function () {
