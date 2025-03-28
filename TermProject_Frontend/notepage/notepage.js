@@ -139,7 +139,7 @@ function fetchNotes(courseId, courseName) {
             }
 
             data.forEach(note => {
-                const noteId = `pdf-canvas-${note.id}`; // PDF için benzersiz ID
+                const noteId = `pdf-canvas-${note.noteID}`; // PDF için benzersiz ID
                 const noteCard = `
             <div class='col'>
                 <div class='card p-3'>
@@ -147,10 +147,11 @@ function fetchNotes(courseId, courseName) {
                     <p>${note.description || 'Açıklama yok.'}</p>
 
             <canvas id="${noteId}" style=" width: 100%; max-height: 300px;"></canvas> <!-- PDF önizleme -->
+            
             <!-- <iframe src="https://localhost:7149${note.filePath}" style="width: 100%; height: 300px;" frameborder="0"></iframe> 
             PDF önizlemesi iframe kullanarak, eğer pdf.js ile çözemezsen bu da bir seçenek.-->
 
-                    <a href="${note.filePath}" class="btn btn-outline-custom w-25" download>İndir</a>
+                    <a href="https://localhost:7149${note.filePath}" class="btn btn-outline-custom w-25" download>İndir</a>
                     
                     <div class="note-footer d-flex justify-content-between align-items-center">
                         <p><strong>Yükleyen:</strong> ${note.userName}</p>
@@ -160,9 +161,14 @@ function fetchNotes(courseId, courseName) {
             </div>`;
 
                 notesContainer.innerHTML += noteCard;
+            });
+
+            setTimeout(() => { }, 500);
+
+            data.forEach(note => {
+                const noteId = `pdf-canvas-${note.noteID}`; // PDF için benzersiz ID
                 // PDF'yi render et
                 renderPDF(note.filePath, noteId);
-
             });
 
         })
@@ -177,8 +183,9 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 function renderPDF(pdfUrl, canvasId) {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
+    const requestUrl = `https://localhost:7149/api/Note/note-files?filePath=${pdfUrl}`;
 
-    pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+    pdfjsLib.getDocument(requestUrl).promise.then(pdf => {
         return pdf.getPage(1); // İlk sayfayı al
     }).then(page => {
         const viewport = page.getViewport({ scale: 1.5 });
@@ -189,6 +196,7 @@ function renderPDF(pdfUrl, canvasId) {
             canvasContext: ctx,
             viewport: viewport
         };
+        console.log(requestUrl);
 
         return page.render(renderContext).promise;
     }).catch(error => {

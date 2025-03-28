@@ -10,10 +10,13 @@ namespace TermProject.Api.Controller
     public class NoteController : ControllerBase
     {
         private readonly INoteService _noteService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public NoteController(INoteService noteService)
+        public NoteController(INoteService noteService,
+            IWebHostEnvironment webHostEnvironment)
         {
             _noteService = noteService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // Not ekleme işlemi
@@ -54,6 +57,14 @@ namespace TermProject.Api.Controller
         {
             var notes = await _noteService.GetNotesByCourseIdAsync(courseId);
             return Ok(notes); // Notları JSON formatında döndür
+        }
+
+        [HttpGet("note-files")]
+        public async Task<IActionResult> File(string filePath)
+        {
+            string path = Path.Join(_webHostEnvironment.WebRootPath, filePath);
+            var file = PhysicalFile(path, "application/pdf");
+            return file;
         }
     }
 }

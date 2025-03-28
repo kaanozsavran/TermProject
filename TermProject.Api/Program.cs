@@ -91,7 +91,6 @@ x.TokenValidationParameters = new TokenValidationParameters
 });
 
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
