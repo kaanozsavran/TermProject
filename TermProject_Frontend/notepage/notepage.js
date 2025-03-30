@@ -188,7 +188,7 @@ function renderPDF(pdfUrl, canvasId) {
     pdfjsLib.getDocument(requestUrl).promise.then(pdf => {
         return pdf.getPage(1); // İlk sayfayı al
     }).then(page => {
-        const viewport = page.getViewport({ scale: 1.5 });
+        const viewport = page.getViewport({ scale: 1.0 });
         canvas.width = viewport.width;
         canvas.height = viewport.height;
 
