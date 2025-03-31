@@ -46,17 +46,9 @@ body {
 
 canvas {
     display: block;
-    /* Blok seviyesinde eleman yap */
     margin: 0 auto;
-    /* Ortalamak için */
-    max-width: 100%;
-    /* Sayfa genişliğini aşmaması için */
-
-    /* Oranları koruyarak yükseklik ayarla */
+    margin-bottom: 15px;
+    max-width: fit-content;
     max-height: 340px;
-    /* Çok uzun olmaması için sınır koy */
-
-    /* Hafif bir çerçeve ekle (isteğe bağlı) */
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    /* Hafif bir gölge */
 }

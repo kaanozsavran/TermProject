@@ -59,6 +59,7 @@ namespace TermProject.Api.Controller
             return Ok(notes); // Notları JSON formatında döndür
         }
 
+        //notların önizleme çekim işlemleri icin
         [HttpGet("note-files")]
         public async Task<IActionResult> File(string filePath)
         {

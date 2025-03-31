@@ -243,7 +243,7 @@ document.getElementById('searchButton').addEventListener('click', function () {
 
     if (!selectedCourseId) {
 
-        alertify.error('Lütfen Kurs Seçiniz!');
+        alertify.error('Lütfen Ders Seçiniz!');
 
         return;
     }
