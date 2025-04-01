@@ -7,9 +7,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    /* Logo ve yazı arasındaki boşluk */
     height: 56px;
-    /* Bootstrap varsayılan navbar yüksekliği */
 }
 
 .navbar-brand img {
@@ -23,18 +21,13 @@ body {
 
 .btn-outline-custom {
     color: white;
-    /* Metin rengi */
     background-color: #42999b;
-    /* Kenar rengi */
 }
 
 .btn-outline-custom:hover {
     background-color: #2b7a7c;
-    /* Hover durumunda arka plan rengi */
     color: white;
-    /* Hover durumunda metin rengi */
 }
-
 
 .alertify-notifier .ajs-message.ajs-error {
     background-color: #42999b;
@@ -44,6 +37,7 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
+/*features of canvas*/
 .canvas-container {
     position: relative;
     display: inline-block;
@@ -67,21 +61,16 @@ canvas {
     font-size: 2rem;
     padding: 10px;
     border-radius: 50%;
-    /* Arka planı biraz opak yaparak daha belirgin hale getirdim */
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
-/* Link içindeki ikon için */
 .hover-icon a {
     color: #42999b !important;
-    /* Belirttiğin renk */
     text-decoration: none;
-    /* Link altı çizgisini kaldır */
 }
 
-/* Hover olunca efekti ekle */
 .canvas-container:hover canvas {
     filter: blur(5px);
 }
