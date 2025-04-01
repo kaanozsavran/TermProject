@@ -238,7 +238,7 @@ document.getElementById('department').addEventListener('change', function () {
 //     const selectedCourseName = this.options[this.selectedIndex].text;
 //     document.getElementById('noteHeader').textContent = `${selectedCourseName} Dersine Ait Notlar`;
 // });
-console.log(alertify);
+// console.log(alertify);
 
 // "Ara" butonuna tıklanınca notları getir ve başlığı güncelle
 document.getElementById('searchButton').addEventListener('click', function () {
