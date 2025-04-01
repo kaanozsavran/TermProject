@@ -117,6 +117,7 @@ function fetchNotes(courseId, courseName) {
     noteHeader.textContent = `${courseName} Dersine Ait Notlar`;
     notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${courseId} dersi için notlar yükleniyor...</div></div>`;
 
+
     fetch(apiUrlNotes(courseId), {
         method: 'GET',
         headers: {
@@ -146,13 +147,16 @@ function fetchNotes(courseId, courseName) {
                     <h5>${note.title}</h5>
                     <p>${note.description || 'Açıklama yok.'}</p>
 
-            <canvas id="${noteId}" style=" width: 100%; max-height: 300px;"></canvas> <!-- PDF önizleme -->
+            <div class="canvas-container">
+                <canvas id="${noteId}" style="width: 100%; max-height: 300px;"></canvas> <!-- PDF önizleme -->
+                    <div class="hover-icon">
+                    <a href="https://localhost:7149${note.filePath}" class="" target="_blank"><i class="bi bi-search"></i></a>
+                    </div>
+             </div>            
             
             <!-- <iframe src="https://localhost:7149${note.filePath}" style="width: 100%; height: 300px;" frameborder="0"></iframe> 
             PDF önizlemesi iframe kullanarak, eğer pdf.js ile çözemezsen bu da bir seçenek.-->
 
-                    <a href="https://localhost:7149${note.filePath}" class="btn btn-outline-custom w-25" download>İndir</a>
-                    
                     <div class="note-footer d-flex justify-content-between align-items-center">
                         <p><strong>Yükleyen:</strong> ${note.userName}</p>
                         <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
@@ -253,4 +257,5 @@ document.getElementById('searchButton').addEventListener('click', function () {
 
     fetchNotes(selectedCourseId, selectedCourseName);
 });
+
 
