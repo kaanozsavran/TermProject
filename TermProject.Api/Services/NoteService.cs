@@ -20,7 +20,7 @@ namespace TermProject.Api.Services
             _environment = environment;
 
         }
-
+        //not ekleme servisi.
         public async Task<bool> AddNoteAsync(NoteInformationDTO createNoteDto)
         {
             if (createNoteDto == null)
