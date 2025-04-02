@@ -30,6 +30,7 @@ document.querySelector("form").addEventListener("submit", function (event) {
             const token = data.token; // Token'ı alıyoruz ama konsola yazdırmıyoruz
             localStorage.setItem('token', token); //Token'ı sakla
 
+
             // Giriş başarılı olduğunda yönlendirme yapabilirsiniz
             window.location.href = "../homepages/home.html"; // Dashboard sayfasına yönlendir
         })

@@ -1,41 +1,74 @@
 document.addEventListener("DOMContentLoaded", async () => {
+    const authContainer = document.getElementById("auth-container");
+
+    if (authContainer) {
+        const token = localStorage.getItem("token");
+
+
+        if (token) {
+            authContainer.innerHTML = `
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="default-profile.png" class="profile-pic" alt="Profil" />
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                        <li><a class="dropdown-item" href="profile.html">Profilim</a></li>
+                        <li><a class="dropdown-item" href="#" id="logout">Çıkış Yap</a></li>
+                    </ul>
+                </div>
+            `;
+
+            document.getElementById("logout").addEventListener("click", function () {
+                localStorage.removeItem("token");
+                window.location.reload();
+            });
+
+        } else {
+            authContainer.innerHTML = `
+                <a href="../login/login.html" class="btn btn-outline-custom">Giriş / Üye Ol</a>
+            `;
+        }
+    }
+
+    // İstatistikleri çekme işlemi
     try {
-        const response = await fetch("https://localhost:7149/api/Statistics"); // API URL'ni kontrol et
+        const response = await fetch("https://localhost:7149/api/Statistics");
         const data = await response.json();
 
-        // HTML'deki ilgili alanları al
         const universityCountEl = document.getElementById("university-count");
         const userCountEl = document.getElementById("user-count");
         const noteCountEl = document.getElementById("note-count");
 
-        // Sayıyı 0'dan hedef değere kadar artıran fonksiyon
         function animateCount(el, target) {
+            if (!el) return; // Element kontrolü
             let current = 0;
-            const increment = Math.ceil(target / 100); // Hız ayarlaması
+            const increment = Math.ceil(target / 100);
             const interval = setInterval(() => {
                 current += increment;
                 if (current >= target) {
-                    el.textContent = target; // Hedef değere ulaşınca durdur
+                    el.textContent = target;
                     clearInterval(interval);
                 } else {
                     el.textContent = current;
                 }
-            }, 20); // Artış hızı (milisaniye)
+            }, 20);
         }
 
-        // Observer API kullanarak istatistikleri ekranda görünce başlat
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     animateCount(universityCountEl, data.universities);
                     animateCount(userCountEl, data.users);
                     animateCount(noteCountEl, data.notes);
-                    observer.disconnect(); // Animasyonu bir kere çalıştır ve sonra gözlemlemeyi durdur
+                    observer.disconnect();
                 }
             });
-        }, { threshold: 0.85 }); // %85 görünür olduğunda başlasın
+        }, { threshold: 0.85 });
 
-        observer.observe(document.getElementById("statics"));
+        const staticsEl = document.getElementById("statics");
+        if (staticsEl) {
+            observer.observe(staticsEl);
+        }
 
     } catch (error) {
         console.error("İstatistikleri çekerken hata oluştu:", error);
