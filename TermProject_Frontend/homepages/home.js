@@ -8,14 +8,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (token) {
             authContainer.innerHTML = `
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="default-profile.png" class="profile-pic" alt="Profil" />
+                    <button class="dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                         <img src="../img/pp.png" class="profile-pic" alt="Profil">
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" href="profile.html">Profilim</a></li>
-                        <li><a class="dropdown-item" href="#" id="logout">Çıkış Yap</a></li>
+                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                         <li><a class="dropdown-item" href="profile.html">Profilim</a></li>
+                          <li><a class="dropdown-item" href="#" id="logout"><i class="bi bi-box-arrow-right logout-icon" style="font-weight:bold"></i> &nbsp;Çıkış Yap</a></li>
                     </ul>
                 </div>
+
             `;
 
             document.getElementById("logout").addEventListener("click", function () {
