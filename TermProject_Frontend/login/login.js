@@ -2,8 +2,10 @@
 document.querySelector("form").addEventListener("submit", function (event) {
     event.preventDefault(); // Formun varsayılan gönderimini engelle
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+
 
     const requestData = {
         email,
@@ -26,7 +28,7 @@ document.querySelector("form").addEventListener("submit", function (event) {
         .then(data => {
             const apiUser = data.apiUser;
             const token = data.token; // Token'ı alıyoruz ama konsola yazdırmıyoruz
-            localStorage.setItem('token', token); //kaldırılabılır
+            localStorage.setItem('token', token); //Token'ı sakla
 
             // Giriş başarılı olduğunda yönlendirme yapabilirsiniz
             window.location.href = "../homepages/home.html"; // Dashboard sayfasına yönlendir
