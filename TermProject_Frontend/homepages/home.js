@@ -3,17 +3,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (authContainer) {
         const token = localStorage.getItem("token");
+        const fullName = localStorage.getItem("fullName");
 
 
-        if (token) {
+        if (token && fullName) {
             authContainer.innerHTML = `
                 <div class="dropdown">
                     <button class="dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                          <img src="../img/pp.png" class="profile-pic" alt="Profil">
                     </button>
                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                         <li><a class="dropdown-item" href="profile.html">Profilim</a></li>
-                          <li><a class="dropdown-item" href="#" id="logout"><i class="bi bi-box-arrow-right logout-icon" style="font-weight:bold"></i> &nbsp;Çıkış Yap</a></li>
+                        <li><span class="dropdown-item-text">Merhaba ${fullName}!</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="profile.html">Profilim</a></li>
+                        <li><a class="dropdown-item" href="#" id="logout">
+                                <i class="bi bi-box-arrow-right logout-icon" style="font-weight:bold"></i> &nbsp;Çıkış Yap</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -21,7 +26,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             document.getElementById("logout").addEventListener("click", function () {
                 localStorage.removeItem("token");
+                localStorage.removeItem("fullName");
                 window.location.reload();
+                // window.location.href = "../login.html"; // Giriş sayfasına yönlendir
             });
 
         } else {

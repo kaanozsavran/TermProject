@@ -138,3 +138,12 @@ body {
     color: inherit !important;
     /* Varsayılan rengi koru */
 }
+
+.dropdown-menu {
+    width: auto;
+    /* Otomatik genişlik */
+    min-width: 180px;
+    /* Minimum genişlik */
+    white-space: nowrap;
+    /* Metni tek satırda tut */
+}
