@@ -34,3 +34,48 @@ body {
     color: white;
     /* Hover durumunda metin rengi */
 }
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+#profileDropdown {
+    background: transparent !important;
+    /* Arka planı kaldır */
+    border: none !important;
+    /* Kenarlığı kaldır */
+    padding: 0;
+    /* Fazladan boşlukları kaldır */
+    box-shadow: none;
+    /* Gölge efektini kaldır */
+}
+
+#profileDropdown:focus {
+    outline: none;
+    /* Butona tıklanınca mavi çerçeve çıkmasını engeller */
+}
+
+.logout-icon {
+    font-size: 1.1rem;
+}
+
+.dropdown-item:active,
+.dropdown-item:focus {
+    background-color: #e9ecef !important;
+    /* Arka planı tamamen kaldır */
+    color: inherit !important;
+    /* Varsayılan rengi koru */
+}
+
+.dropdown-menu {
+    width: auto;
+    /* Otomatik genişlik */
+    min-width: 180px;
+    /* Minimum genişlik */
+    white-space: nowrap;
+    /* Metni tek satırda tut */
+}
