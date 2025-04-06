@@ -249,7 +249,7 @@ namespace TermProject.Api.Services
 
         public async Task<UserInformationDTO> GetUserById(int userid)
         {
-            var user = _dbcontext.Users.Find(userid);
+            var user = await _dbcontext.Users.FindAsync(userid);
             if (user == null)
             {
                 throw new Exception("Kullanıcı bulunamadı.");
@@ -260,7 +260,10 @@ namespace TermProject.Api.Services
                 Email = user.Email,
                 DepartmentName = await GetDepartmentNameByIDAsync(user.DepartmentID),
                 FacultyName = await GetFacultyNameByIDAsync(user.FacultyID),
-                UniversityName = await GetUniversityNameByIDAsync(user.UniversityID)
+                UniversityName = await GetUniversityNameByIDAsync(user.UniversityID),
+                DepartmentID = user.DepartmentID,
+                FacultyID = user.FacultyID,
+                UniversityID = user.UniversityID
 
             };
             if(userinfo == null)

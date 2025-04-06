@@ -82,9 +82,8 @@ namespace TermProject.Api.Controller
             await _userService.DeleteAccount(id);
             return Ok("Hesabınız başarıyla silindi!");
         }
-        [HttpGet]
+        [HttpGet("userinfo/{userid}")]
         
-
         public async Task<IActionResult> GetUserInfo(int userid)
         {
             var userinfo = await _userService.GetUserById(userid);

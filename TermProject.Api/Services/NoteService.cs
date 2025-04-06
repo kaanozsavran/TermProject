@@ -33,40 +33,53 @@ namespace TermProject.Api.Services
                 throw new ArgumentNullException(nameof(createNoteDto.File));
             }
 
-            // Kullanıcının not dosyasını kaydedeceğimiz dizin
+            // 1. Dosya türü kontrolü
+            var allowedExtensions = new[] { ".pdf" };
+            var extension = Path.GetExtension(createNoteDto.File.FileName).ToLower();
+
+            if (!allowedExtensions.Contains(extension))
+            {
+                throw new InvalidOperationException("Sadece PDF dosyaları kabul edilir.");
+            }
+
+            // 2. Dosya boyutu kontrolü (örn. maksimum 10 MB)
+            if (createNoteDto.File.Length > 10 * 1024 * 1024)
+            {
+                throw new InvalidOperationException("Dosya boyutu çok büyük. Maksimum 10 MB olabilir.");
+            }
+
+            // 3. Dosya yolu oluşturma
             var directoryPath = Path.Combine(_environment.WebRootPath, "files", "notes");
 
-            // Eğer dizin yoksa oluştur
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
             }
 
-            // Dosya adı oluştur (Örn: 12_xxxx.pdf)
-            var fileName = $"{createNoteDto.UserID}_{Guid.NewGuid()}{Path.GetExtension(createNoteDto.File.FileName)}";
+            var fileName = $"{createNoteDto.UserID}_{Guid.NewGuid()}{extension}";
             var filePath = Path.Combine(directoryPath, fileName);
-            // LOG: Konsolda kaydedilen yolu kontrol et
+
+            // LOG
             Console.WriteLine($"Dosya şu dizine kaydediliyor: {filePath}");
             Console.WriteLine($"_environment.WebRootPath: {_environment.WebRootPath}");
 
-            // Dosya kaydetme işlemi
+            // 4. Dosyayı fiziksel olarak kaydetme
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await createNoteDto.File.CopyToAsync(stream);
             }
 
-            // Not nesnesi oluştur
+            // 5. Note nesnesini oluşturup veritabanına ekle
             var note = new Notes
             {
                 Title = createNoteDto.Title,
                 Description = createNoteDto.Description,
-                FilePath = $"/files/notes/{fileName}", // Frontend erişebilsin diye düzelttik
+                FilePath = $"/files/notes/{fileName}",
                 CourseID = createNoteDto.CourseID,
                 UserID = createNoteDto.UserID,
                 UploadDate = DateTime.Now
             };
 
-            // Veritabanına kaydet
             _context.Notes.Add(note);
             var result = await _context.SaveChangesAsync();
 

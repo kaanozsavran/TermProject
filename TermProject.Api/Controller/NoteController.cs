@@ -23,21 +23,29 @@ namespace TermProject.Api.Controller
         [HttpPost("add-note")]
         public async Task<IActionResult> AddNote([FromForm] NoteInformationDTO createNoteDto)
         {
-            // Dosya yüklenmediği durum kontrolü
-            if (createNoteDto.File == null || createNoteDto.File.Length == 0)
+            try
             {
-                return BadRequest("Dosya yüklenmedi.");
+                var result = await _noteService.AddNoteAsync(createNoteDto);
+
+                if (!result)
+                {
+                    return StatusCode(500, "Not veritabanına eklenemedi.");
+                }
+
+                return Ok("Not başarıyla eklendi.");
             }
-
-            // Notu ve dosyayı veritabanına kaydetmek için service'i çağırıyoruz
-            var result = await _noteService.AddNoteAsync(createNoteDto);
-
-            if (!result)
+            catch (ArgumentNullException ex)
             {
-                return BadRequest("Not eklenirken bir hata oluştu.");
+                return BadRequest($"Eksik veri: {ex.ParamName}");
             }
-
-            return Ok("Not başarıyla eklendi.");
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // PDF değilse veya boyut büyükse buradan yakalanır
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Bir hata oluştu: {ex.Message}");
+            }
         }
         [HttpGet("user-notes/{userId}")]
         public async Task<IActionResult> GetUserNotes(int userId)

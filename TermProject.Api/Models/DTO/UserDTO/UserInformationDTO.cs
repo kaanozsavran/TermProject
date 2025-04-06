@@ -9,7 +9,12 @@
         public string FacultyName { get; set; }
 
         public string DepartmentName { get; set; }
-        
+
+
+        public int DepartmentID { get; set; } // bunları da ekle
+        public int FacultyID { get; set; }
+        public int UniversityID { get; set; }
+
 
     }
 }

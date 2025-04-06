@@ -29,8 +29,11 @@ document.querySelector("form").addEventListener("submit", function (event) {
             const apiUser = data.apiUser;
             const token = data.token; // Token'ı alıyoruz ama konsola yazdırmıyoruz
             const fullName = apiUser.fullName;
+            const userID = apiUser.userID;
             localStorage.setItem('token', token); //Token'ı sakla
             localStorage.setItem('fullName', fullName);
+            localStorage.setItem('userID', userID);
+
 
 
             // Giriş başarılı olduğunda yönlendirme yapabilirsiniz

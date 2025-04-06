@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (authContainer) {
         const token = localStorage.getItem("token");
         const fullName = localStorage.getItem("fullName");
+        const userID = localStorage.getItem("userID");
+
 
 
         if (token && fullName) {
@@ -27,6 +29,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById("logout").addEventListener("click", function () {
                 localStorage.removeItem("token");
                 localStorage.removeItem("fullName");
+                localStorage.removeItem("userID");
+
                 window.location.reload();
                 // window.location.href = "../login.html"; // Giriş sayfasına yönlendir
             });
