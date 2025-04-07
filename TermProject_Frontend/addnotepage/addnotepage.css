@@ -93,7 +93,7 @@ body {
 
 /* Hata mesajı (alertify.error) */
 .alertify-notifier .ajs-message.ajs-error {
-    background-color: red;
+    background-color: #42999b;
     /* Hata arka planı kırmızı */
     color: white;
     /* Yazı rengi beyaz */
@@ -104,6 +104,8 @@ body {
 
 /* Genel mesaj kutusu stilleri */
 .alertify-notifier .ajs-message {
+    background-color: #42999b;
+    color: white;
     font-size: 16px;
     padding: 14px 20px;
     text-align: center;
