@@ -2,7 +2,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     setupAuthDropdown(); // Kullanıcı durumu kontrolü ve dropdown ayarlama
     fetchUserDetails(); // Kullanıcının üniversite/fakülte/departman bilgilerini çek
-
 });
 
 
@@ -158,6 +157,9 @@ document.getElementById("noteForm").addEventListener("submit", async function (e
             },
             body: formData
         });
+        console.log("Response status:", response.status);
+        console.log("Response ok?:", response.ok);
+
 
         if (!response.ok) {
             const errText = await response.text();
@@ -165,7 +167,8 @@ document.getElementById("noteForm").addEventListener("submit", async function (e
         }
 
         alertify.success("Not başarıyla eklendi!");
-        document.getElementById("noteForm").reset(); // Formu temizle
+        document.getElementById("noteForm").reset();
+
     } catch (error) {
         console.error("Not ekleme hatası:", error);
         alertify.error(`Hata: ${error.message}`);
