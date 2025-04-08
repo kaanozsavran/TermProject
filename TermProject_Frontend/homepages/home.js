@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             authContainer.innerHTML = `
                 <div class="dropdown">
                     <button class="dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                         <img src="../img/pp.png" class="profile-pic" alt="Profil">
+                         <img src="../img/pp-blue.png" class="profile-pic" alt="Profil">
                     </button>
                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                         <li><span class="dropdown-item-text">Merhaba ${fullName}!</span></li>

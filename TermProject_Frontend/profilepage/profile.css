@@ -79,3 +79,55 @@ body {
     white-space: nowrap;
     /* Metni tek satırda tut */
 }
+
+/* Sol Menü Kartı */
+.card.p-3 {
+    background-color: #42999b;
+    color: white;
+    border: none;
+}
+
+/* Menü Liste Öğeleri */
+.card .list-group-item {
+    background-color: transparent;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover Efekti */
+.card .list-group-item:hover {
+    background-color: #2b7a7c;
+    color: white;
+    cursor: pointer;
+}
+
+/* Alt Menü (Güvenlik altı) için ek stil */
+#securitySubmenu .list-group-item {
+    font-size: 0.9rem;
+    padding-left: 1.5rem;
+}
+
+/* Alt menü hover */
+#securitySubmenu .list-group-item:hover {
+    background-color: #2b7a7c;
+
+}
+
+/* İkon için ekstra boşluk ve konum ayarı */
+#securityIcon {
+    margin-left: 5px;
+    /* İkon ile metin arasında boşluk */
+    font-size: 0.9rem;
+    /* İkon boyutu */
+}
+
+.updateButton {
+    background: #2b7a7c !important;
+    color: white;
+}
+
+.updateButton:hover {
+    background: #0a4f51 !important;
+    color: white;
+}
