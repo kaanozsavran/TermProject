@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Logo ve yazı arasındaki boşluk */
+    height: 56px;
+    /* Bootstrap varsayılan navbar yüksekliği */
+}
+
+.navbar-brand img {
+    width: 60px;
+    height: 60px;
+}
+
+.titleName {
+    margin-left: -20px;
+}
+
+.btn-outline-custom {
+    color: white !important;
+    /* Metin rengi */
+    background-color: #42999b !important;
+    /* Kenar rengi */
+}
+
+.btn-outline-custom:hover {
+    background-color: #2b7a7c !important;
+    /* Hover durumunda arka plan rengi */
+    color: white !important;
+    /* Hover durumunda metin rengi */
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+#profileDropdown {
+    background: transparent !important;
+    /* Arka planı kaldır */
+    border: none !important;
+    /* Kenarlığı kaldır */
+    padding: 0;
+    /* Fazladan boşlukları kaldır */
+    box-shadow: none;
+    /* Gölge efektini kaldır */
+}
+
+#profileDropdown:focus {
+    outline: none;
+    /* Butona tıklanınca mavi çerçeve çıkmasını engeller */
+}
+
+.logout-icon {
+    font-size: 1.1rem;
+}
+
+.dropdown-item:active,
+.dropdown-item:focus {
+    background-color: #e9ecef !important;
+    /* Arka planı tamamen kaldır */
+    color: inherit !important;
+    /* Varsayılan rengi koru */
+}
+
+.dropdown-menu {
+    width: auto;
+    /* Otomatik genişlik */
+    min-width: 180px;
+    /* Minimum genişlik */
+    white-space: nowrap;
+    /* Metni tek satırda tut */
+}

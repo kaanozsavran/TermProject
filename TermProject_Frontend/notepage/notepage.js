@@ -275,7 +275,7 @@ function setupAuthDropdown() {
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" style="min-width: 200px;">
                     <li><span class="dropdown-item-text">Merhaba ${fullName}!</span></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="profile.html">Profilim</a></li>
+                    <li><a class="dropdown-item" href="../profilepage/profile.html">Profilim</a></li>
                     <li><a class="dropdown-item" href="#" id="logout">
                         <i class="bi bi-box-arrow-right logout-icon" style="font-weight:bold"></i> &nbsp;Çıkış Yap</a>
                     </li>
