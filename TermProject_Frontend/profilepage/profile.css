@@ -90,6 +90,7 @@ body {
 /* Menü Liste Öğeleri */
 .card .list-group-item {
     background-color: transparent;
+    border-radius: 5px;
     color: white;
     border: none;
     transition: background-color 0.3s ease;
@@ -111,7 +112,7 @@ body {
 /* Alt menü hover */
 #securitySubmenu .list-group-item:hover {
     background-color: #2b7a7c;
-
+    border-radius: 5px;
 }
 
 /* İkon için ekstra boşluk ve konum ayarı */

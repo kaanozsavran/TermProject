@@ -80,15 +80,15 @@ function loadSection(section) {
                     <h4>Şifre Değiştir</h4>
                     <form>
                         <div class="mb-3">
-                            <label for="oldPassword" class="form-label">Eski Şifre</label>
+                            <label for="oldPassword" class="form-label">Eski Şifre:</label>
                             <input type="password" class="form-control" id="oldPassword">
                         </div>
                         <div class="mb-3">
-                            <label for="newPassword" class="form-label">Yeni Şifre</label>
+                            <label for="newPassword" class="form-label">Yeni Şifre:</label>
                             <input type="password" class="form-control" id="newPassword">
                         </div>
                         <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Yeni Şifre (Tekrar)</label>
+                            <label for="confirmPassword" class="form-label">Yeni Şifre (Tekrar):</label>
                             <input type="password" class="form-control" id="confirmPassword">
                         </div>
                         <button type="submit" class="btn btn-outline-custom updateButton">Şifreyi Güncelle</button>
