@@ -22,17 +22,15 @@ body {
 }
 
 .btn-outline-custom {
-    color: white;
-    /* Metin rengi */
-    background-color: #42999b;
-    /* Kenar rengi */
+    background-color: white;
+    color: #42999b;
+    border: 2px solid white;
+    font-weight: bold;
 }
 
 .btn-outline-custom:hover {
-    background-color: #2b7a7c;
-    /* Hover durumunda arka plan rengi */
-    color: white;
-    /* Hover durumunda metin rengi */
+    background-color: #e6e6e6;
+    color: #2b7a7c;
 }
 
 .profile-pic {
@@ -109,4 +107,15 @@ body {
     font-size: 16px;
     padding: 14px 20px;
     text-align: center;
+}
+
+/* Card arka planı */
+.custom-card {
+    background-color: #42999b !important;
+    color: white;
+}
+
+/* Başlıklar (label vs.) beyaz renkte olsun */
+.custom-card .form-label {
+    color: white;
 }
