@@ -15,6 +15,11 @@ body {
     height: 60px;
 }
 
+.carousel-item img {
+    height: 400px;
+    object-fit: cover;
+}
+
 .titleName {
     margin-left: -20px;
 }
