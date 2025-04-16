@@ -99,3 +99,38 @@ function loadSection(section) {
             contentArea.innerHTML = `<div class="card p-3 shadow-sm"><h4>İçerik buraya yüklenecek</h4></div>`;
     }
 }
+
+// Profil resmi değiştirme
+document.getElementById('profilePicInput').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    const imgElement = document.getElementById('profileImage');
+
+    if (file && imgElement) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            imgElement.src = e.target.result;
+
+            // İsteğe bağlı: resmi localStorage’a kaydet
+            localStorage.setItem('profileImage', e.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Sayfa yüklendiğinde daha önce seçilmiş resmi göster
+document.addEventListener("DOMContentLoaded", function () {
+    setupAuthDropdown();
+
+    const fullName = localStorage.getItem('fullName');
+    const greetingText = document.getElementById("greetingText");
+    const savedImage = localStorage.getItem('profileImage');
+    const imgElement = document.getElementById('profileImage');
+
+    if (fullName && greetingText) {
+        greetingText.textContent = `Merhaba ${fullName}!`;
+    }
+
+    if (savedImage && imgElement) {
+        imgElement.src = savedImage;
+    }
+});
