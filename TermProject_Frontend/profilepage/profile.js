@@ -4,20 +4,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const fullName = localStorage.getItem('fullName');
     const greetingText = document.getElementById("greetingText");
+    const savedImage = localStorage.getItem('profileImage');
+    const imgElement = document.getElementById('profileImage');
 
     if (fullName && greetingText) {
         greetingText.textContent = `Merhaba ${fullName}!`;
     }
+
+    if (savedImage && imgElement) {
+        imgElement.src = savedImage;
+    }
+
+    // ===>> SAYFA AÇILINCA "Profilim" SEÇENEĞİNİ YÜKLE <<
+    loadSection('profilim');
 });
 
 // Kullanıcı Durumunu Kontrol Et ve Dropdown'u Oluştur
 function setupAuthDropdown() {
     const token = localStorage.getItem('token');
-    const fullName = localStorage.getItem('fullName'); // Full Name'i al
+    const fullName = localStorage.getItem('fullName');
     const authContainer = document.getElementById("authContainer");
 
     if (token && fullName) {
-        // Kullanıcı giriş yapmışsa dropdown menüsünü göster
         authContainer.innerHTML = `
             <div class="dropdown">
                 <button class="dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -34,14 +42,12 @@ function setupAuthDropdown() {
             </div>
         `;
 
-        // Çıkış yapma fonksiyonu
         document.getElementById("logout").addEventListener("click", function () {
             localStorage.removeItem('token');
             localStorage.removeItem('fullName');
-            window.location.href = "../login/login.html"; // Giriş sayfasına yönlendir
+            window.location.href = "../login/login.html";
         });
     } else {
-        // Kullanıcı giriş yapmamışsa varsayılan giriş butonunu göster
         authContainer.innerHTML = `<a href="../login/login.html" class="btn btn-outline-custom">Giriş / Üye Ol</a>`;
     }
 }
@@ -52,7 +58,6 @@ function toggleSecurity() {
     const icon = document.getElementById("securityIcon");
 
     submenu.classList.toggle("d-none");
-    // İkonu değiştir
     if (submenu.classList.contains("d-none")) {
         icon.classList.remove("bi-chevron-up");
         icon.classList.add("bi-chevron-down");
@@ -62,8 +67,7 @@ function toggleSecurity() {
     }
 }
 
-
-// Menü tıklandığında sağ içeriği değiştirme (örnek)
+// Menü tıklandığında sağ içeriği değiştirme
 function loadSection(section) {
     const contentArea = document.getElementById("contentArea");
 
@@ -109,28 +113,61 @@ document.getElementById('profilePicInput').addEventListener('change', function (
         const reader = new FileReader();
         reader.onload = function (e) {
             imgElement.src = e.target.result;
-
-            // İsteğe bağlı: resmi localStorage’a kaydet
             localStorage.setItem('profileImage', e.target.result);
         };
         reader.readAsDataURL(file);
     }
 });
 
-// Sayfa yüklendiğinde daha önce seçilmiş resmi göster
-document.addEventListener("DOMContentLoaded", function () {
-    setupAuthDropdown();
+// Şifre değiştirme formunu dinle
+document.addEventListener('submit', function (event) {
+    if (event.target.matches('form')) {
+        event.preventDefault(); // Sayfa yenilenmesini engelle
 
-    const fullName = localStorage.getItem('fullName');
-    const greetingText = document.getElementById("greetingText");
-    const savedImage = localStorage.getItem('profileImage');
-    const imgElement = document.getElementById('profileImage');
+        const oldPassword = document.getElementById('oldPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const newPasswordAgain = document.getElementById('confirmPassword').value; // 'Yeni Şifre (Tekrar)' kısmı
+        const userId = localStorage.getItem('userID'); // LocalStorage'dan kullanıcı ID'yi al
 
-    if (fullName && greetingText) {
-        greetingText.textContent = `Merhaba ${fullName}!`;
-    }
+        // Basit doğrulamalar
+        if (!oldPassword || !newPassword || !newPasswordAgain) {
+            alertify.error('Lütfen tüm alanları doldurun.');
+            return;
+        }
 
-    if (savedImage && imgElement) {
-        imgElement.src = savedImage;
+        if (newPassword !== newPasswordAgain) {
+            alertify.error('Yeni şifreler eşleşmiyor.');
+            return;
+        }
+
+        // API isteği
+        fetch(`https://localhost:7149/api/User/password-change/${userId}`, {
+            method: 'PUT', // PUT kullanıyoruz çünkü API böyle istiyor
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}` // Eğer token istiyorsa ekle
+            },
+            body: JSON.stringify({
+                oldPassword: oldPassword,
+                newPassword: newPassword,
+                newPasswordAgain: newPasswordAgain // "Yeni Şifre (Tekrar)" da API'ye eklenmeli
+            })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alertify.success('Şifreniz başarıyla güncellendi.');
+                    // İstersen formu temizleyebilirsin
+                    event.target.reset();
+                } else {
+                    return response.json().then(data => {
+                        const errorMessage = data.message || 'Şifre güncellenirken bir hata oluştu.';
+                        throw new Error(errorMessage);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Şifre değiştirme hatası:', error);
+                alertify.error(error.message);
+            });
     }
 });

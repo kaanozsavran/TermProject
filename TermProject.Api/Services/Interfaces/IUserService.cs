@@ -12,5 +12,6 @@ namespace TermProject.Api.Services.Interfaces
         public Task<UserInformationDTO> GetUserById(int userid);
         public Task UpdateUserInfo(int userid, UserUpdateInfoDTO dto);
         public Task<(bool Success, string Message)> UploadProfilePictureAsync(int userId, IFormFile profilePicture);
+        public Task UpdateUserPassword(int userid, UserPasswordUpdateDTO userPasswordUpdateDTO);
     }
 }

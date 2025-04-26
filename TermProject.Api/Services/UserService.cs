@@ -341,5 +341,43 @@ namespace TermProject.Api.Services
 
 
         }
+
+        public async Task UpdateUserPassword(int userid, UserPasswordUpdateDTO userPasswordUpdateDTO)
+        {
+            // 1. Kullanıcıyı veritabanından bul
+            var user = await _dbcontext.Users.FindAsync(userid);
+
+            if (user == null)
+            {
+                throw new Exception("Kullanıcı bulunamadı.");
+            }
+
+            // 2. Mevcut şifreyi kontrol et
+            if (user.PasswordHash != userPasswordUpdateDTO.oldPassword)
+            {
+                throw new Exception("Eski şifre yanlış.");
+            }
+
+            // 3. Yeni şifreler birbiriyle aynı mı kontrol et
+            if (userPasswordUpdateDTO.newPassword != userPasswordUpdateDTO.newPasswordAgain)
+            {
+                throw new Exception("Yeni şifreler birbiriyle uyuşmuyor.");
+            }
+            if(user.PasswordHash == userPasswordUpdateDTO.newPassword 
+                || user.PasswordHash ==  userPasswordUpdateDTO.newPasswordAgain)
+            {
+                throw new Exception("Yeni şifre, eski şifreniz ile aynı olamaz!");
+            }
+            if (userPasswordUpdateDTO.newPassword == "") 
+            { 
+                throw  new Exception("Şifre boş bırakılamaz!");
+            }
+            // 4. Şifreyi güncelle
+            user.PasswordHash = userPasswordUpdateDTO.newPassword;
+
+            // 5. Değişiklikleri kaydet
+            await _dbcontext.SaveChangesAsync();
+        }
+
     }
 }
