@@ -115,17 +115,17 @@ namespace TermProject.Api.Controller
 
             return Ok(result.Message);
         }
-        [HttpPut("password-change{userid}")]
-        public async Task<IActionResult> UpdatePassword(int userid, [FromBody] UserPasswordUpdateDTO userPasswordUpdateDTO)
+        [HttpPut("password-change{userId}")]
+        public async Task<IActionResult> UpdatePassword(int userId, [FromBody] UserPasswordUpdateDTO userPasswordUpdateDTO)
         {
             try
             {
-                await _userService.UpdateUserPassword(userid, userPasswordUpdateDTO);
+                await _userService.UpdateUserPassword(userId, userPasswordUpdateDTO);
                 return Ok(new { message = "Şifre başarıyla güncellendi." });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { error = ex.Message });
+                return BadRequest( ex.Message );
             }
         }
     }

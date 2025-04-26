@@ -67,7 +67,7 @@ function toggleSecurity() {
     }
 }
 
-// Menü tıklandığında sağ içeriği değiştirme
+// Şifre değiştirme içeriğini yüklemek için
 function loadSection(section) {
     const contentArea = document.getElementById("contentArea");
 
@@ -79,21 +79,22 @@ function loadSection(section) {
             contentArea.innerHTML = `<div class="card p-3 shadow-sm"><h4>Notlarım</h4><p>Notlar burada listelenecek.</p></div>`;
             break;
         case 'sifreDegistir':
+            // Şifre değiştir formunu JS ile oluşturma
             contentArea.innerHTML = `
                 <div class="card p-3 shadow-sm">
                     <h4>Şifre Değiştir</h4>
-                    <form>
+                    <form id="changePasswordForm">
                         <div class="mb-3">
                             <label for="oldPassword" class="form-label">Eski Şifre:</label>
-                            <input type="password" class="form-control" id="oldPassword">
+                            <input type="password" class="form-control" id="oldPassword" required>
                         </div>
                         <div class="mb-3">
                             <label for="newPassword" class="form-label">Yeni Şifre:</label>
-                            <input type="password" class="form-control" id="newPassword">
+                            <input type="password" class="form-control" id="newPassword" required>
                         </div>
                         <div class="mb-3">
                             <label for="confirmPassword" class="form-label">Yeni Şifre (Tekrar):</label>
-                            <input type="password" class="form-control" id="confirmPassword">
+                            <input type="password" class="form-control" id="confirmPassword" required>
                         </div>
                         <button type="submit" class="btn btn-outline-custom updateButton">Şifreyi Güncelle</button>
                     </form>
@@ -102,7 +103,102 @@ function loadSection(section) {
         default:
             contentArea.innerHTML = `<div class="card p-3 shadow-sm"><h4>İçerik buraya yüklenecek</h4></div>`;
     }
+
+    // Form yüklendikten sonra event listener eklemek
+    const changePasswordForm = document.getElementById("changePasswordForm");
+    if (changePasswordForm) {
+        changePasswordForm.addEventListener("submit", async function (e) {
+            e.preventDefault(); // Sayfa yenilenmesin
+
+            const token = localStorage.getItem('token');
+            const userID = localStorage.getItem('userID'); // Kullanıcı ID'sini alıyoruz
+
+            const oldPassword = document.getElementById("oldPassword").value.trim();
+            const newPassword = document.getElementById("newPassword").value.trim();
+            const confirmNewPassword = document.getElementById("confirmPassword").value.trim();
+
+            // Basit kontroller
+            if (!oldPassword || !newPassword || !confirmNewPassword) {
+                alertify.error("Lütfen tüm alanları doldurun.");
+                return;
+            }
+
+            if (newPassword !== confirmNewPassword) {
+                alertify.error("Yeni şifreler eşleşmiyor!");
+                return;
+            }
+
+            const requestBody = {
+                oldPassword: oldPassword,
+                newPassword: newPassword,
+                newPasswordAgain: confirmNewPassword
+            };
+
+            try {
+                const response = await fetch(`https://localhost:7149/api/User/password-change${userID}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`  // API Key veya token burada kullanılıyor
+                    },
+                    body: JSON.stringify(requestBody)  // JSON formatında veri gönderiyoruz
+                });
+
+                console.log("Response status:", response.status);
+                console.log("Response ok?:", response.ok);
+
+                if (!response.ok) {
+                    const errText = await response.text();  // Yanıt metnini al
+                    throw new Error(errText || "Şifre değiştirilemedi.");
+                }
+
+                const responseData = await response.json();  // Yanıtı JSON olarak çözümle
+                alertify.success(responseData.message || "Şifre başarıyla değiştirildi!");
+
+                // Formu sıfırlıyoruz (formun gerçekten yüklendiğinden emin olarak)
+                changePasswordForm.reset();
+
+            } catch (error) {
+                console.error("Şifre değiştirme hatası:", error);
+                alertify.error(`${error.message}`);
+            }
+        });
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Profil resmi değiştirme
 document.getElementById('profilePicInput').addEventListener('change', function (event) {
@@ -116,58 +212,5 @@ document.getElementById('profilePicInput').addEventListener('change', function (
             localStorage.setItem('profileImage', e.target.result);
         };
         reader.readAsDataURL(file);
-    }
-});
-
-// Şifre değiştirme formunu dinle
-document.addEventListener('submit', function (event) {
-    if (event.target.matches('form')) {
-        event.preventDefault(); // Sayfa yenilenmesini engelle
-
-        const oldPassword = document.getElementById('oldPassword').value;
-        const newPassword = document.getElementById('newPassword').value;
-        const newPasswordAgain = document.getElementById('confirmPassword').value; // 'Yeni Şifre (Tekrar)' kısmı
-        const userId = localStorage.getItem('userID'); // LocalStorage'dan kullanıcı ID'yi al
-
-        // Basit doğrulamalar
-        if (!oldPassword || !newPassword || !newPasswordAgain) {
-            alertify.error('Lütfen tüm alanları doldurun.');
-            return;
-        }
-
-        if (newPassword !== newPasswordAgain) {
-            alertify.error('Yeni şifreler eşleşmiyor.');
-            return;
-        }
-
-        // API isteği
-        fetch(`https://localhost:7149/api/User/password-change/${userId}`, {
-            method: 'PUT', // PUT kullanıyoruz çünkü API böyle istiyor
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}` // Eğer token istiyorsa ekle
-            },
-            body: JSON.stringify({
-                oldPassword: oldPassword,
-                newPassword: newPassword,
-                newPasswordAgain: newPasswordAgain // "Yeni Şifre (Tekrar)" da API'ye eklenmeli
-            })
-        })
-            .then(response => {
-                if (response.ok) {
-                    alertify.success('Şifreniz başarıyla güncellendi.');
-                    // İstersen formu temizleyebilirsin
-                    event.target.reset();
-                } else {
-                    return response.json().then(data => {
-                        const errorMessage = data.message || 'Şifre güncellenirken bir hata oluştu.';
-                        throw new Error(errorMessage);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Şifre değiştirme hatası:', error);
-                alertify.error(error.message);
-            });
     }
 });
