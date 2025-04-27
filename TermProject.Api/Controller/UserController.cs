@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TermProject.Api.Models.DTO.UserDTO;
 using TermProject.Api.Services;
 using TermProject.Api.Services.Interfaces;
@@ -128,9 +129,18 @@ namespace TermProject.Api.Controller
                 return BadRequest( ex.Message );
             }
         }
-        [HttpGet("getUserInformation/{userId}")]
-        public async Task<IActionResult> GetUserInformation(int userId)
+        [HttpGet("getUserInformation")]
+        [Authorize] // authorize işlemi güvenlik için bu sayede parametre olarak hem backendde hem de front'ta fetch işleminde parametre olarak userid cekmeye ıhtıyac duymuyoruz.
+        public async Task<IActionResult> GetUserInformation()
         {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized(new { message = "Geçerli kullanıcı bulunamadı." });
+            }
+
+            int userId = int.Parse(userIdClaim.Value);
+
             try
             {
                 var userInformation = await _userService.GetUserInformationAsync(userId);

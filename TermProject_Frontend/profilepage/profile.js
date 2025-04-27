@@ -73,7 +73,7 @@ function loadSection(section) {
 
     switch (section) {
         case 'profilim':
-            contentArea.innerHTML = `<div class="card p-3 shadow-sm"><h4>Profilim</h4><p>Profil bilgileri burada gösterilecek.</p></div>`;
+            loadUserProfile();
             break;
         case 'notlarim':
             contentArea.innerHTML = `<div class="card p-3 shadow-sm"><h4>Notlarım</h4><p>Notlar burada listelenecek.</p></div>`;
@@ -167,38 +167,50 @@ function loadSection(section) {
 }
 
 
+// Profil Bilgilerini Backend'den Al
+async function loadUserProfile() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        alertify.error("Kullanıcı girişi yapılmamış.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://localhost:7149/api/User/getUserInformation`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`, // Token gönderimi
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(errText || "Kullanıcı bilgileri alınamadı.");
+        }
+
+        const userData = await response.json();  // Kullanıcı verisini JSON olarak al
 
 
+        // Kullanıcı bilgilerini sayfada göster
+        const contentArea = document.getElementById("contentArea");
+        contentArea.innerHTML = `
+            <div class="card p-3 shadow-sm">
+                <h4>Profilim</h4>
+                <p><strong>Ad Soyad:</strong> ${userData.fullName}</p>
+                <p><strong>Email:</strong> ${userData.email}</p>
+                <p><strong>Üniversite:</strong> ${userData.universityName}</p>
+                <p><strong>Fakülte:</strong> ${userData.facultyName}</p>
+                <p><strong>Bölüm:</strong> ${userData.departmentName}</p>
+            </div>
+        `;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    } catch (error) {
+        console.error("Profil bilgileri yüklenirken hata:", error);
+        alertify.error(`${error.message}`);
+    }
+}
 
 // Profil resmi değiştirme
 document.getElementById('profilePicInput').addEventListener('change', function (event) {
@@ -214,3 +226,14 @@ document.getElementById('profilePicInput').addEventListener('change', function (
         reader.readAsDataURL(file);
     }
 });
+
+
+
+
+
+
+
+
+
+
+

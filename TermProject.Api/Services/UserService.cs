@@ -46,9 +46,10 @@ namespace TermProject.Api.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
-                {
-            new Claim(ClaimTypes.Email, user.UserID.ToString()),
-                }),
+      {
+        new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()), // 🔥 DOĞRU
+        new Claim(ClaimTypes.Email, user.Email) // 🔥 E-mail bilgisini de düzgün ekleyelim
+      }),
                 Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
