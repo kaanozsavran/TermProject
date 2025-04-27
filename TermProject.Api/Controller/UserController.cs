@@ -128,5 +128,18 @@ namespace TermProject.Api.Controller
                 return BadRequest( ex.Message );
             }
         }
+        [HttpGet("getUserInformation/{userId}")]
+        public async Task<IActionResult> GetUserInformation(int userId)
+        {
+            try
+            {
+                var userInformation = await _userService.GetUserInformationAsync(userId);
+                return Ok(userInformation);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
     }
 }

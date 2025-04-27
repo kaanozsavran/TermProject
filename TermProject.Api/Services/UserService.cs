@@ -379,5 +379,29 @@ namespace TermProject.Api.Services
             await _dbcontext.SaveChangesAsync();
         }
 
+
+        public async Task<UserInformationProfileDTO> GetUserInformationAsync(int userId)
+        {
+            var user = await _dbcontext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new Exception("Kullanıcı bulunamadı.");
+            }
+
+            // User information with associated data (Department, Faculty, University)
+            var userInfo = new UserInformationProfileDTO
+            {
+                FullName = user.FullName,
+                Email = user.Email,
+                DepartmentName = await GetDepartmentNameByIDAsync(user.DepartmentID),
+                FacultyName = await GetFacultyNameByIDAsync(user.FacultyID),
+                UniversityName = await GetUniversityNameByIDAsync(user.UniversityID)
+            };
+
+            return userInfo;
+        }
+
+
+
     }
 }
