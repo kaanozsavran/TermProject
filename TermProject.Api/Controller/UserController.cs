@@ -151,5 +151,19 @@ namespace TermProject.Api.Controller
                 return NotFound(new { message = ex.Message });
             }
         }
+        [HttpGet("{userId}/profile-picture")]
+        public async Task<IActionResult> GetProfilePicture(int userId)
+        {
+            try
+            {
+                var result = await _userService.GetProfilePictureAsync(userId);
+                return Ok(result);
+            }
+            
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Bir hata oluştu.", details = ex.Message });
+            } 
+        }
     }
 }

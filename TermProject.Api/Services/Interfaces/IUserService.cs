@@ -1,4 +1,5 @@
 ﻿using TermProject.Api.Models;
+using TermProject.Api.Models.DTO.ProfilePictureDTO;
 using TermProject.Api.Models.DTO.UserDTO;
 
 namespace TermProject.Api.Services.Interfaces
@@ -14,6 +15,8 @@ namespace TermProject.Api.Services.Interfaces
         public Task<(bool Success, string Message)> UploadProfilePictureAsync(int userId, IFormFile profilePicture);
         public Task UpdateUserPassword(int userid, UserPasswordUpdateDTO userPasswordUpdateDTO);
         Task<UserInformationProfileDTO> GetUserInformationAsync(int userId);
+        Task<ProfilePictureDTO> GetProfilePictureAsync(int userId);
+
 
     }
 }

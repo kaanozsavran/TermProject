@@ -14,10 +14,70 @@ document.addEventListener("DOMContentLoaded", function () {
     if (savedImage && imgElement) {
         imgElement.src = savedImage;
     }
-
+    // Fetch the user's profile picture from the backend
+    const userId = localStorage.getItem('userID'); // Assuming the user ID is saved in localStorage
+    if (userId) {
+        fetchProfilePicture(userId);
+    }
     // ===>> SAYFA AÇILINCA "Profilim" SEÇENEĞİNİ YÜKLE <<
     loadSection('profilim');
 });
+
+
+
+
+
+
+
+
+async function fetchProfilePicture(userId) {
+    try {
+        const response = await fetch(`https://localhost:7149/api/User/${userId}/profile-picture`);
+
+        if (!response.ok) {
+            throw new Error("Profil fotoğrafı yüklenemedi");
+        }
+
+        const data = await response.json();
+        const profilePictureUrl = data.profilePictureUrl;
+
+        // Set the profile picture src to the fetched URL
+        const imgElement = document.getElementById('profileImage');
+        imgElement.src = profilePictureUrl ? profilePictureUrl : '../img/pp-blue.png'; // Fallback to default image if no URL is provided
+    } catch (error) {
+        console.error(error);
+        // If there's an error, fallback to default profile picture
+        const imgElement = document.getElementById('profileImage');
+        imgElement.src = '../img/pp-blue.png';
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Kullanıcı Durumunu Kontrol Et ve Dropdown'u Oluştur
 function setupAuthDropdown() {
@@ -76,7 +136,7 @@ function loadSection(section) {
             loadUserProfile();
             break;
         case 'notlarim':
-            contentArea.innerHTML = `<div class="card p-3 shadow-sm"><h4>Notlarım</h4><p>Notlar burada listelenecek.</p></div>`;
+            getUserNotes();
             break;
         case 'sifreDegistir':
             // Şifre değiştir formunu JS ile oluşturma
@@ -226,6 +286,93 @@ document.getElementById('profilePicInput').addEventListener('change', function (
         reader.readAsDataURL(file);
     }
 });
+
+function getUserNotes() {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userID'); // Login olduktan sonra zaten kaydediyorsun
+    const notesContainer = document.getElementById('contentArea');
+
+    fetch(`https://localhost:7149/api/Note/user-notes/${userId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Kullanıcı notları çekilemedi.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            notesContainer.innerHTML = '<div class="row">'; // Temizle ve grid başlat
+
+            if (!data || data.length === 0) {
+                notesContainer.innerHTML = `<div class='col'><div class='card p-3 text-center' style="background:white ;color:#42999b;"><strong>Hiç not eklenmemiş.</strong></div></div>`;
+                return;
+            }
+
+            data.forEach(note => {
+                const noteId = `pdf-canvas-${note.noteID}`;
+                const noteCard = `
+                    <div class='col-md-4 mb-4'>
+            <div class='card p-3 shadow-sm'>
+                <h5>${note.title}</h5>
+                <p>${note.description || 'Açıklama yok.'}</p>
+                <div class="canvas-container">
+                    <canvas id="${noteId}" style="width: 100%; max-height: 300px;"></canvas>
+                    <div class="hover-icon">
+                        <a href="https://localhost:7149${note.filePath}" target="_blank"><i class="bi bi-search"></i></a>
+                    </div>
+                </div>
+                <div class="note-footer d-flex justify-content-between align-items-center">
+                    <p><strong>Ders:</strong> ${note.courseName || 'Bilinmiyor'}</p>
+                    <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
+                </div>
+            </div>
+        </div>
+                `;
+                notesContainer.innerHTML += noteCard;
+            });
+
+            notesContainer.innerHTML += '</div>'; // Grid kapat
+
+            setTimeout(() => {
+                data.forEach(note => {
+                    const noteId = `pdf-canvas-${note.noteID}`;
+                    renderPDF(note.filePath, noteId);
+                });
+            }, 500);
+        })
+        .catch(error => {
+            notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${error.message}</div></div>`;
+            console.error('Hata:', error);
+        });
+}
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+function renderPDF(pdfUrl, canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    const requestUrl = `https://localhost:7149/api/Note/note-files?filePath=${pdfUrl}`;
+
+    pdfjsLib.getDocument(requestUrl).promise.then(pdf => {
+        return pdf.getPage(1);
+    }).then(page => {
+        const viewport = page.getViewport({ scale: 1.0 });
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        const renderContext = {
+            canvasContext: ctx,
+            viewport: viewport
+        };
+        return page.render(renderContext).promise;
+    }).catch(error => {
+        console.error("PDF yüklenirken hata oluştu:", error);
+    });
+}
 
 
 

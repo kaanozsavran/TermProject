@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using TermProject.Api.Data;
 using TermProject.Api.Models;
+using TermProject.Api.Models.DTO.ProfilePictureDTO;
 using TermProject.Api.Models.DTO.UserDTO;
 using TermProject.Api.Services.Interfaces;
 
@@ -322,7 +323,6 @@ namespace TermProject.Api.Services
             {
                 return (false, "Kullanıcı bulunamadı.");
             }
-
             // Dosya adı oluşturma (örneğin: userId_guid.jpg)
             var fileName = $"{userId}_{Guid.NewGuid()}{Path.GetExtension(profilePicture.FileName)}";
             var filePath = Path.Combine(_environment.WebRootPath, "images", "profile-pictures", fileName);
@@ -339,7 +339,7 @@ namespace TermProject.Api.Services
 
             return (true, "Profil fotoğrafı başarıyla eklendi!");
 
-
+            
 
         }
 
@@ -398,9 +398,35 @@ namespace TermProject.Api.Services
                 FacultyName = await GetFacultyNameByIDAsync(user.FacultyID),
                 UniversityName = await GetUniversityNameByIDAsync(user.UniversityID)
             };
-
             return userInfo;
         }
+
+
+
+
+
+        public async Task<ProfilePictureDTO> GetProfilePictureAsync(int userId)
+        {
+            var user = await _dbcontext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new Exception("Kullanıcı bulunamadı."); 
+            }
+
+            var profilePicturePath = user.ProfilePicturePath;  
+
+            // Kullanıcı profil fotoğrafı yüklememişse, varsayılan fotoğraf döndür
+            if (string.IsNullOrEmpty(profilePicturePath))
+            {
+                profilePicturePath = "/images/profile-pictures/pp-blue.png"; // Varsayılan profil fotoğrafı
+            }
+
+            return new ProfilePictureDTO
+            {
+                ProfilePictureUrl = profilePicturePath
+            };
+        }
+
 
 
 
