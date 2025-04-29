@@ -12,9 +12,10 @@ namespace TermProject.Api.Models
         public string Description { get; set; }
         public string FilePath { get; set; }
         [ForeignKey("Courses")]
-        public int CourseID { get; set; }
+        public int CourseID { get; set; } 
         public DateTime UploadDate { get; set; }
         [ForeignKey("Users")]
         public int UserID { get; set; }
+       
     }
 }

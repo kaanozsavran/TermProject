@@ -50,7 +50,7 @@ namespace TermProject.Api.Controller
         [HttpGet("user-notes/{userId}")]
         public async Task<IActionResult> GetUserNotes(int userId)
         {
-            var notes = await _noteService.GetUserNotesAsync(userId);
+            var notes = await _noteService.GetNotesByUserIdAsync(userId);
 
             if (notes == null || !notes.Any())
             {

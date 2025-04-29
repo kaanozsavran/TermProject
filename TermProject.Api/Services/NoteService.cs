@@ -8,7 +8,7 @@ using TermProject.Api.Services.Interfaces;
 
 namespace TermProject.Api.Services
 {
-    public class NoteService : INoteService
+    public class NoteService : INoteService 
     {
         private readonly NotelandDbContext _context;
         private readonly IWebHostEnvironment _environment;
@@ -138,76 +138,32 @@ namespace TermProject.Api.Services
             }
         }
 
-        public async Task<List<NoteResponseDTO>> GetUserNotesAsync(int userId)
+        public async Task<List<NoteGetInformationDTO>> GetNotesByUserIdAsync(int userId)
         {
             var notes = await _context.Notes
-                .Where(n => n.UserID == userId)
-                .Select(n => new NoteResponseDTO
+        .Where(n => n.UserID == userId)
+        .ToListAsync();
+
+            var noteDTOs = new List<NoteGetInformationDTO>();
+
+            foreach (var note in notes)
+            {
+                var courseName = await GetCourseNameByIDAsync(note.CourseID);
+
+                noteDTOs.Add(new NoteGetInformationDTO
                 {
-                    NoteID = n.NoteID,
-                    Title = n.Title,
-                    Description = n.Description,
-                    FilePath = n.FilePath,
-                    UploadDate = n.UploadDate
-                })
-                .ToListAsync();
+                    NoteID = note.NoteID,
+                    Title = note.Title,
+                    Description = note.Description,
+                    FilePath = note.FilePath,
+                    UploadDate = note.UploadDate,
+                    CourseName = courseName
+                });
+            }
 
-            return notes;
+            return noteDTOs;
         }
-        //public async Task<List<NoteResponseDTO>> GetNotesByCourseIdAsync(int courseId)
-        //{
-        //    var notes = await _context.Notes
-        //.Where(n => n.CourseID == courseId)
-        //.Include(n => n.Course) // Course tablosuyla ilişkilendir
-        //    .ThenInclude(c => c.Department) // Department'a erişmek için
-        //        .ThenInclude(d => d.Faculty) // Faculty'ye erişmek için
-        //            .ThenInclude(f => f.University) // University'ye erişmek için
-        //.ToListAsync();
 
-        //    if (notes == null || !notes.Any())
-        //    {
-        //        throw new Exception("Bu kursa ait not bulunamadı.");
-        //    }
-
-        //    var noteList = new List<NoteResponseDTO>();
-
-        //    foreach (var n in notes)
-        //    {
-        //        noteList.Add(new NoteResponseDTO
-        //        {
-        //            NoteID = n.NoteID,
-        //            Title = n.Title,
-        //            Description = n.Description,
-        //            FilePath = n.FilePath,
-        //            UploadDate = n.UploadDate,
-        //            CourseName = n.Course.CourseName, // Course tablosundan al
-        //            DepartmentName = n.Course.Department.DepartmentName, // Doğru ilişkiyle al
-        //            FacultyName = n.Course.Department.Faculty.FacultyName, // Doğru ilişkiyle al
-        //            UniversityName = n.Course.Department.Faculty.University.UniversityName // Doğru ilişkiyle al
-        //        });
-        //    }
-
-        //    return noteList;
-
-        //var notes = await _context.Notes
-        //    .Where(n => n.CourseID == courseId)
-        //    .Select(n => new NoteResponseDTO
-        //    {
-        //        NoteID = n.NoteID,
-        //        Title = n.Title,
-        //        Description = n.Description,
-        //        FilePath = n.FilePath,
-        //        UploadDate = n.UploadDate,
-        //        DepartmentName = await GetDepartmentNameByIDAsync(user.DepartmentID),
-        //        FacultyName = await GetFacultyNameByIDAsync(user.FacultyID),
-        //        UniversityName = await GetUniversityNameByIDAsync(user.UniversityID),
-        //        UniversityName = await GetUniversityNameByIDAsync(user.UniversityID)
-        //    })
-        //    .ToListAsync();
-
-        //return notes;
-        //}
-        // Belirtilen courseId'ye bağlı notları çekme
         public async Task<List<NoteResponseDTO>> GetNotesByCourseIdAsync(int courseId)
         {
             
@@ -221,15 +177,25 @@ namespace TermProject.Api.Services
                     Description = n.Description,
                     FilePath = n.FilePath,
                     UploadDate = n.UploadDate,
-                    UserID = n.UserID,
-                    UserName = _context.Users.FirstOrDefault(u => u.UserID == n.UserID).FullName // Kullanıcı adını ekle
+
                 })
                 .ToListAsync();
            
 
             return notes; // List<NoteResponseDTO> döndür
         }
-
+        public async Task<string> GetCourseNameByIDAsync(int courseId)
+        {
+            var course = await _context.Courses.FirstOrDefaultAsync(c => c.CourseID == courseId);
+            if (course != null)
+            {
+                return course.CourseName;
+            }
+            else
+            {
+                throw new ArgumentException("Course ID is not found!", nameof(courseId));
+            }
+        }
 
     }
 }
