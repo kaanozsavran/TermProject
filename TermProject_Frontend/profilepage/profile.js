@@ -41,16 +41,20 @@ async function fetchProfilePicture(userId) {
         const data = await response.json();
         const profilePictureUrl = data.profilePictureUrl;
 
-        // Set the profile picture src to the fetched URL
+
+        // Tam URL'yi oluştur
+        const fullUrl = profilePictureUrl ? `https://localhost:7149${profilePictureUrl}` : null;
+
+        // Set the profile picture src to the fetched full URL
         const imgElement = document.getElementById('profileImage');
-        imgElement.src = profilePictureUrl ? profilePictureUrl : '../img/pp-blue.png'; // Fallback to default image if no URL is provided
+        imgElement.src = fullUrl || '../img/pp-blue.png';
     } catch (error) {
         console.error(error);
-        // If there's an error, fallback to default profile picture
         const imgElement = document.getElementById('profileImage');
         imgElement.src = '../img/pp-blue.png';
     }
 }
+
 
 
 
@@ -256,25 +260,25 @@ async function loadUserProfile() {
         // Kullanıcı bilgilerini sayfada göster
         const contentArea = document.getElementById("contentArea");
         contentArea.innerHTML = `
-            <div class="card p-3 shadow-sm">
-    <h4>Profilim</h4>
-    <p><strong>Ad Soyad:</strong>
-        <input type="text" id="fullName" value="${userData.fullName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
-    </p>
-    <p><strong>Email:</strong> 
-        <input type="email" id="email" value="${userData.email}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
-    </p>
-    <p><strong>Üniversite:</strong> 
-        <input type="text" id="universityName" value="${userData.universityName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
-    </p>
-    <p><strong>Fakülte:</strong> 
-        <input type="text" id="facultyName" value="${userData.facultyName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
-    </p>
-    <p><strong>Bölüm:</strong> 
-        <input type="text" id="departmentName" value="${userData.departmentName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
-    </p>
-    <button class="btn btn-custom mt-3" onclick="updateProfile()">Güncelle</button>
-</div>
+                <div class="card p-3 shadow-sm">
+                        <h4>Profilim</h4>
+                        <p><strong>Ad Soyad:</strong>
+                            <input type="text" id="fullName" value="${userData.fullName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
+                        </p>
+                        <p><strong>Email:</strong> 
+                            <input type="email" id="email" value="${userData.email}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
+                        </p>
+                        <p><strong>Üniversite:</strong> 
+                            <input type="text" id="universityName" value="${userData.universityName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
+                        </p>
+                        <p><strong>Fakülte:</strong> 
+                            <input type="text" id="facultyName" value="${userData.facultyName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
+                        </p>
+                        <p><strong>Bölüm:</strong> 
+                            <input type="text" id="departmentName" value="${userData.departmentName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
+                        </p>
+                        <button class="btn btn-custom mt-3" onclick="updateProfile()">Güncelle</button>
+                 </div>
         `;
 
     } catch (error) {
@@ -301,7 +305,7 @@ document.getElementById('profilePicInput').addEventListener('change', function (
 function getUserNotes() {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userID'); // Login olduktan sonra zaten kaydediyorsun
-    const notesContainer = document.getElementById('contentArea');
+    const notesContainer = document.getElementById('contentAreaItem');
 
     fetch(`https://localhost:7149/api/Note/user-notes/${userId}`, {
         method: 'GET',
@@ -317,7 +321,7 @@ function getUserNotes() {
             return response.json();
         })
         .then(data => {
-            notesContainer.innerHTML = '<div class="row">'; // Temizle ve grid başlat
+
 
             if (!data || data.length === 0) {
                 notesContainer.innerHTML = `<div class='col'><div class='card p-3 text-center' style="background:white ;color:#42999b;"><strong>Hiç not eklenmemiş.</strong></div></div>`;
@@ -327,7 +331,8 @@ function getUserNotes() {
             data.forEach(note => {
                 const noteId = `pdf-canvas-${note.noteID}`;
                 const noteCard = `
-                    <div class='col-md-4 mb-4'>
+                
+                    <div class='d-flex col-md-4 mb-4'>
             <div class='card p-3 shadow-sm'>
                 <h5>${note.title}</h5>
                 <p>${note.description || 'Açıklama yok.'}</p>
@@ -347,7 +352,7 @@ function getUserNotes() {
                 notesContainer.innerHTML += noteCard;
             });
 
-            notesContainer.innerHTML += '</div>'; // Grid kapat
+
 
             setTimeout(() => {
                 data.forEach(note => {
