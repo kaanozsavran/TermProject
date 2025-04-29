@@ -257,13 +257,24 @@ async function loadUserProfile() {
         const contentArea = document.getElementById("contentArea");
         contentArea.innerHTML = `
             <div class="card p-3 shadow-sm">
-                <h4>Profilim</h4>
-                <p><strong>Ad Soyad:</strong> ${userData.fullName}</p>
-                <p><strong>Email:</strong> ${userData.email}</p>
-                <p><strong>Üniversite:</strong> ${userData.universityName}</p>
-                <p><strong>Fakülte:</strong> ${userData.facultyName}</p>
-                <p><strong>Bölüm:</strong> ${userData.departmentName}</p>
-            </div>
+    <h4>Profilim</h4>
+    <p><strong>Ad Soyad:</strong>
+        <input type="text" id="fullName" value="${userData.fullName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
+    </p>
+    <p><strong>Email:</strong> 
+        <input type="email" id="email" value="${userData.email}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
+    </p>
+    <p><strong>Üniversite:</strong> 
+        <input type="text" id="universityName" value="${userData.universityName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
+    </p>
+    <p><strong>Fakülte:</strong> 
+        <input type="text" id="facultyName" value="${userData.facultyName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
+    </p>
+    <p><strong>Bölüm:</strong> 
+        <input type="text" id="departmentName" value="${userData.departmentName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
+    </p>
+    <button class="btn btn-custom mt-3" onclick="updateProfile()">Güncelle</button>
+</div>
         `;
 
     } catch (error) {
@@ -328,7 +339,7 @@ function getUserNotes() {
                 </div>
                 <div class="note-footer d-flex justify-content-between align-items-center">
                     <p><strong>Ders:</strong> ${note.courseName || 'Bilinmiyor'}</p>
-                    <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
+                    <p class="text-muted" style="color:white !important;">${new Date(note.uploadDate).toLocaleDateString()}</p>
                 </div>
             </div>
         </div>

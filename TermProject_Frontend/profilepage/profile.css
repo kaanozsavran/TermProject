@@ -23,16 +23,21 @@ body {
 
 .btn-outline-custom {
     color: white !important;
-    /* Metin rengi */
     background-color: #42999b !important;
-    /* Kenar rengi */
 }
 
 .btn-outline-custom:hover {
     background-color: #2b7a7c !important;
-    /* Hover durumunda arka plan rengi */
     color: white !important;
-    /* Hover durumunda metin rengi */
+}
+
+.btn-custom {
+    color: #42999b !important;
+    background-color: white !important;
+}
+
+.btn-custom:hover {
+    background-color: #e6e6e6 !important;
 }
 
 .profile-pic {

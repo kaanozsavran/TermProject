@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\files\pp\" />
     <Folder Include="wwwroot\images\profile-pictures\" />
   </ItemGroup>
 
