@@ -47,41 +47,13 @@ async function fetchProfilePicture(userId) {
 
         // Set the profile picture src to the fetched full URL
         const imgElement = document.getElementById('profileImage');
-        imgElement.src = fullUrl || '../img/pp-blue.png';
+        imgElement.src = fullUrl || '../img/pp-white.png';
     } catch (error) {
         console.error(error);
         const imgElement = document.getElementById('profileImage');
-        imgElement.src = '../img/pp-blue.png';
+        imgElement.src = '../img/pp-white.png';
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Kullanıcı Durumunu Kontrol Et ve Dropdown'u Oluştur
 function setupAuthDropdown() {
@@ -199,7 +171,7 @@ function loadSection(section) {
             };
 
             try {
-                const response = await fetch(`https://localhost:7149/api/User/password-change${userID}`, {
+                const response = await fetch(`https://localhost:7149/api/User/password-change/${userID}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -281,6 +253,7 @@ async function loadUserProfile() {
                  </div>
         `;
 
+
     } catch (error) {
         console.error("Profil bilgileri yüklenirken hata:", error);
         alertify.error(`${error.message}`);
@@ -305,7 +278,8 @@ document.getElementById('profilePicInput').addEventListener('change', function (
 function getUserNotes() {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userID'); // Login olduktan sonra zaten kaydediyorsun
-    const notesContainer = document.getElementById('contentAreaItem');
+    const notesContainer = document.getElementById('contentArea');
+
 
     fetch(`https://localhost:7149/api/Note/user-notes/${userId}`, {
         method: 'GET',
@@ -329,7 +303,7 @@ function getUserNotes() {
             }
 
             data.forEach(note => {
-                const noteId = `pdf-canvas-${note.noteID}`;
+                const noteId = `pdf-canvas-${note.noteID}`; //burada row içerisine almadığı için hata alıyorduk,html de row içerisine dahil edince sorun çözüldü.
                 const noteCard = `
                 
                     <div class='d-flex col-md-4 mb-4'>
@@ -362,7 +336,7 @@ function getUserNotes() {
             }, 500);
         })
         .catch(error => {
-            notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${error.message}</div></div>`;
+            notesContainer.innerHTML = `<div class="col"><div class="card p-3">${error.message}</div></div>`;
             console.error('Hata:', error);
         });
 }

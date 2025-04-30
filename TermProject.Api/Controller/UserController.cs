@@ -116,7 +116,7 @@ namespace TermProject.Api.Controller
 
             return Ok(result.Message);
         }
-        [HttpPut("password-change{userId}")]
+        [HttpPut("password-change/{userId}")]
         public async Task<IActionResult> UpdatePassword(int userId, [FromBody] UserPasswordUpdateDTO userPasswordUpdateDTO)
         {
             try
