@@ -280,6 +280,8 @@ function getUserNotes() {
     const userId = localStorage.getItem('userID'); // Login olduktan sonra zaten kaydediyorsun
     const notesContainer = document.getElementById('contentArea');
 
+    // İÇERİĞİ TEMİZLE - Bu satır eklendi
+    notesContainer.innerHTML = '';
 
     fetch(`https://localhost:7149/api/Note/user-notes/${userId}`, {
         method: 'GET',
@@ -302,12 +304,15 @@ function getUserNotes() {
                 return;
             }
 
+            const row = document.createElement('div');
+            row.className = 'row';
+
             data.forEach(note => {
-                const noteId = `pdf-canvas-${note.noteID}`; //burada row içerisine almadığı için hata alıyorduk,html de row içerisine dahil edince sorun çözüldü.
-                const noteCard = `
-                
-                    <div class='d-flex col-md-4 mb-4'>
-            <div class='card p-3 shadow-sm'>
+                const noteId = `pdf-canvas-${note.noteID}`;
+                const noteCard = document.createElement('div');
+                noteCard.className = 'col-md-4 mb-4 d-flex';
+                noteCard.innerHTML = `
+            <div class='card p-3 shadow-sm w-100'>
                 <h5>${note.title}</h5>
                 <p>${note.description || 'Açıklama yok.'}</p>
                 <div class="canvas-container">
@@ -321,12 +326,11 @@ function getUserNotes() {
                     <p class="text-muted" style="color:white !important;">${new Date(note.uploadDate).toLocaleDateString()}</p>
                 </div>
             </div>
-        </div>
-                `;
-                notesContainer.innerHTML += noteCard;
+        `;
+                row.appendChild(noteCard);
             });
 
-
+            notesContainer.appendChild(row);
 
             setTimeout(() => {
                 data.forEach(note => {
@@ -335,10 +339,6 @@ function getUserNotes() {
                 });
             }, 500);
         })
-        .catch(error => {
-            notesContainer.innerHTML = `<div class="col"><div class="card p-3">${error.message}</div></div>`;
-            console.error('Hata:', error);
-        });
 }
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
