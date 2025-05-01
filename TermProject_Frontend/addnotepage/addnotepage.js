@@ -11,13 +11,15 @@ function setupAuthDropdown() {
     const token = localStorage.getItem('token');
     const fullName = localStorage.getItem('fullName'); // Full Name'i al
     const authContainer = document.getElementById("authContainer");
+    const profilePic = localStorage.getItem('profileImage') || '../img/pp-blue.png'; // varsayılan resim
+
 
     if (token && fullName) {
         // Kullanıcı giriş yapmışsa dropdown menüsünü göster
         authContainer.innerHTML = `
             <div class="dropdown">
                 <button class="dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="../img/pp-blue.png" class="profile-pic" alt="Profil">
+                    <img src="${profilePic}" class="profile-pic" alt="Profil">
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" style="min-width: 200px;">
                     <li><span class="dropdown-item-text">Merhaba ${fullName}!</span></li>

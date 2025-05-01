@@ -179,3 +179,17 @@ canvas {
     opacity: 1;
     visibility: visible;
 }
+
+.edit-icon {
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: white;
+    font-size: 1.2rem;
+    z-index: 10;
+    transition: color 0.2s ease;
+}
+
+.edit-icon:hover {
+    color: #e6e6e6;
+}

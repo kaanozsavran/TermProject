@@ -48,6 +48,7 @@ async function fetchProfilePicture(userId) {
         // Set the profile picture src to the fetched full URL
         const imgElement = document.getElementById('profileImage');
         imgElement.src = fullUrl || '../img/pp-white.png';
+        localStorage.setItem('profileImage', fullUrl);
     } catch (error) {
         console.error(error);
         const imgElement = document.getElementById('profileImage');
@@ -60,12 +61,14 @@ function setupAuthDropdown() {
     const token = localStorage.getItem('token');
     const fullName = localStorage.getItem('fullName');
     const authContainer = document.getElementById("authContainer");
+    const profilePic = localStorage.getItem('profileImage') || '../img/pp-blue.png'; // varsayılan resim
+
 
     if (token && fullName) {
         authContainer.innerHTML = `
             <div class="dropdown">
                 <button class="dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="../img/pp-blue.png" class="profile-pic" alt="Profil">
+                    <img src="${profilePic}" class="profile-pic" alt="Profil">
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" style="min-width: 200px;">
                     <li><span class="dropdown-item-text">Merhaba ${fullName}!</span></li>
@@ -312,20 +315,27 @@ function getUserNotes() {
                 const noteCard = document.createElement('div');
                 noteCard.className = 'col-md-4 mb-4 d-flex';
                 noteCard.innerHTML = `
-            <div class='card p-3 shadow-sm w-100'>
-                <h5>${note.title}</h5>
-                <p>${note.description || 'Açıklama yok.'}</p>
-                <div class="canvas-container">
-                    <canvas id="${noteId}" style="width: 100%; max-height: 300px;"></canvas>
-                    <div class="hover-icon">
-                        <a href="https://localhost:7149${note.filePath}" target="_blank"><i class="bi bi-search"></i></a>
-                    </div>
-                </div>
-                <div class="note-footer d-flex justify-content-between align-items-center">
-                    <p><strong>Ders:</strong> ${note.courseName || 'Bilinmiyor'}</p>
-                    <p class="text-muted" style="color:white !important;">${new Date(note.uploadDate).toLocaleDateString()}</p>
-                </div>
+            <div class='card p-3 shadow-sm w-100 position-relative'>
+        <!-- Düzenleme ikonu -->
+        <div class="edit-icon position-absolute" data-note-id="${note.noteID}">
+            <i class="bi bi-pencil-square"></i>
+        </div>
+
+        <h5>${note.title}</h5>
+        <p>${note.description || 'Açıklama yok.'}</p>
+        <div class="canvas-container">
+            <canvas id="${noteId}" style="width: 100%; max-height: 300px;"></canvas>
+            <div class="hover-icon">
+                <a href="https://localhost:7149${note.filePath}" target="_blank"><i class="bi bi-search"></i></a>
             </div>
+        </div>
+        <div class="note-footer mt-3 position-relative" style="min-height: 50px;">
+            <p class="mb-1"><strong>Ders:</strong> ${note.courseName || 'Bilinmiyor'}</p>
+            <p class="text-muted position-absolute" style="top: 37px; right: -5px; font-size: 0.9rem; color:white !important;">
+                ${new Date(note.uploadDate).toLocaleDateString()}
+            </p>
+        </div>
+    </div>
         `;
                 row.appendChild(noteCard);
             });
