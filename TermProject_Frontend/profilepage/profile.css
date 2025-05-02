@@ -193,3 +193,34 @@ canvas {
 .edit-icon:hover {
     color: #e6e6e6;
 }
+
+/* Başarı mesajı (alertify.success) */
+.alertify-notifier .ajs-message.ajs-success {
+    background-color: #42999b !important;
+    /* Özel başarı arka planı */
+    color: white;
+    /* Yazı rengi */
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Hata mesajı (alertify.error) */
+.alertify-notifier .ajs-message.ajs-error {
+    background-color: #42999b !important;
+    /* Hata arka planı kırmızı */
+    color: white;
+    /* Yazı rengi beyaz */
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Genel mesaj kutusu stilleri */
+.alertify-notifier .ajs-message {
+    background-color: #42999b;
+    color: white;
+    font-size: 16px;
+    padding: 14px 20px;
+    text-align: center;
+}

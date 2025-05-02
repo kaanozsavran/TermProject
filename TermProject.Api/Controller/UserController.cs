@@ -98,7 +98,7 @@ namespace TermProject.Api.Controller
             await _userService.UpdateUserInfo(userid, userUpdateDTO);
             return Ok("Kullanıcı bilgileriniz başarıyla güncellendi!");
         }
-        [HttpPost("{userID}/upload-profile-picture")]
+        [HttpPost("{userId}/upload-profile-picture")]
         public async Task<IActionResult> UploadProfilePicture(int userId, [FromForm] UploadProfilePictureDto uploadProfilePictureDto)
         {
             if (uploadProfilePictureDto.ProfilePicture == null || uploadProfilePictureDto.ProfilePicture.Length == 0)
