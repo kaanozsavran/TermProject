@@ -138,6 +138,19 @@ namespace TermProject.Api.Services
             }
         }
 
+        public async Task<string> GetUserNameByIDAsync(int userid)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserID == userid);
+            if (user != null)
+            {
+                return user.FullName; // Bu satırı düzeltmek gerekti.
+            }
+            else
+            {
+                throw new ArgumentException("User is not found!", nameof(userid));
+            }
+        }
+
         public async Task<List<NoteGetInformationDTO>> GetNotesByUserIdAsync(int userId)
         {
             var notes = await _context.Notes
@@ -166,23 +179,31 @@ namespace TermProject.Api.Services
 
         public async Task<List<NoteResponseDTO>> GetNotesByCourseIdAsync(int courseId)
         {
-            
-            // Belirtilen courseId ile notları bul
+
+            // 1. Notları çek
             var notes = await _context.Notes
                 .Where(n => n.CourseID == courseId)
-                .Select(n => new NoteResponseDTO
-                {
-                    NoteID = n.NoteID,
-                    Title = n.Title,
-                    Description = n.Description,
-                    FilePath = n.FilePath,
-                    UploadDate = n.UploadDate,
-
-                })
                 .ToListAsync();
-           
 
-            return notes; // List<NoteResponseDTO> döndür
+            // 2. Kullanıcı adlarını çek ve NoteResponseDTO'ya dönüştür
+            var noteDtos = new List<NoteResponseDTO>();
+
+            foreach (var note in notes)
+            {
+                var userName = await GetUserNameByIDAsync(note.UserID); // tek tek user adlarını al
+
+                noteDtos.Add(new NoteResponseDTO
+                {
+                    NoteID = note.NoteID,
+                    Title = note.Title,
+                    Description = note.Description,
+                    FilePath = note.FilePath,
+                    UploadDate = note.UploadDate,
+                    UserName = userName
+                });
+            }
+
+            return noteDtos;
         }
         public async Task<string> GetCourseNameByIDAsync(int courseId)
         {

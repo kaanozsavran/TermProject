@@ -80,7 +80,6 @@ function setupAuthDropdown() {
                 </ul>
             </div>
         `;
-
         document.getElementById("logout").addEventListener("click", function () {
             localStorage.removeItem('token');
             localStorage.removeItem('fullName');
@@ -263,20 +262,54 @@ async function loadUserProfile() {
     }
 }
 
-// Profil resmi değiştirme
 document.getElementById('profilePicInput').addEventListener('change', function (event) {
     const file = event.target.files[0];
     const imgElement = document.getElementById('profileImage');
 
+    const userID = localStorage.getItem('userID'); // localStorage'dan userId çekiliyor
+    if (!userID) {
+        alert("Kullanıcı ID bulunamadı. Lütfen giriş yapın.");
+        return;
+    }
+
+    const apiUrl = `https://localhost:7149/api/User/${userID}/upload-profile-picture`;
+
     if (file && imgElement) {
+        // 1. Görseli hemen ekranda göster
         const reader = new FileReader();
         reader.onload = function (e) {
             imgElement.src = e.target.result;
             localStorage.setItem('profileImage', e.target.result);
         };
         reader.readAsDataURL(file);
+
+        // 2. FormData ile dosyayı gönder (DTO'daki isim: ProfilePicture)
+        const formData = new FormData();
+        formData.append("ProfilePicture", file); // DTO'daki isimle birebir aynı olmalı
+
+        fetch(apiUrl, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.text(); // Ok result.Message dönüyor
+                } else {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+            })
+            .then(message => {
+                console.log('Sunucudan yanıt:', message);
+                alert(message);
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+                alert("Profil fotoğrafı yüklenirken hata oluştu: " + error.message);
+            });
     }
 });
+
+
 
 function getUserNotes() {
     const token = localStorage.getItem('token');
