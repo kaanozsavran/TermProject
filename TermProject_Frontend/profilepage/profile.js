@@ -313,10 +313,9 @@ document.getElementById('profilePicInput').addEventListener('change', function (
 
 function getUserNotes() {
     const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userID'); // Login olduktan sonra zaten kaydediyorsun
+    const userId = localStorage.getItem('userID');
     const notesContainer = document.getElementById('contentArea');
 
-    // İÇERİĞİ TEMİZLE - Bu satır eklendi
     notesContainer.innerHTML = '';
 
     fetch(`https://localhost:7149/api/Note/user-notes/${userId}`, {
@@ -327,14 +326,10 @@ function getUserNotes() {
         }
     })
         .then(response => {
-            if (!response.ok) {
-                throw new Error("Kullanıcı notları çekilemedi.");
-            }
+            if (!response.ok) throw new Error("Kullanıcı notları çekilemedi.");
             return response.json();
         })
         .then(data => {
-
-
             if (!data || data.length === 0) {
                 notesContainer.innerHTML = `<div class='col'><div class='card p-3 text-center' style="background:white ;color:#42999b;"><strong>Hiç not eklenmemiş.</strong></div></div>`;
                 return;
@@ -348,28 +343,27 @@ function getUserNotes() {
                 const noteCard = document.createElement('div');
                 noteCard.className = 'col-md-4 mb-4 d-flex';
                 noteCard.innerHTML = `
-            <div class='card p-3 shadow-sm w-100 position-relative'>
-        <!-- Düzenleme ikonu -->
-        <div class="edit-icon position-absolute" data-note-id="${note.noteID}">
-            <i class="bi bi-pencil-square"></i>
-        </div>
+                <div class='card p-3 shadow-sm w-100 position-relative'>
+                    <div class="edit-icon position-absolute" data-note-id="${note.noteID}">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+                    <h5>${note.title}</h5>
+                    <p>${note.description || 'Açıklama yok.'}</p>
+                    <div class="canvas-container">
+                        <canvas id="${noteId}" style="width: 100%; max-height: 300px;"></canvas>
+                        <div class="hover-icon">
+                            <a href="https://localhost:7149${note.filePath}" target="_blank"><i class="bi bi-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="note-footer mt-3 position-relative" style="min-height: 50px;">
+                        <p class="mb-1"><strong>Ders:</strong> ${note.courseName || 'Bilinmiyor'}</p>
+                        <p class="text-muted position-absolute" style="top: 37px; right: -5px; font-size: 0.9rem; color:white !important;">
+                            ${new Date(note.uploadDate).toLocaleDateString()}
+                        </p>
+                    </div>
+                </div>
+            `;
 
-        <h5>${note.title}</h5>
-        <p>${note.description || 'Açıklama yok.'}</p>
-        <div class="canvas-container">
-            <canvas id="${noteId}" style="width: 100%; max-height: 300px;"></canvas>
-            <div class="hover-icon">
-                <a href="https://localhost:7149${note.filePath}" target="_blank"><i class="bi bi-search"></i></a>
-            </div>
-        </div>
-        <div class="note-footer mt-3 position-relative" style="min-height: 50px;">
-            <p class="mb-1"><strong>Ders:</strong> ${note.courseName || 'Bilinmiyor'}</p>
-            <p class="text-muted position-absolute" style="top: 37px; right: -5px; font-size: 0.9rem; color:white !important;">
-                ${new Date(note.uploadDate).toLocaleDateString()}
-            </p>
-        </div>
-    </div>
-        `;
                 row.appendChild(noteCard);
             });
 
@@ -381,8 +375,103 @@ function getUserNotes() {
                     renderPDF(note.filePath, noteId);
                 });
             }, 500);
+
+            // ✨ Modal edit fonksiyonu
+            document.querySelectorAll('.edit-icon').forEach(icon => {
+                icon.addEventListener('click', function () {
+                    const noteId = this.dataset.noteId;
+                    const noteCard = this.closest('.card');
+                    const currentTitle = noteCard.querySelector('h5').innerText;
+                    const currentDescription = noteCard.querySelector('p').innerText === 'Açıklama yok.' ? '' : noteCard.querySelector('p').innerText;
+
+                    // Eski modal varsa kaldır
+                    const existingModal = document.getElementById('editNoteModal');
+                    if (existingModal) existingModal.remove();
+
+                    // ✨ Modal popup içine silme ikonu ve buton eklendi
+                    const modal = document.createElement('div');
+                    modal.id = 'editNoteModal';
+                    modal.innerHTML = `
+                    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                                background-color: rgba(0,0,0,0.5); display: flex; align-items: center;
+                                justify-content: center; z-index: 9999;">
+                        <div style="background: white; padding: 20px; border-radius: 10px; width: 400px; position: relative;">
+                            <h5>Notu Düzenle</h5>
+                            <input type="text" id="editTitle" placeholder="Başlık" class="form-control mb-2" value="${currentTitle}" />
+                            <textarea id="editDescription" placeholder="Açıklama" class="form-control mb-2">${currentDescription}</textarea>
+                            <div class="text-end">
+                                <button id="saveNoteBtn" class="btn btn-primary btn-sm">Kaydet</button>
+                                <button id="deleteNoteBtn" class="btn btn-danger btn-sm">Sil</button> <!-- ✨ Silme butonu -->
+                            </div>
+                            <span id="closeModalBtn" style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 20px;">&times;</span> <!-- X işareti -->
+                        </div>
+                    </div>
+                `;
+                    document.body.appendChild(modal);
+
+                    // Kapatma işlemi (X işaretine tıklanması)
+                    document.getElementById('closeModalBtn').addEventListener('click', () => {
+                        modal.remove();
+                    });
+
+                    // Kaydet butonu
+                    document.getElementById('saveNoteBtn').addEventListener('click', function () {
+                        const updatedTitle = document.getElementById('editTitle').value;
+                        const updatedDesc = document.getElementById('editDescription').value;
+
+                        fetch(`https://localhost:7149/api/Note/${noteId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify({
+                                title: updatedTitle,
+                                description: updatedDesc
+                            })
+                        })
+                            .then(res => {
+                                if (!res.ok) throw new Error('Güncelleme başarısız!');
+                                return res.json();
+                            })
+                            .then(() => {
+                                // Sayfadaki içeriği güncelle
+                                noteCard.querySelector('h5').innerText = updatedTitle;
+                                noteCard.querySelector('p').innerText = updatedDesc || 'Açıklama yok.';
+                                modal.remove();
+                            })
+                            .catch(err => alert(err.message));
+                    });
+
+                    // ✨ Silme butonu fonksiyonu
+                    document.getElementById('deleteNoteBtn').addEventListener('click', function () {
+                        if (confirm("Bu notu silmek istediğinize emin misiniz?")) {
+                            fetch(`https://localhost:7149/api/Note/${noteId}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Authorization': `Bearer ${token}`
+                                }
+                            })
+                                .then(res => {
+                                    if (!res.ok) throw new Error('Not silinemedi!');
+                                    // Kartı sayfadan kaldır
+                                    noteCard.parentElement.remove();
+                                    modal.remove();
+                                })
+                                .catch(err => alert(err.message));
+                        }
+                    });
+                });
+            });
+
         })
+        .catch(error => {
+            notesContainer.innerHTML = `<div class='col'><div class='card p-3 text-center text-danger'><strong>${error.message}</strong></div></div>`;
+        });
 }
+
+
+
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
 function renderPDF(pdfUrl, canvasId) {
