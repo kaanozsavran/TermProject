@@ -61,7 +61,7 @@ function setupAuthDropdown() {
     const token = localStorage.getItem('token');
     const fullName = localStorage.getItem('fullName');
     const authContainer = document.getElementById("authContainer");
-    const profilePic = localStorage.getItem('profileImage') || '../img/pp-blue.png'; // varsayılan resim
+    const profilePic = localStorage.getItem('profileImage') || '../img/pp-white.png'; // varsayılan resim
 
 
     if (token && fullName) {
@@ -134,7 +134,7 @@ function loadSection(section) {
                             <label for="confirmPassword" class="form-label">Yeni Şifre (Tekrar):</label>
                             <input type="password" class="form-control" id="confirmPassword" required>
                         </div>
-                        <button type="submit" class="btn btn-outline-custom updateButton">Şifreyi Güncelle</button>
+                        <button type="submit" class="btn  updateButton">Şifreyi Güncelle</button>
                     </form>
                 </div>`;
             break;
@@ -392,20 +392,20 @@ function getUserNotes() {
                     const modal = document.createElement('div');
                     modal.id = 'editNoteModal';
                     modal.innerHTML = `
-                    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                                background-color: rgba(0,0,0,0.5); display: flex; align-items: center;
-                                justify-content: center; z-index: 9999;">
-                        <div style="background: white; padding: 20px; border-radius: 10px; width: 400px; position: relative;">
-                            <h5>Notu Düzenle</h5>
-                            <input type="text" id="editTitle" placeholder="Başlık" class="form-control mb-2" value="${currentTitle}" />
-                            <textarea id="editDescription" placeholder="Açıklama" class="form-control mb-2">${currentDescription}</textarea>
-                            <div class="text-end">
-                                <button id="saveNoteBtn" class="btn btn-primary btn-sm">Kaydet</button>
-                                <button id="deleteNoteBtn" class="btn btn-danger btn-sm">Sil</button> <!-- ✨ Silme butonu -->
-                            </div>
-                            <span id="closeModalBtn" style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 20px;">&times;</span> <!-- X işareti -->
-                        </div>
-                    </div>
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background-color: rgba(0, 0, 0, 0.5); display: flex; align-items: center;
+                    justify-content: center; z-index: 9999;">
+            <div class="bg-info text-white p-4 rounded" style="width: 600px; position: relative; background-color: #42999b !important;">
+                <h5 class="fw-bold mb-3">Notu Düzenle</h5>
+                <input type="text" id="editTitle" placeholder="Başlık" class="form-control mb-3" value="${currentTitle}" />
+                <textarea id="editDescription" placeholder="Açıklama" class="form-control mb-3">${currentDescription}</textarea>
+                <div class="text-end mt-3">
+                    <button id="saveNoteBtn" class="btn btn-sm fw-bold text-white" style="background-color: white;color:#42999b !important; cursor:pointer;">Kaydet</button>
+                    <button id="deleteNoteBtn" class="btn btn-sm fw-bold text-white" style="background-color: white;color:#42999b !important; cursor:pointer;">Notu Sil</button>
+                </div>
+                <span id="closeModalBtn" style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 20px; color: white;">&times;</span>
+            </div>
+        </div>
                 `;
                     document.body.appendChild(modal);
 

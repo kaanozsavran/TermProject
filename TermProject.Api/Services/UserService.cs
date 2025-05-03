@@ -418,7 +418,7 @@ namespace TermProject.Api.Services
             // Kullanıcı profil fotoğrafı yüklememişse, varsayılan fotoğraf döndür
             if (string.IsNullOrEmpty(profilePicturePath))
             {
-                profilePicturePath = "/images/profile-pictures/pp-blue.png"; // Varsayılan profil fotoğrafı
+                profilePicturePath = "/images/profile-pictures/pp-darkblue.png"; // Varsayılan profil fotoğrafı
             }
 
             return new ProfilePictureDTO

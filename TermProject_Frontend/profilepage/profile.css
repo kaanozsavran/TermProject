@@ -129,13 +129,20 @@ body {
 }
 
 .updateButton {
-    background: #2b7a7c !important;
-    color: white;
+    background: white !important;
+    color: #42999b !important;
 }
 
 .updateButton:hover {
-    background: #0a4f51 !important;
-    color: white;
+    background: #e6e6e6 !important;
+}
+
+#saveNoteBtn:hover {
+    background-color: #e6e6e6 !important;
+}
+
+#deleteNoteBtn:hover {
+    background-color: #e6e6e6 !important;
 }
 
 .canvas-container {
