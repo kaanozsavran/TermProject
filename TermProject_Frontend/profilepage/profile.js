@@ -24,12 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
-
-
-
-
 async function fetchProfilePicture(userId) {
     try {
         const response = await fetch(`https://localhost:7149/api/User/${userId}/profile-picture`);
@@ -309,8 +303,6 @@ document.getElementById('profilePicInput').addEventListener('change', function (
     }
 });
 
-
-
 function getUserNotes() {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userID');
@@ -376,7 +368,7 @@ function getUserNotes() {
                 });
             }, 500);
 
-            // ✨ Modal edit fonksiyonu
+            // Modal edit fonksiyonu
             document.querySelectorAll('.edit-icon').forEach(icon => {
                 icon.addEventListener('click', function () {
                     const noteId = this.dataset.noteId;
@@ -388,7 +380,7 @@ function getUserNotes() {
                     const existingModal = document.getElementById('editNoteModal');
                     if (existingModal) existingModal.remove();
 
-                    // ✨ Modal popup içine silme ikonu ve buton eklendi
+                    // Modal popup içine silme ikonu ve buton eklendi
                     const modal = document.createElement('div');
                     modal.id = 'editNoteModal';
                     modal.innerHTML = `
@@ -443,7 +435,7 @@ function getUserNotes() {
                             .catch(err => alert(err.message));
                     });
 
-                    // ✨ Silme butonu fonksiyonu
+                    // Silme butonu fonksiyonu
                     document.getElementById('deleteNoteBtn').addEventListener('click', function () {
                         if (confirm("Bu notu silmek istediğinize emin misiniz?")) {
                             fetch(`https://localhost:7149/api/Note/${noteId}`, {
@@ -470,8 +462,6 @@ function getUserNotes() {
         });
 }
 
-
-
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
 function renderPDF(pdfUrl, canvasId) {
@@ -495,14 +485,3 @@ function renderPDF(pdfUrl, canvasId) {
         console.error("PDF yüklenirken hata oluştu:", error);
     });
 }
-
-
-
-
-
-
-
-
-
-
-
