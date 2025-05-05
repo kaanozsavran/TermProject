@@ -439,27 +439,38 @@ function getUserNotes() {
 
                     // Silme butonu fonksiyonu
                     document.getElementById('deleteNoteBtn').addEventListener('click', function () {
-                        if (confirm("Bu notu silmek istediğinize emin misiniz?")) {
-                            fetch(`https://localhost:7149/api/Note/deletenotes/${noteId}`, {
-                                method: 'DELETE',
-                                headers: {
-                                    'Authorization': `Bearer ${token}`
-                                }
-                            })
-                                .then(res => {
-                                    if (!res.ok) throw new Error('Not silinemedi!');
-
-                                    // Başarılıysa kartı sayfadan kaldır
-                                    noteCard.parentElement.remove();
-                                    modal.remove();
-
-                                    // Alertify ile kullanıcıya mesaj göster
-                                    alertify.success('Not başarıyla silindi.');
+                        // Modalı geçici olarak gizle
+                        document.getElementById('editNoteModal').style.display = 'none';
+                        alertify.confirm(
+                            "Notu Sil",
+                            "Bu notu silmek istediğinize emin misiniz?",
+                            function () {
+                                fetch(`https://localhost:7149/api/Note/deletenotes/${noteId}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'Authorization': `Bearer ${token}`
+                                    }
                                 })
-                                .catch(err => {
-                                    alertify.error(err.message); // Hata durumunda Alertify ile hata mesajı
-                                });
-                        }
+                                    .then(res => {
+                                        if (!res.ok) throw new Error('Not silinemedi!');
+
+                                        // Başarılıysa kartı sayfadan kaldır
+                                        noteCard.parentElement.remove();
+                                        modal.remove();
+
+                                        // Alertify ile kullanıcıya mesaj göster
+                                        alertify.success('Not başarıyla silindi.');
+                                    })
+                                    .catch(err => {
+                                        alertify.error(err.message); // Hata durumunda Alertify ile hata mesajı
+                                    });
+                            },
+                            function () {
+                                // İptal edilirse modalı tekrar göster
+                                document.getElementById('editNoteModal').style.display = 'flex';
+                                alertify.message("Silme işlemi iptal edildi.");
+                            }
+                        ).set('labels', { ok: 'Evet', cancel: 'Hayır' });
                     });
                 });
             });
