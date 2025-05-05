@@ -96,5 +96,21 @@ namespace TermProject.Api.Controller
 
             return Ok(new { message = "Not başarıyla güncellendi." });
         }
+
+        [HttpDelete("{noteId}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteNote(int noteId)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            var result = await _noteService.DeleteNoteAsync(noteId, userId);
+
+            if (!result)
+            {
+                return Forbid("Bu notu silme yetkiniz yok.");
+            }
+
+            return NoContent();
+        }
     }
 }

@@ -233,5 +233,18 @@ namespace TermProject.Api.Services
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> DeleteNoteAsync(int noteId, int userId)
+        {
+            var note = await _context.Notes.FindAsync(noteId);
+
+            if (note == null || note.UserID != userId)
+            {
+                return false; // Not bulunamadı veya kullanıcıya ait değil
+            }
+
+            _context.Notes.Remove(note);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

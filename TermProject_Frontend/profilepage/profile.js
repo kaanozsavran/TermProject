@@ -431,6 +431,8 @@ function getUserNotes() {
                                 noteCard.querySelector('h5').innerText = updatedTitle;
                                 noteCard.querySelector('p').innerText = updatedDesc || 'Açıklama yok.';
                                 modal.remove();
+                                alertify.success("Not başarıyla güncellendi.");
+
                             })
                             .catch(err => alert(err.message));
                     });
