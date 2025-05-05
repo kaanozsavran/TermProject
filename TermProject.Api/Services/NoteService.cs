@@ -218,5 +218,20 @@ namespace TermProject.Api.Services
             }
         }
 
+        public async Task<bool> UpdateNoteAsync(int noteId, int userId, NoteUpdateDTO noteUpdateDTO)
+        {
+            var note = await _context.Notes
+           .FirstOrDefaultAsync(n => n.NoteID == noteId && n.UserID == userId);
+
+            if (note == null)
+                return false;
+
+            note.Title = noteUpdateDTO.Title;
+            note.Description = noteUpdateDTO.Description;
+
+            _context.Notes.Update(note);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

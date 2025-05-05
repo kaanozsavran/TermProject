@@ -8,7 +8,8 @@ namespace TermProject.Api.Services.Interfaces
         Task<List<NoteGetInformationDTO>> GetNotesByUserIdAsync(int userId); // Kullanıcıya ait notları getir
         Task<List<NoteResponseDTO>> GetNotesByCourseIdAsync(int courseId); // Ders ID'sine göre notları getir
 
-        
+        Task<bool> UpdateNoteAsync(int noteId, int userId, NoteUpdateDTO updateDto);
+
 
     }
 }

@@ -418,6 +418,7 @@ function getUserNotes() {
                                 'Authorization': `Bearer ${token}`
                             },
                             body: JSON.stringify({
+                                noteID: parseInt(noteId),
                                 title: updatedTitle,
                                 description: updatedDesc
                             })
@@ -427,7 +428,6 @@ function getUserNotes() {
                                 return res.json();
                             })
                             .then(() => {
-                                // Sayfadaki içeriği güncelle
                                 noteCard.querySelector('h5').innerText = updatedTitle;
                                 noteCard.querySelector('p').innerText = updatedDesc || 'Açıklama yok.';
                                 modal.remove();

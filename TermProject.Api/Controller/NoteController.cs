@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TermProject.Api.Models.DTO.NoteDTO;
+using TermProject.Api.Services;
 using TermProject.Api.Services.Interfaces;
 
 namespace TermProject.Api.Controller
@@ -74,6 +77,24 @@ namespace TermProject.Api.Controller
             string path = Path.Join(_webHostEnvironment.WebRootPath, filePath);
             var file = PhysicalFile(path, "application/pdf");
             return file;
+        }
+
+
+        [HttpPut("{noteId}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateNote(int noteId, [FromBody] NoteUpdateDTO updateDto)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
+
+            var result = await _noteService.UpdateNoteAsync(noteId, userId, updateDto);
+
+            if (!result)
+                return NotFound(new { message = "Not bulunamadı veya bu not size ait değil." });
+
+            return Ok(new { message = "Not başarıyla güncellendi." });
         }
     }
 }
