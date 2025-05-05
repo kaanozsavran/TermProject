@@ -51,7 +51,7 @@ namespace TermProject.Api.Services
         new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()), // 🔥 DOĞRU
         new Claim(ClaimTypes.Email, user.Email) // 🔥 E-mail bilgisini de düzgün ekleyelim
       }),
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                Expires = DateTime.UtcNow.AddMinutes(45),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

@@ -232,4 +232,5 @@ canvas {
     padding: 14px 20px;
     text-align: center;
     font-weight: bold;
+    border-radius: 8px;
 }
