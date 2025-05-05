@@ -440,7 +440,7 @@ function getUserNotes() {
                     // Silme butonu fonksiyonu
                     document.getElementById('deleteNoteBtn').addEventListener('click', function () {
                         if (confirm("Bu notu silmek istediğinize emin misiniz?")) {
-                            fetch(`https://localhost:7149/api/Note/${noteId}`, {
+                            fetch(`https://localhost:7149/api/Note/deletenotes/${noteId}`, {
                                 method: 'DELETE',
                                 headers: {
                                     'Authorization': `Bearer ${token}`
@@ -448,11 +448,17 @@ function getUserNotes() {
                             })
                                 .then(res => {
                                     if (!res.ok) throw new Error('Not silinemedi!');
-                                    // Kartı sayfadan kaldır
+
+                                    // Başarılıysa kartı sayfadan kaldır
                                     noteCard.parentElement.remove();
                                     modal.remove();
+
+                                    // Alertify ile kullanıcıya mesaj göster
+                                    alertify.success('Not başarıyla silindi.');
                                 })
-                                .catch(err => alert(err.message));
+                                .catch(err => {
+                                    alertify.error(err.message); // Hata durumunda Alertify ile hata mesajı
+                                });
                         }
                     });
                 });

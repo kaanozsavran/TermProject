@@ -97,7 +97,7 @@ namespace TermProject.Api.Controller
             return Ok(new { message = "Not başarıyla güncellendi." });
         }
 
-        [HttpDelete("{noteId}")]
+        [HttpDelete("deletenotes/{noteId}")]
         [Authorize]
         public async Task<IActionResult> DeleteNote(int noteId)
         {
