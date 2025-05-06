@@ -49,9 +49,9 @@ namespace TermProject.Api.Services
                 Subject = new ClaimsIdentity(new Claim[]
       {
         new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()), // 🔥 DOĞRU
-        new Claim(ClaimTypes.Email, user.Email) // 🔥 E-mail bilgisini de düzgün ekleyelim
+        new Claim(ClaimTypes.Email, user.Email) //  E-mail bilgisini de düzgün ekleyelim
       }),
-                Expires = DateTime.UtcNow.AddMinutes(45),
+                Expires = DateTime.UtcNow.AddMinutes(45), //token time
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
