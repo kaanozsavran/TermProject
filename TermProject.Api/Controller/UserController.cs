@@ -90,13 +90,13 @@ namespace TermProject.Api.Controller
             var userinfo = await _userService.GetUserById(userid);
             return Ok(userinfo);
         }
-        [HttpPut]
+        [HttpPut("userinfo-change/{userId}")]
         [Authorize]
 
-        public async Task<IActionResult> UpdateUserInfo(int userid, [FromBody] UserUpdateInfoDTO userUpdateDTO)
+        public async Task<IActionResult> UpdateUserInfo(int userId, [FromBody] UserUpdateInfoDTO userUpdateDTO)
         {
-            await _userService.UpdateUserInfo(userid, userUpdateDTO);
-            return Ok("Kullanıcı bilgileriniz başarıyla güncellendi!");
+            await _userService.UpdateUserInfo(userId, userUpdateDTO);
+            return Ok(new { message = "Kullanıcı bilgileriniz başarıyla güncellendi!" });
         }
         [HttpPost("{userId}/upload-profile-picture")]
         public async Task<IActionResult> UploadProfilePicture(int userId, [FromForm] UploadProfilePictureDto uploadProfilePictureDto)

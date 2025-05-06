@@ -199,7 +199,7 @@ function loadSection(section) {
 }
 
 
-// Profil Bilgilerini Backend'den Al
+// Profil Bilgilerini Backend'den Al ve Dropdown Menülerini Hazırla
 async function loadUserProfile() {
     const token = localStorage.getItem('token');
 
@@ -209,10 +209,11 @@ async function loadUserProfile() {
     }
 
     try {
+        // Kullanıcı bilgilerini al
         const response = await fetch(`https://localhost:7149/api/User/getUserInformation`, {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${token}`, // Token gönderimi
+                "Authorization": `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         });
@@ -224,37 +225,318 @@ async function loadUserProfile() {
 
         const userData = await response.json();  // Kullanıcı verisini JSON olarak al
 
-
         // Kullanıcı bilgilerini sayfada göster
         const contentArea = document.getElementById("contentArea");
         contentArea.innerHTML = `
-                <div class="card p-3 shadow-sm">
-                        <h4>Profilim</h4>
-                        <p><strong>Ad Soyad:</strong>
-                            <input type="text" id="fullName" value="${userData.fullName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
-                        </p>
-                        <p><strong>Email:</strong> 
-                            <input type="email" id="email" value="${userData.email}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
-                        </p>
-                        <p><strong>Üniversite:</strong> 
-                            <input type="text" id="universityName" value="${userData.universityName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
-                        </p>
-                        <p><strong>Fakülte:</strong> 
-                            <input type="text" id="facultyName" value="${userData.facultyName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
-                        </p>
-                        <p><strong>Bölüm:</strong> 
-                            <input type="text" id="departmentName" value="${userData.departmentName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
-                        </p>
-                        <button class="btn btn-custom mt-3" onclick="updateProfile()">Güncelle</button>
-                 </div>
+            <div class="card p-3 shadow-sm">
+                <h4>Profilim</h4>
+                <p><strong>Ad Soyad:</strong>
+                    <input type="text" id="fullName" value="${userData.fullName}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
+                </p>
+                <p><strong>Email:</strong> 
+                    <input type="email" id="email" value="${userData.email}" readonly class="form-control" onfocus="this.removeAttribute('readonly');">
+                </p>
+                <p><strong>Üniversite:</strong> 
+                    <select id="universityDropdown" class="form-select">
+                        <option value="">Yükleniyor...</option>
+                    </select>
+                </p>
+                <p><strong>Fakülte:</strong> 
+                    <select id="facultyDropdown" class="form-select" disabled>
+                        <option value="">Önce üniversite seçin</option>
+                    </select>
+                </p>
+                <p><strong>Bölüm:</strong> 
+                    <select id="departmentDropdown" class="form-select" disabled>
+                        <option value="">Önce fakülte seçin</option>
+                    </select>
+                </p>
+                <button class="btn btn-custom mt-3" onclick="updateProfile()">Güncelle</button>
+            </div>
         `;
 
+        // Üniversite listesini yükle
+        await loadUniversities(userData.universityName);
+
+        // Eğer kullanıcının mevcut bir üniversitesi varsa, onun fakültelerini yükle
+        if (userData.universityName) {
+            // Üniversite ID'sini bul
+            const universityDropdown = document.getElementById('universityDropdown');
+            for (let i = 0; i < universityDropdown.options.length; i++) {
+                if (universityDropdown.options[i].text === userData.universityName) {
+                    universityDropdown.selectedIndex = i;
+                    await loadFaculties(universityDropdown.value, userData.facultyName);
+                    break;
+                }
+            }
+        }
+
+        // Eğer kullanıcının mevcut bir fakültesi varsa, onun bölümlerini yükle
+        if (userData.facultyName) {
+            const facultyDropdown = document.getElementById('facultyDropdown');
+            for (let i = 0; i < facultyDropdown.options.length; i++) {
+                if (facultyDropdown.options[i].text === userData.facultyName) {
+                    facultyDropdown.selectedIndex = i;
+                    await loadDepartments(facultyDropdown.value, userData.departmentName);
+                    break;
+                }
+            }
+        }
+
+        // Event listeners ekle
+        document.getElementById('universityDropdown').addEventListener('change', async function () {
+            const universityId = this.value;
+            if (universityId) {
+                await loadFaculties(universityId);
+            } else {
+                const facultyDropdown = document.getElementById('facultyDropdown');
+                facultyDropdown.innerHTML = '<option value="">Önce üniversite seçin</option>';
+                facultyDropdown.disabled = true;
+
+                const departmentDropdown = document.getElementById('departmentDropdown');
+                departmentDropdown.innerHTML = '<option value="">Önce fakülte seçin</option>';
+                departmentDropdown.disabled = true;
+            }
+        });
+
+        document.getElementById('facultyDropdown').addEventListener('change', async function () {
+            const facultyId = this.value;
+            if (facultyId) {
+                await loadDepartments(facultyId);
+            } else {
+                const departmentDropdown = document.getElementById('departmentDropdown');
+                departmentDropdown.innerHTML = '<option value="">Önce fakülte seçin</option>';
+                departmentDropdown.disabled = true;
+            }
+        });
 
     } catch (error) {
         console.error("Profil bilgileri yüklenirken hata:", error);
         alertify.error(`${error.message}`);
     }
 }
+
+// Üniversiteleri yükle ve dropdown'a ekle
+async function loadUniversities(currentUniversity = null) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('https://localhost:7149/api/University', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Üniversite listesi alınamadı!");
+        }
+
+        const universities = await response.json();
+        const universityDropdown = document.getElementById('universityDropdown');
+
+        // Dropdown'ı temizle
+        universityDropdown.innerHTML = '<option value="">Üniversite seçin</option>';
+
+        // Üniversiteleri dropdown'a ekle
+        universities.forEach(university => {
+            const option = document.createElement('option');
+            option.value = university.universityID;
+            option.textContent = university.universityName;
+            universityDropdown.appendChild(option);
+
+            // Eğer bu üniversite kullanıcının mevcut üniversitesi ise seç
+            if (currentUniversity && university.universityName === currentUniversity) {
+                option.selected = true;
+            }
+        });
+
+        universityDropdown.disabled = false;
+    } catch (error) {
+        console.error("Üniversiteler yüklenirken hata:", error);
+        alertify.error(`${error.message}`);
+    }
+}
+
+// Fakülteleri yükle ve dropdown'a ekle
+async function loadFaculties(universityId, currentFaculty = null) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`https://localhost:7149/api/Faculty?universityId=${universityId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Fakülte listesi alınamadı!");
+        }
+
+        const faculties = await response.json();
+        const facultyDropdown = document.getElementById('facultyDropdown');
+
+        // Dropdown'ı temizle
+        facultyDropdown.innerHTML = '<option value="">Fakülte seçin</option>';
+
+        // Fakülteleri dropdown'a ekle
+        faculties.forEach(faculty => {
+            const option = document.createElement('option');
+            option.value = faculty.facultyID;
+            option.textContent = faculty.facultyName;
+            facultyDropdown.appendChild(option);
+
+            // Eğer bu fakülte kullanıcının mevcut fakültesi ise seç
+            if (currentFaculty && faculty.facultyName === currentFaculty) {
+                option.selected = true;
+            }
+        });
+
+        facultyDropdown.disabled = false;
+
+        // Bölüm dropdown'ını sıfırla
+        const departmentDropdown = document.getElementById('departmentDropdown');
+        departmentDropdown.innerHTML = '<option value="">Önce fakülte seçin</option>';
+        departmentDropdown.disabled = true;
+    } catch (error) {
+        console.error("Fakülteler yüklenirken hata:", error);
+        alertify.error(`${error.message}`);
+    }
+}
+
+// Bölümleri yükle ve dropdown'a ekle
+async function loadDepartments(facultyId, currentDepartment = null) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`https://localhost:7149/api/Department/faculty/${facultyId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Bölüm listesi alınamadı!");
+        }
+
+        const departments = await response.json();
+        const departmentDropdown = document.getElementById('departmentDropdown');
+
+        // Dropdown'ı temizle
+        departmentDropdown.innerHTML = '<option value="">Bölüm seçin</option>';
+
+        // Bölümleri dropdown'a ekle
+        departments.forEach(department => {
+            const option = document.createElement('option');
+            option.value = department.departmentID;
+            option.textContent = department.departmentName;
+            departmentDropdown.appendChild(option);
+
+            // Eğer bu bölüm kullanıcının mevcut bölümü ise seç
+            if (currentDepartment && department.departmentName === currentDepartment) {
+                option.selected = true;
+            }
+        });
+
+        departmentDropdown.disabled = false;
+    } catch (error) {
+        console.error("Bölümler yüklenirken hata:", error);
+        alertify.error(`${error.message}`);
+    }
+}
+
+// Profil bilgilerini güncelleme fonksiyonu
+async function updateProfile() {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userID');
+
+    if (!token || !userId) {
+        alertify.error("Kullanıcı girişi yapılmamış veya kullanıcı ID bulunamadı.");
+        return;
+    }
+
+    // Form değerlerini al
+    const fullName = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+
+    // Dropdown seçimlerini al
+    const universityDropdown = document.getElementById('universityDropdown');
+    const facultyDropdown = document.getElementById('facultyDropdown');
+    const departmentDropdown = document.getElementById('departmentDropdown');
+
+    const universityId = universityDropdown.value;
+    const facultyId = facultyDropdown.value;
+    const departmentId = departmentDropdown.value;
+
+    // Seçilen değerlerin metin karşılıklarını al
+    const universityName = universityId ? universityDropdown.options[universityDropdown.selectedIndex].text : '';
+    const facultyName = facultyId ? facultyDropdown.options[facultyDropdown.selectedIndex].text : '';
+    const departmentName = departmentId ? departmentDropdown.options[departmentDropdown.selectedIndex].text : '';
+
+    // Validasyon kontrolleri
+    if (!fullName) {
+        alertify.error("Ad Soyad alanı boş olamaz!");
+        return;
+    }
+
+
+    if (!universityId) {
+        alertify.error("Lütfen bir üniversite seçin!");
+        return;
+    }
+
+    if (!facultyId) {
+        alertify.error("Lütfen bir fakülte seçin!");
+        return;
+    }
+
+    if (!departmentId) {
+        alertify.error("Lütfen bir bölüm seçin!");
+        return;
+    }
+
+    // Güncelleme verisi hazırla
+    const updateData = {
+        fullName: fullName,
+        email: email,
+        universityName: universityName,
+        facultyName: facultyName,
+        departmentName: departmentName,
+    };
+
+    try {
+        const response = await fetch(`https://localhost:7149/api/User/userinfo-change/${userId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(updateData)
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(errText || "Profil güncellenemedi!");
+        }
+
+        const result = await response.json();
+
+        // Lokalda saklanan adı güncelle
+        localStorage.setItem('fullName', fullName);
+
+        alertify.success(result.message);
+        // Dropdown değerlerini güncelle
+        setupAuthDropdown(); // Üst menüdeki profil adını da güncelle
+
+    } catch (error) {
+        console.error("Profil güncelleme hatası:", error);
+
+    }
+}
+
+
 
 document.getElementById('profilePicInput').addEventListener('change', function (event) {
     const file = event.target.files[0];
@@ -504,4 +786,3 @@ function renderPDF(pdfUrl, canvasId) {
         console.error("PDF yüklenirken hata oluştu:", error);
     });
 }
-

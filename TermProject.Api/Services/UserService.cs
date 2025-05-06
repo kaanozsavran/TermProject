@@ -287,15 +287,7 @@ namespace TermProject.Api.Services
             user.FullName = dto.FullName;
             user.Email = dto.Email;
 
-            // Şifre kontrolü (Eğer şifreler eşleşmiyorsa hata fırlat)
-            if (!string.IsNullOrEmpty(dto.Password) && dto.Password == dto.PasswordAgain)
-            {
-                user.PasswordHash = dto.Password; // Gerçek projede hashleme eklemelisin!
-            }
-            else if (!string.IsNullOrEmpty(dto.Password) || !string.IsNullOrEmpty(dto.PasswordAgain))
-            {
-                throw new Exception("Şifreler uyuşmuyor!");
-            }
+
 
             // Üniversite ID'sini bulma
             var universityId = await GetUniversityIDByNameAsync(dto.UniversityName);
@@ -313,6 +305,7 @@ namespace TermProject.Api.Services
 
             // Değişiklikleri kaydet
             await _dbcontext.SaveChangesAsync();
+
         }
 
 
