@@ -504,3 +504,4 @@ function renderPDF(pdfUrl, canvasId) {
         console.error("PDF yüklenirken hata oluştu:", error);
     });
 }
+

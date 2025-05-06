@@ -234,3 +234,12 @@ canvas {
     font-weight: bold;
     border-radius: 8px;
 }
+
+aside {
+    position: sticky;
+    top: 30px;
+    /* Üst boşluk bırak, navbar ile çakışmayı önler */
+    height: fit-content;
+    /* İçeriğe göre boyutlandır */
+
+}
