@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (userId) {
         fetchProfilePicture(userId);
     }
-    // ===>> SAYFA AÇILINCA "Profilim" SEÇENEĞİNİ YÜKLE <<
+    //SAYFA AÇILINCA "Profilim" SEÇENEĞİNİ YÜKLE 
     loadSection('profilim');
 });
 

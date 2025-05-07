@@ -5,8 +5,6 @@ document.querySelector("form").addEventListener("submit", function (event) {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
-
-
     const requestData = {
         email,
         password
@@ -27,21 +25,30 @@ document.querySelector("form").addEventListener("submit", function (event) {
         })
         .then(data => {
             const apiUser = data.apiUser;
-            const token = data.token; // Token'ı alıyoruz ama konsola yazdırmıyoruz
+            const token = data.token;
             const fullName = apiUser.fullName;
             const userID = apiUser.userID;
-            localStorage.setItem('token', token); //Token'ı sakla
+
+            // 🔴 Eski kullanıcı bilgilerini temizle
+            localStorage.removeItem('token');
+            localStorage.removeItem('fullName');
+            localStorage.removeItem('userID');
+            localStorage.removeItem('profileImage');
+
+            // ✅ Yeni kullanıcı bilgilerini sakla
+            localStorage.setItem('token', token);
             localStorage.setItem('fullName', fullName);
             localStorage.setItem('userID', userID);
 
-
-
-            // Giriş başarılı olduğunda yönlendirme yapabilirsiniz
-            window.location.href = "../homepages/home.html"; // Dashboard sayfasına yönlendir
+            // 🟡 Profil fotoğrafını backend'den çek ve localStorage'a kaydet
+            fetchProfilePicture(userID).then(() => {
+                // Tüm işlemler tamamlandıktan sonra yönlendir
+                window.location.href = "../homepages/home.html";
+            });
         })
         .catch(error => {
             console.error("Giriş hatası:", error);
-            alert(error.message); // Hata mesajını kullanıcıya göster
+            alert(error.message);
         });
 });
 
@@ -61,3 +68,21 @@ function togglePassword() {
     }
 }
 
+// 🟢 Profil fotoğrafını backend'den çekme fonksiyonu
+async function fetchProfilePicture(userId) {
+    try {
+        const response = await fetch(`https://localhost:7149/api/User/${userId}/profile-picture`);
+        if (!response.ok) {
+            throw new Error("Profil fotoğrafı yüklenemedi");
+        }
+
+        const data = await response.json();
+        const profilePictureUrl = data.profilePictureUrl;
+        const fullUrl = profilePictureUrl ? `https://localhost:7149${profilePictureUrl}` : '../img/pp-white.png';
+
+        localStorage.setItem('profileImage', fullUrl);
+    } catch (error) {
+        console.error("Profil fotoğrafı yüklenirken hata oluştu:", error);
+        localStorage.setItem('profileImage', '../img/pp-white.png'); // varsayılan fotoğraf
+    }
+}
