@@ -125,7 +125,7 @@ function registerUser() {
     const university = document.getElementById("university").value;
     const facultyID = document.getElementById("faculty").value;
     const department = document.getElementById("department").value;
-    const kvkkConsent = document.getElementById("kvkkConsent").checked; // ✅ KVKK checkbox kontrolü
+    const kvkkConsent = document.getElementById("kvkkConsent").checked; //KVKK checkbox kontrolü
 
     if (password !== passwordAgain) {
         alert("Şifreler eşleşmiyor!");
@@ -144,7 +144,7 @@ function registerUser() {
         universityId: parseInt(university),
         facultyId: parseInt(facultyID),
         departmentId: parseInt(department),
-        kvkkApproved: kvkkConsent // ✅ Backend'e gönderilecek alan
+        kvkkApproved: kvkkConsent //Backend'e gönderilecek alan kvkk
     };
 
     console.log("Gönderilen veri:", requestData);

@@ -29,18 +29,18 @@ document.querySelector("form").addEventListener("submit", function (event) {
             const fullName = apiUser.fullName;
             const userID = apiUser.userID;
 
-            // 🔴 Eski kullanıcı bilgilerini temizle
+            //  Eski kullanıcı bilgilerini temizle
             localStorage.removeItem('token');
             localStorage.removeItem('fullName');
             localStorage.removeItem('userID');
             localStorage.removeItem('profileImage');
 
-            // ✅ Yeni kullanıcı bilgilerini sakla
+            //  Yeni kullanıcı bilgilerini sakla
             localStorage.setItem('token', token);
             localStorage.setItem('fullName', fullName);
             localStorage.setItem('userID', userID);
 
-            // 🟡 Profil fotoğrafını backend'den çek ve localStorage'a kaydet
+            //  Profil fotoğrafını backend'den çek ve localStorage'a kaydet
             fetchProfilePicture(userID).then(() => {
                 // Tüm işlemler tamamlandıktan sonra yönlendir
                 window.location.href = "../homepages/home.html";
@@ -68,7 +68,7 @@ function togglePassword() {
     }
 }
 
-// 🟢 Profil fotoğrafını backend'den çekme fonksiyonu
+// Profil fotoğrafını backend'den çekme fonksiyonu
 async function fetchProfilePicture(userId) {
     try {
         const response = await fetch(`https://localhost:7149/api/User/${userId}/profile-picture`);
