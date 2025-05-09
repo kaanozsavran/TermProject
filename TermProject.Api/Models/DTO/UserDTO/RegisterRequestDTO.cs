@@ -16,5 +16,7 @@ namespace TermProject.Api.Models.DTO.UserDTO
         public int UniversityId { get; set; }
         public int FacultyId { get; set; }
         public int DepartmentId { get; set; }
+        public bool KvkkAccepted { get; set; }  // <-- Bunu ekle
+
     }
 }
