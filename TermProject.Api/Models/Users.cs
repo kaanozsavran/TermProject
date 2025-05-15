@@ -23,6 +23,8 @@ namespace TermProject.Api.Models
         public int DepartmentID { get; set; }
 
         public string? ProfilePicturePath { get; set; }
+        public bool KvkkAccepted { get; set; } 
+
 
     }
 }

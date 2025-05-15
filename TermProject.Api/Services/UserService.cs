@@ -159,20 +159,7 @@ namespace TermProject.Api.Services
         
         public async Task<Users> Register(RegisterRequestDTO registerRequestDTO)
         {
-            //Users user = new Users()
-            //{
-            //    FullName = registerRequestDTO.FullName,
-            //    Email = registerRequestDTO.Email,
-            //    PasswordHash = registerRequestDTO.Password,
-            //    UniversityID = await GetUniversityIDByNameAsync(registerRequestDTO.UniversityName),
-            //    FacultyID = await GetFacultyIDByNameAsync(registerRequestDTO.FacultyName),
-            //    DepartmentID = await GetDepartmentIDByNameAsync(registerRequestDTO.DepartmentName),
-            //    Role = "student"
-            //};  
-            //burası vardı oncesınde
-            //await _dbcontext.AddAsync(user);
-            //await _dbcontext.SaveChangesAsync();
-            //return user;
+            
             try
             {
                 Users user = new Users()
@@ -184,8 +171,10 @@ namespace TermProject.Api.Services
                     UniversityID = registerRequestDTO.UniversityId,
                     FacultyID = registerRequestDTO.FacultyId,
                     DepartmentID = registerRequestDTO.DepartmentId,
-                    Role = "student"
+                    Role = "student",
+                    KvkkAccepted = registerRequestDTO.KvkkAccepted
                 };
+                Console.WriteLine("KVKK Değeri DTO'dan gelen: " + registerRequestDTO.KvkkAccepted);
 
                 await _dbcontext.Users.AddAsync(user);
                 await _dbcontext.SaveChangesAsync();
@@ -193,7 +182,7 @@ namespace TermProject.Api.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Kullanıcı kaydı sırasında hata oluştu: {ex.Message}");
+                throw new Exception("Kullanıcı kaydı sırasında hata oluştu: " + ex.InnerException?.Message ?? ex.Message);
             }
         }
 

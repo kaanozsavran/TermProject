@@ -144,7 +144,7 @@ function registerUser() {
         universityId: parseInt(university),
         facultyId: parseInt(facultyID),
         departmentId: parseInt(department),
-        kvkkApproved: kvkkConsent //Backend'e gönderilecek alan kvkk
+        kvkkAccepted: kvkkConsent //Backend'e gönderilecek alan kvkk
     };
 
     console.log("Gönderilen veri:", requestData);
@@ -162,8 +162,9 @@ function registerUser() {
             alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
             window.location.href = "../login/login.html";
         })
-        .catch(error => {
-            console.error("Kayıt hatası:", error);
-            alert("Kayıt sırasında hata oluştu. Lütfen tekrar deneyin.");
+        .catch(async (error) => {
+            const errText = await error.message;
+            console.error("Kayıt hatası:", errText);
+            alert("Kayıt sırasında hata oluştu. Hata: " + errText);
         });
 }
