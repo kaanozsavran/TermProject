@@ -66,6 +66,7 @@ builder.Services.AddScoped<IDepartmentService, DepartmentService>(); // Departme
 builder.Services.AddScoped<ICourseService, CourseService>(); // CourseService entegresi.
 builder.Services.AddScoped<IStatisticsService, StatisticsService>(); // StatisticsService entegresi.
 builder.Services.AddScoped<INoteService, NoteService>(); // StatisticsService entegresi.
+builder.Services.AddScoped<INoteLikeService, NoteLikeService>(); // StatisticsService entegresi.
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

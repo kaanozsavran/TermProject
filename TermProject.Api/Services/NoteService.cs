@@ -8,7 +8,7 @@ using TermProject.Api.Services.Interfaces;
 
 namespace TermProject.Api.Services
 {
-    public class NoteService : INoteService 
+    public class NoteService : INoteService
     {
         private readonly NotelandDbContext _context;
         private readonly IWebHostEnvironment _environment;
@@ -77,7 +77,8 @@ namespace TermProject.Api.Services
                 FilePath = $"/files/notes/{fileName}",
                 CourseID = createNoteDto.CourseID,
                 UserID = createNoteDto.UserID,
-                UploadDate = DateTime.Now
+                UploadDate = DateTime.Now,
+                LikeCount = 0
             };
 
             _context.Notes.Add(note);

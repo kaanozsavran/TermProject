@@ -16,6 +16,8 @@ namespace TermProject.Api.Models
         public DateTime UploadDate { get; set; }
         [ForeignKey("Users")]
         public int UserID { get; set; }
-       
+        public int LikeCount { get; set; }
+
+        public ICollection<NoteLikes> Likes { get; set; }
     }
 }

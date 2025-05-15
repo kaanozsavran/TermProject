@@ -18,6 +18,7 @@ namespace TermProject.Api.Data
         public DbSet<Notes> Notes { get; set; }
         public DbSet<Universities> Universities { get; set; }
         public DbSet<Users> Users { get; set; }
+        public DbSet<NoteLikes> NoteLikes { get; set; }
 
     }
 }
