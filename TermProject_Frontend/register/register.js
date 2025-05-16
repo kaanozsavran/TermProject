@@ -133,7 +133,7 @@ function registerUser() {
     }
 
     if (!kvkkConsent) {
-        alert("Kayıt olabilmek için KVKK metnini onaylamalısınız.");
+        alert("Kayıt olabilmek için KVKK metnini onaylamalısınız."); //Kvkk onaylama zorunluluğu
         return;
     }
 

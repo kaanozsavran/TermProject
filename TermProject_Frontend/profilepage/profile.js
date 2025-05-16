@@ -544,7 +544,7 @@ document.getElementById('profilePicInput').addEventListener('change', function (
 
     const userID = localStorage.getItem('userID'); // localStorage'dan userId çekiliyor
     if (!userID) {
-        alert("Kullanıcı ID bulunamadı. Lütfen giriş yapın.");
+        alert("Kullanıcı ID bulunamadı. Lütfen giriş yapın."); //you need to add alertfiy
         return;
     }
 
@@ -576,11 +576,11 @@ document.getElementById('profilePicInput').addEventListener('change', function (
             })
             .then(message => {
                 console.log('Sunucudan yanıt:', message);
-                alert(message);
+                alert(message); //you need to add alertfiy
             })
             .catch(error => {
                 console.error('Hata:', error);
-                alert("Profil fotoğrafı yüklenirken hata oluştu: " + error.message);
+                alert("Profil fotoğrafı yüklenirken hata oluştu: " + error.message); //you need to add alertfiy
             });
     }
 });
@@ -716,7 +716,7 @@ function getUserNotes() {
                                 alertify.success("Not başarıyla güncellendi.");
 
                             })
-                            .catch(err => alert(err.message));
+                            .catch(err => alert(err.message)); //you need to add alertfiy
                     });
 
                     // Silme butonu fonksiyonu
