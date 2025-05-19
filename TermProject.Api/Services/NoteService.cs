@@ -171,7 +171,9 @@ namespace TermProject.Api.Services
                     Description = note.Description,
                     FilePath = note.FilePath,
                     UploadDate = note.UploadDate,
-                    CourseName = courseName
+                    CourseName = courseName,
+                    LikeCount = note.LikeCount // <- like sayısını ekledik
+
                 });
             }
 

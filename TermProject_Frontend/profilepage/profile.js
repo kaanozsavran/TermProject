@@ -631,6 +631,11 @@ function getUserNotes() {
                     </div>
                     <div class="note-footer mt-3 position-relative" style="min-height: 50px;">
                         <p class="mb-1"><strong>Ders:</strong> ${note.courseName || 'Bilinmiyor'}</p>
+                         <!-- Beğeni sayısı - Sol alt köşe -->
+            <span class="like-count text-muted position-absolute" id="like-count-${note.noteID}"
+                style="bottom: 0; left: 0; font-size: 0.9rem;">
+                ${note.likeCount || 0} beğeni
+            </span>
                         <p class="text-muted position-absolute" style="top: 37px; right: -5px; font-size: 0.9rem; color:white !important;">
                             ${new Date(note.uploadDate).toLocaleDateString()}
                         </p>

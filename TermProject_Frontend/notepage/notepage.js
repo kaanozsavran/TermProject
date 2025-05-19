@@ -107,7 +107,7 @@ function fetchCourses(departmentId) {
         });
 }
 
-function fetchNotes(courseId, courseName) {
+async function fetchNotes(courseId, courseName) {
     if (!courseId) return;
 
     const token = localStorage.getItem('token');
@@ -117,70 +117,91 @@ function fetchNotes(courseId, courseName) {
     noteHeader.textContent = `${courseName} Dersine Ait Notlar`;
     notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${courseId} dersi için notlar yükleniyor...</div></div>`;
 
-
-    fetch(apiUrlNotes(courseId), {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Notları çekerken bir hata oluştu.');
-            }
-            return response.json();
-        })
-        .then(data => {
-            notesContainer.innerHTML = '';
-
-            if (!data || data.length === 0) {
-                notesContainer.innerHTML = `<div class='col'><div class='card p-3 text-center' style="background:white ;color:#42999b;"><strong>Bu derse ait not bulunamadı.</strong></div></div>`;
-                return;
-            }
-
-            data.forEach(note => {
-                const noteId = `pdf-canvas-${note.noteID}`; // PDF için benzersiz ID
-                const noteCard = `
-            <div class='col'>
-                <div class='card p-3'>
-                    <h5>${note.title}</h5>
-                    <p>${note.description || 'Açıklama yok.'}</p>
-
-            <div class="canvas-container">
-                <canvas id="${noteId}" style="width: 100%; max-height: 300px;"></canvas> <!-- PDF önizleme -->
-                    <div class="hover-icon">
-                    <a href="https://localhost:7149${note.filePath}" class="" target="_blank"><i class="bi bi-search"></i></a>
-                    </div>
-             </div>            
-            
-            <!-- <iframe src="https://localhost:7149${note.filePath}" style="width: 100%; height: 300px;" frameborder="0"></iframe> 
-            PDF önizlemesi iframe kullanarak, eğer pdf.js ile çözemezsen bu da bir seçenek.-->
-
-                    <div class="note-footer d-flex justify-content-between align-items-center">
-                        <p><strong>Yükleyen:</strong> ${note.userName}</p>
-                        <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
-                    </div>
-                </div>
-            </div>`;
-
-                notesContainer.innerHTML += noteCard;
-            });
-
-            setTimeout(() => { }, 500);
-
-            data.forEach(note => {
-                const noteId = `pdf-canvas-${note.noteID}`; // PDF için benzersiz ID
-                // PDF'yi render et
-                renderPDF(note.filePath, noteId);
-            });
-
-        })
-        .catch(error => {
-            notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${error.message}</div></div>`;
-            console.error('Hata:', error);
+    try {
+        const response = await fetch(apiUrlNotes(courseId), {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
         });
+
+        if (!response.ok) throw new Error('Notları çekerken bir hata oluştu.');
+        const data = await response.json();
+
+        notesContainer.innerHTML = '';
+
+        if (!data || data.length === 0) {
+            notesContainer.innerHTML = `<div class='col'><div class='card p-3 text-center' style="background:white ;color:#42999b;"><strong>Bu derse ait not bulunamadı.</strong></div></div>`;
+            return;
+        }
+
+        // Her bir not için ayrı ayrı hasLiked kontrolü yapılıyor
+        for (const note of data) {
+            const noteId = `pdf-canvas-${note.noteID}`;
+
+            // Beğeni kontrolü yap
+            let hasLiked = false;
+            try {
+                const likeResponse = await fetch(`https://localhost:7149/api/NoteLike/hasLiked/${note.noteID}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (likeResponse.ok) {
+                    const result = await likeResponse.json();
+                    hasLiked = result.hasLiked;
+                }
+            } catch (error) {
+                console.error("Beğeni kontrol hatası:", error);
+            }
+
+            // İkona göre class belirleniyor
+            const likeIconClass = hasLiked ? "bi-hand-thumbs-up-fill" : "bi-hand-thumbs-up";
+
+            const noteCard = `
+                <div class='col'>
+                    <div class='card p-3'>
+                        <h5>${note.title}</h5>
+                        <p>${note.description || 'Açıklama yok.'}</p>
+
+                        <div class="canvas-container">
+                            <canvas id="${noteId}" style="width: 100%; max-height: 300px;"></canvas>
+                            <div class="hover-icon">
+                                <a href="https://localhost:7149${note.filePath}" class="" target="_blank"><i class="bi bi-search"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="note-footer d-flex justify-content-between align-items-center">
+                            <p><strong>Yükleyen:</strong> ${note.userName}</p>
+                            <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
+                        </div>
+
+                        <div class="like-section d-flex justify-content-between align-items-center mt-2">
+                            <button class="btn btn-sm btn-outline-primary like-btn" data-noteid="${note.noteID}">
+                                <i class="bi ${likeIconClass}"></i> Beğen
+                            </button>
+                            <span class="like-count text-muted" id="like-count-${note.noteID}">${note.likeCount || 0} beğeni</span>
+                        </div>
+                    </div>
+                </div>`;
+
+            notesContainer.innerHTML += noteCard;
+        }
+
+        // PDF'leri render et
+        data.forEach(note => {
+            const noteId = `pdf-canvas-${note.noteID}`;
+            renderPDF(note.filePath, noteId);
+        });
+
+    } catch (error) {
+        notesContainer.innerHTML = `<div class='col'><div class='card p-3'>${error.message}</div></div>`;
+        console.error('Hata:', error);
+    }
 }
+
 // PDF.js kütüphanesinin gerekli özelliklerini ayarlayın
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
@@ -296,3 +317,56 @@ function setupAuthDropdown() {
         authContainer.innerHTML = `<a href="../login/login.html" class="btn btn-outline-custom">Giriş / Üye Ol</a>`;
     }
 }
+
+document.addEventListener("click", async function (e) {
+    const likeButton = e.target.closest(".like-btn");
+    if (!likeButton) return;
+
+    const noteId = likeButton.getAttribute("data-noteid");
+    const icon = likeButton.querySelector("i");
+    const countSpan = document.getElementById(`like-count-${noteId}`);
+    let currentCount = parseInt(countSpan.textContent) || 0;
+
+    const token = localStorage.getItem('token');
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+
+    // Eğer beğenmişse -> unlike, beğenmemişse -> like
+    const isLiked = icon.classList.contains("bi-hand-thumbs-up-fill");
+    const endpoint = isLiked
+        ? `https://localhost:7149/api/NoteLike/unlike/${noteId}`
+        : `https://localhost:7149/api/NoteLike/like/${noteId}`;
+
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: headers,
+            body: isLiked ? null : JSON.stringify({ noteId: parseInt(noteId) }) // like için body, unlike için boş
+        });
+
+        if (response.ok) {
+            // Buton görünümünü güncelle
+            if (isLiked) {
+                icon.classList.remove("bi-hand-thumbs-up-fill");
+                icon.classList.add("bi-hand-thumbs-up");
+                currentCount = Math.max(currentCount - 1, 0);
+            } else {
+                icon.classList.remove("bi-hand-thumbs-up");
+                icon.classList.add("bi-hand-thumbs-up-fill");
+                currentCount++;
+            }
+            countSpan.textContent = `${currentCount} beğeni`;
+        } else {
+            const errorText = await response.text();
+            alert(`İşlem başarısız: ${errorText}`);
+        }
+    } catch (error) {
+        console.error("Beğeni işlem hatası:", error);
+        alert("Bir hata oluştu.");
+    }
+});
+
+
+

@@ -16,7 +16,7 @@ namespace TermProject.Api.Controller
             _likeService = likeService;
         }
 
-        [HttpPost("like")]
+        [HttpPost("like/{noteId}")]
         public async Task<IActionResult> LikeNote(int noteId)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -29,7 +29,7 @@ namespace TermProject.Api.Controller
             return Ok("Note liked.");
         }
 
-        [HttpPost("unlike")]
+        [HttpPost("unlike/{noteId}")]
         public async Task<IActionResult> UnlikeNote(int noteId)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -47,6 +47,16 @@ namespace TermProject.Api.Controller
         {
             var count = await _likeService.GetLikeCountAsync(noteId);
             return Ok(count);
+        }
+        [HttpGet("hasLiked/{noteId}")]
+        public async Task<IActionResult> HasUserLiked(int noteId)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
+
+            var hasLiked = await _likeService.HasUserLikedAsync(noteId, userId);
+            return Ok(new { hasLiked });
         }
     }
 }

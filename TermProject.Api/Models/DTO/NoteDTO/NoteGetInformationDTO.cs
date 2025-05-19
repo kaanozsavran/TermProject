@@ -11,5 +11,7 @@
         //public string DepartmentName { get; set; }
         //public string FacultyName { get; set; }
         //public string UniversityName { get; set; }
+        public int LikeCount { get; set; } // Yeni eklenen alan
+
     }
 }

@@ -18,30 +18,39 @@ namespace TermProject.Api.Services
         public async Task<bool> LikeNoteAsync(int noteId, int userId)
         {
 
-            var alreadyLiked = await _context.NoteLikes
-                .AnyAsync(l => l.NoteID == noteId && l.UserID == userId);
-
-            if (alreadyLiked)
-                return false;
-
-            var like = new NoteLikes
+            try
             {
-                NoteID = noteId,
-                UserID = userId,
-                LikedAt = DateTime.UtcNow
-            };
+                var alreadyLiked = await _context.NoteLikes
+                    .AnyAsync(l => l.NoteID == noteId && l.UserID == userId);
 
-            _context.NoteLikes.Add(like);
+                if (alreadyLiked)
+                    return false;
 
+                var like = new NoteLikes
+                {
+                    NoteID = noteId,
+                    UserID = userId,
+                    LikedAt = DateTime.UtcNow
+                };
 
-            var note = await _context.Notes.FindAsync(noteId);
-            if (note != null)
+                _context.NoteLikes.Add(like);
+
+                var note = await _context.Notes.FindAsync(noteId);
+                if (note != null)
+                {
+                    note.LikeCount += 1;
+                }
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
             {
-                note.LikeCount += 1;
+                throw new Exception("Beğeni atılırken hata oluştu!");
+
+                
             }
 
-            await _context.SaveChangesAsync();
-            return true;
         }
 
         public async Task<bool> UnlikeNoteAsync(int noteId, int userId)
