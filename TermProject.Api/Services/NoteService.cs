@@ -180,18 +180,19 @@ namespace TermProject.Api.Services
 
         public async Task<List<NoteResponseDTO>> GetNotesByCourseIdAsync(int courseId)
         {
-
             // 1. Notları çek
             var notes = await _context.Notes
                 .Where(n => n.CourseID == courseId)
                 .ToListAsync();
 
-            // 2. Kullanıcı adlarını çek ve NoteResponseDTO'ya dönüştür
             var noteDtos = new List<NoteResponseDTO>();
 
             foreach (var note in notes)
             {
-                var userName = await GetUserNameByIDAsync(note.UserID); // tek tek user adlarını al
+                var userName = await GetUserNameByIDAsync(note.UserID); // kullanıcı adını al
+
+                // Like sayısını al (Likes tablosunda NoteID olduğunu varsayıyorum)
+                var likeCount = await _context.NoteLikes.CountAsync(l => l.NoteID == note.NoteID);
 
                 noteDtos.Add(new NoteResponseDTO
                 {
@@ -200,7 +201,8 @@ namespace TermProject.Api.Services
                     Description = note.Description,
                     FilePath = note.FilePath,
                     UploadDate = note.UploadDate,
-                    UserName = userName
+                    UserName = userName,
+                    LikeCount = likeCount // <- like sayısını ekledik
                 });
             }
 

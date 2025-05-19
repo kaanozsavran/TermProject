@@ -15,6 +15,7 @@
         //public string CourseName { get; set; }
         public int UserID { get; set; }
         public string UserName { get; set; } // Kullanıcı adı
+        public int LikeCount { get; set; } // Yeni eklenen alan
 
 
     }
