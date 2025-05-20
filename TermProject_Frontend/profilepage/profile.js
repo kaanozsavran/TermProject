@@ -618,29 +618,34 @@ function getUserNotes() {
                 noteCard.className = 'col-md-4 mb-4 d-flex';
                 noteCard.innerHTML = `
                 <div class='card p-3 shadow-sm w-100 position-relative'>
-                    <div class="edit-icon position-absolute" data-note-id="${note.noteID}">
-                        <i class="bi bi-pencil-square"></i>
-                    </div>
-                    <h5>${note.title}</h5>
-                    <p>${note.description || 'Açıklama yok.'}</p>
-                    <div class="canvas-container">
-                        <canvas id="${noteId}" style="width: 100%; max-height: 300px;"></canvas>
-                        <div class="hover-icon">
-                            <a href="https://localhost:7149${note.filePath}" target="_blank"><i class="bi bi-search"></i></a>
-                        </div>
-                    </div>
-                    <div class="note-footer mt-3 position-relative" style="min-height: 50px;">
-                        <p class="mb-1"><strong>Ders:</strong> ${note.courseName || 'Bilinmiyor'}</p>
-                         <!-- Beğeni sayısı - Sol alt köşe -->
-            <span class="like-count text-muted position-absolute" id="like-count-${note.noteID}"
-                style="bottom: 0; left: 0; font-size: 0.9rem;">
-                ${note.likeCount || 0} beğeni
+    <div class="edit-icon position-absolute" data-note-id="${note.noteID}">
+        <i class="bi bi-pencil-square"></i>
+    </div>
+    <h5>${note.title}</h5>
+    <p>${note.description || 'Açıklama yok.'}</p>
+
+    <div class="canvas-container">
+        <canvas id="${noteId}" style="width: 100%; max-height: 300px;"></canvas>
+        <div class="hover-icon">
+            <a href="https://localhost:7149${note.filePath}" target="_blank"><i class="bi bi-search"></i></a>
+        </div>
+    </div>
+
+    <div class="note-footer mt-3">
+        <p class="mb-1"><strong>Ders:</strong> ${note.courseName || 'Bilinmiyor'}</p>
+        
+        <!-- Beğeni ikonu + sayı & tarih aynı satırda -->
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted d-flex align-items-center" style="font-size: 0.9rem; color: white !important;">
+                <i class="bi bi-hand-thumbs-up-fill me-1" style="color: white;"></i>
+                <span id="like-count-${note.noteID}">${note.likeCount || 0}</span>
             </span>
-                        <p class="text-muted position-absolute" style="top: 37px; right: -5px; font-size: 0.9rem; color:white !important;">
-                            ${new Date(note.uploadDate).toLocaleDateString()}
-                        </p>
-                    </div>
-                </div>
+            <span class="text-muted" style="font-size: 0.9rem; color: white !important;">
+                ${new Date(note.uploadDate).toLocaleDateString()}
+            </span>
+        </div>
+    </div>
+</div>
             `;
 
                 row.appendChild(noteCard);
