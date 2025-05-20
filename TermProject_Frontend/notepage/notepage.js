@@ -161,31 +161,34 @@ async function fetchNotes(courseId, courseName) {
             const likeIconClass = hasLiked ? "bi-hand-thumbs-up-fill" : "bi-hand-thumbs-up";
 
             const noteCard = `
-                <div class='col'>
-                    <div class='card p-3'>
-                        <h5>${note.title}</h5>
-                        <p>${note.description || 'Açıklama yok.'}</p>
+                                    <div class='col'>
+    <div class='card p-3 position-relative'>
 
-                        <div class="canvas-container">
-                            <canvas id="${noteId}" style="width: 100%; max-height: 300px;"></canvas>
-                            <div class="hover-icon">
-                                <a href="https://localhost:7149${note.filePath}" class="" target="_blank"><i class="bi bi-search"></i></a>
-                            </div>
-                        </div>
+        <!-- Beğeni butonu + sayı (sağ üst köşe) -->
+        <div class="position-absolute d-flex align-items-center" style="top: 10px; right: 10px; color: #42999b;">
+            <button class="like-btn border-0 bg-transparent p-0 m-0" data-noteid="${note.noteID}" style="color: #42999b;">
+                <i class="bi ${likeIconClass} fs-5"></i>
+            </button>
+            <span class="ms-1" id="like-count-${note.noteID}">${note.likeCount || 0}</span>
+        </div>
 
-                        <div class="note-footer d-flex justify-content-between align-items-center">
-                            <p><strong>Yükleyen:</strong> ${note.userName}</p>
-                            <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
-                        </div>
+        <h5>${note.title}</h5>
+        <p>${note.description || 'Açıklama yok.'}</p>
 
-                        <div class="like-section d-flex justify-content-between align-items-center mt-2">
-                            <button class="btn btn-sm btn-outline-primary like-btn" data-noteid="${note.noteID}">
-                                <i class="bi ${likeIconClass}"></i> Beğen
-                            </button>
-                            <span class="like-count text-muted" id="like-count-${note.noteID}">${note.likeCount || 0} beğeni</span>
-                        </div>
-                    </div>
-                </div>`;
+        <div class="canvas-container">
+            <canvas id="${noteId}" style="width: 100%; max-height: 300px;"></canvas>
+            <div class="hover-icon">
+                <a href="https://localhost:7149${note.filePath}" class="" target="_blank"><i class="bi bi-search"></i></a>
+            </div>
+        </div>
+
+        <div class="note-footer d-flex justify-content-between align-items-center mt-3">
+            <p><strong>Yükleyen:</strong> ${note.userName}</p>
+            <p class="text-muted">${new Date(note.uploadDate).toLocaleDateString()}</p>
+        </div>
+
+    </div>
+</div>`;
 
             notesContainer.innerHTML += noteCard;
         }
@@ -357,7 +360,7 @@ document.addEventListener("click", async function (e) {
                 icon.classList.add("bi-hand-thumbs-up-fill");
                 currentCount++;
             }
-            countSpan.textContent = `${currentCount} beğeni`;
+            countSpan.textContent = `${currentCount}`;
         } else {
             const errorText = await response.text();
             alert(`İşlem başarısız: ${errorText}`);
