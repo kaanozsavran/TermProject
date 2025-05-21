@@ -3,6 +3,7 @@ using System;
 using TermProject.Api.Data;
 using TermProject.Api.Models;
 using TermProject.Api.Models.DTO.NoteDTO;
+using TermProject.Api.Models.DTO.NoteLikeDTO;
 using TermProject.Api.Models.DTO.UserDTO;
 using TermProject.Api.Services.Interfaces;
 
@@ -250,6 +251,31 @@ namespace TermProject.Api.Services
             _context.Notes.Remove(note);
             await _context.SaveChangesAsync();
             return true;
+        }
+        public async Task<List<TopLikedNoteDTO>> GetTopLikedNotesAsync(int count = 3)
+        {
+            var topNotes = await (from n in _context.Notes
+                                  join u in _context.Users on n.UserID equals u.UserID
+                                  select new
+                                  {
+                                      Note = n,
+                                      User = u
+                                  })
+                          .OrderByDescending(x => x.Note.Likes.Count)
+                          .Take(count)
+                          .Select(x => new TopLikedNoteDTO
+                          {
+                              Title = x.Note.Title,
+                              LikeCount = x.Note.Likes.Count,
+                              FullName = x.User.FullName,
+                              ProfileImage = string.IsNullOrEmpty(x.User.ProfilePicturePath) ? "../img/pp-blue.png" : x.User.ProfilePicturePath,
+                              FilePath = x.Note.FilePath,
+                              UploadDate = x.Note.UploadDate 
+
+                          })
+                          .ToListAsync();
+
+            return topNotes;
         }
     }
 }

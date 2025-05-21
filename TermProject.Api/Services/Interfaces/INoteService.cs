@@ -1,4 +1,5 @@
 ﻿using TermProject.Api.Models.DTO.NoteDTO;
+using TermProject.Api.Models.DTO.NoteLikeDTO;
 
 namespace TermProject.Api.Services.Interfaces
 {
@@ -11,6 +12,7 @@ namespace TermProject.Api.Services.Interfaces
         Task<bool> UpdateNoteAsync(int noteId, int userId, NoteUpdateDTO updateDto);
         Task<bool> DeleteNoteAsync(int noteId, int userId);
 
+        Task<List<TopLikedNoteDTO>> GetTopLikedNotesAsync(int count = 3);
 
     }
 }

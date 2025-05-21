@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -103,7 +104,13 @@ if (app.Environment.IsDevelopment())
 
 // Statik dosyalarýn sunulmasý ic?in middleware'i ekle
 app.UseStaticFiles(); // wwwroot klaso?ru?nden statik dosyalarý sunmak ic?in
-
+// /files yolunu wwwroot/files klasörüne baðla
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files")),
+    RequestPath = "/files"
+});
 app.UseHttpsRedirection();
 app.UseCors("AllowSpecificOrigin"); // CORS'u aktif et
 

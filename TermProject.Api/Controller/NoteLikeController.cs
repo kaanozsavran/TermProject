@@ -58,6 +58,7 @@ namespace TermProject.Api.Controller
             var hasLiked = await _likeService.HasUserLikedAsync(noteId, userId);
             return Ok(new { hasLiked });
         }
+
     }
 }
 

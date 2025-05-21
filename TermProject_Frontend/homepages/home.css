@@ -147,3 +147,46 @@ body {
     white-space: nowrap;
     /* Metni tek satırda tut */
 }
+
+/*features of canvas*/
+.canvas-container {
+    position: relative;
+    display: inline-block;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    max-width: fit-content;
+    max-height: 340px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    transition: filter 0.3s ease-in-out;
+}
+
+.hover-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    padding: 10px;
+    border-radius: 50%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.hover-icon a {
+    color: #42999b !important;
+    text-decoration: none;
+}
+
+.canvas-container:hover canvas {
+    filter: blur(5px);
+}
+
+.canvas-container:hover .hover-icon {
+    opacity: 1;
+    visibility: visible;
+}

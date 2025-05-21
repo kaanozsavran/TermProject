@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TermProject.Api.Models.DTO.NoteDTO;
+using TermProject.Api.Models.DTO.NoteLikeDTO;
 using TermProject.Api.Services;
 using TermProject.Api.Services.Interfaces;
 
@@ -111,6 +112,12 @@ namespace TermProject.Api.Controller
             }
 
             return NoContent();
+        }
+        [HttpGet("top-liked")]
+        public async Task<ActionResult<List<TopLikedNoteDTO>>> GetTopLikedNotes()
+        {
+            var notes = await _noteService.GetTopLikedNotesAsync(3);
+            return Ok(notes);
         }
     }
 }
