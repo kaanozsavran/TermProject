@@ -64,13 +64,13 @@ namespace TermProject.Api.Services
             Console.WriteLine($"Dosya şu dizine kaydediliyor: {filePath}");
             Console.WriteLine($"_environment.WebRootPath: {_environment.WebRootPath}");
 
-            // 4. Dosyayı fiziksel olarak kaydetme
+            
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await createNoteDto.File.CopyToAsync(stream);
             }
 
-            // 5. Note nesnesini oluşturup veritabanına ekle
+            
             var note = new Notes
             {
                 Title = createNoteDto.Title,
@@ -120,7 +120,7 @@ namespace TermProject.Api.Services
             var department = await _context.Departments.FirstOrDefaultAsync(u => u.DepartmentName == name);
             if (department != null)
             {
-                return department.DepartmentID; // Bu satırı düzeltmek gerekti.
+                return department.DepartmentID; 
             }
             else
             {
@@ -132,7 +132,7 @@ namespace TermProject.Api.Services
             var course = await _context.Courses.FirstOrDefaultAsync(u => u.CourseName == name);
             if (course != null)
             {
-                return course.CourseID; // Bu satırı düzeltmek gerekti.
+                return course.CourseID; 
             }
             else
             {
@@ -145,7 +145,7 @@ namespace TermProject.Api.Services
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserID == userid);
             if (user != null)
             {
-                return user.FullName; // Bu satırı düzeltmek gerekti.
+                return user.FullName; 
             }
             else
             {
@@ -173,7 +173,7 @@ namespace TermProject.Api.Services
                     FilePath = note.FilePath,
                     UploadDate = note.UploadDate,
                     CourseName = courseName,
-                    LikeCount = note.LikeCount // <- like sayısını ekledik
+                    LikeCount = note.LikeCount
 
                 });
             }
@@ -183,7 +183,7 @@ namespace TermProject.Api.Services
 
         public async Task<List<NoteResponseDTO>> GetNotesByCourseIdAsync(int courseId)
         {
-            // 1. Notları çek
+           
             var notes = await _context.Notes
                 .Where(n => n.CourseID == courseId)
                 .ToListAsync();
@@ -192,9 +192,9 @@ namespace TermProject.Api.Services
 
             foreach (var note in notes)
             {
-                var userName = await GetUserNameByIDAsync(note.UserID); // kullanıcı adını al
+                var userName = await GetUserNameByIDAsync(note.UserID); 
 
-                // Like sayısını al (Likes tablosunda NoteID olduğunu varsayıyorum)
+                
                 var likeCount = await _context.NoteLikes.CountAsync(l => l.NoteID == note.NoteID);
 
                 noteDtos.Add(new NoteResponseDTO
@@ -205,7 +205,7 @@ namespace TermProject.Api.Services
                     FilePath = note.FilePath,
                     UploadDate = note.UploadDate,
                     UserName = userName,
-                    LikeCount = likeCount // <- like sayısını ekledik
+                    LikeCount = likeCount 
                 });
             }
 
@@ -245,7 +245,7 @@ namespace TermProject.Api.Services
 
             if (note == null || note.UserID != userId)
             {
-                return false; // Not bulunamadı veya kullanıcıya ait değil
+                return false; 
             }
 
             _context.Notes.Remove(note);

@@ -65,56 +65,7 @@ namespace TermProject.Api.Services
             return loginResponseDTO;
         }
 
-        //public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)
-        //{
-        //    var user = await _dbcontext.Users
-        //        .FirstOrDefaultAsync(u => u.Email == loginRequestDTO.Email && u.PasswordHash == loginRequestDTO.Password);
-
-        //    if (user == null)
-        //    {
-        //        return new LoginResponseDTO()
-        //        {
-        //            Token = "",
-        //            APIUser = null
-        //        };
-        //    }
-
-        //    var tokenHandler = new JwtSecurityTokenHandler();
-        //    var key = Encoding.ASCII.GetBytes(secretkey);
-
-        //    var tokenDescriptor = new SecurityTokenDescriptor
-        //    {
-        //        Subject = new ClaimsIdentity(new Claim[] {
-        //    new Claim(ClaimTypes.Email, user.UserID.ToString()),
-        //}),
-        //        Expires = DateTime.UtcNow.AddMinutes(15),
-        //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        //    };
-
-        //    var token = tokenHandler.CreateToken(tokenDescriptor);
-        //    var jwtToken = tokenHandler.WriteToken(token);
-
-        //    // Token'ı HttpOnly cookie olarak ekle
-        //    var cookieOptions = new CookieOptions
-        //    {
-        //        HttpOnly = true,
-        //        Secure = true, // HTTPS kullanıyorsanız
-        //        SameSite = SameSiteMode.Strict, // CSRF koruması için
-        //        Expires = DateTime.UtcNow.AddMinutes(15) // Cookie'nin geçerlilik süresi
-        //    };
-
-        //    // HttpContext kullanarak cookie ekleme
-        //    var httpContext = new DefaultHttpContext(); // HttpContext nesnesi oluşturma
-        //    httpContext.Response.Cookies.Append("token", jwtToken, cookieOptions);
-
-        //    return new LoginResponseDTO()
-        //    {
-        //        Token = "", // Artık token'ı döndürmüyoruz, çünkü cookie'de saklı
-        //        APIUser = user,
-        //    };
-        //}
-
-
+       
         public async Task<int> GetUniversityIDByNameAsync(string name)
         {
             var university = await _dbcontext.Universities.FirstOrDefaultAsync(u => u.UniversityName == name);

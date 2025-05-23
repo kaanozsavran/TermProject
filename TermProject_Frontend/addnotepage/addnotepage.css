@@ -9,7 +9,6 @@ body {
     gap: 10px;
     /* Logo ve yazı arasındaki boşluk */
     height: 56px;
-    /* Bootstrap varsayılan navbar yüksekliği */
 }
 
 .navbar-brand img {
@@ -48,18 +47,13 @@ body {
 
 #profileDropdown {
     background: transparent !important;
-    /* Arka planı kaldır */
     border: none !important;
-    /* Kenarlığı kaldır */
     padding: 0;
-    /* Fazladan boşlukları kaldır */
     box-shadow: none;
-    /* Gölge efektini kaldır */
 }
 
 #profileDropdown:focus {
     outline: none;
-    /* Butona tıklanınca mavi çerçeve çıkmasını engeller */
 }
 
 .logout-icon {
@@ -69,43 +63,32 @@ body {
 .dropdown-item:active,
 .dropdown-item:focus {
     background-color: #e9ecef !important;
-    /* Arka planı tamamen kaldır */
     color: inherit !important;
-    /* Varsayılan rengi koru */
 }
 
 .dropdown-menu {
     width: auto;
-    /* Otomatik genişlik */
     min-width: 180px;
-    /* Minimum genişlik */
     white-space: nowrap;
-    /* Metni tek satırda tut */
 }
 
-/* Başarı mesajı (alertify.success) */
+
 .alertify-notifier .ajs-message.ajs-success {
     background-color: #42999b;
-    /* Özel başarı arka planı */
     color: white;
-    /* Yazı rengi */
     font-weight: bold;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Hata mesajı (alertify.error) */
 .alertify-notifier .ajs-message.ajs-error {
     background-color: #42999b !important;
-    /* Hata arka planı kırmızı */
     color: white;
-    /* Yazı rengi beyaz */
     font-weight: bold;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Genel mesaj kutusu stilleri */
 .alertify-notifier .ajs-message {
     background-color: #42999b !important;
     color: white;
@@ -114,13 +97,11 @@ body {
     text-align: center;
 }
 
-/* Card arka planı */
 .custom-card {
     background-color: #42999b !important;
     color: white;
 }
 
-/* Başlıklar (label vs.) beyaz renkte olsun */
 .custom-card .form-label {
     color: white;
 }
