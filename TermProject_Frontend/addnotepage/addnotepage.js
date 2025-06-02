@@ -43,8 +43,6 @@ function setupAuthDropdown() {
         authContainer.innerHTML = `<a href="../login/login.html" class="btn btn-outline-custom">Giriş / Üye Ol</a>`;
     }
 }
-
-
 function fetchUserDetails() {
     const userID = localStorage.getItem('userID');
 
