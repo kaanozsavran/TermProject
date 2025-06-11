@@ -91,4 +91,3 @@ NoteLand, üniversite öğrencilerinin ders notlarını paylaşabildiği, beğen
 5. **Not Ekle**: PDF dosyası yüklenir, başlık ve açıklama girilir.
 6. **Profil**: Kullanıcı bilgileri ve yüklediği notlar.
 
----
