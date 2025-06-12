@@ -4,19 +4,6 @@ NoteLand, üniversite öğrencilerinin ders notlarını paylaşabildiği, beğen
 
 ---
 
-## İçindekiler
-
-- [Kullanılan Teknolojiler](#kullanılan-teknolojiler)
-- [Mimari ve Katmanlar](#mimari-ve-katmanlar)
-- [Kurulum ve Çalıştırma](#kurulum-ve-çalıştırma)
-- [Backend Detayları](#backend-detayları)
-- [Frontend Detayları](#frontend-detayları)
-- [API ve Örnekler](#api-ve-örnekler)
-- [Ekran Görüntüleri](#ekran-görüntüleri)
-- [Katkı Sağlama](#katkı-sağlama)
-- [Lisans](#lisans)
-
----
 
 ## Kullanılan Teknolojiler
 
@@ -62,34 +49,6 @@ NoteLand, üniversite öğrencilerinin ders notlarını paylaşabildiği, beğen
 
 ---
 
-## Kurulum ve Çalıştırma
-
-### Backend
-
-1. **Gereksinimler**: .NET 8 SDK, SQL Server
-2. **Bağımlılıklar**: Proje kökünde
-   ```
-   dotnet restore
-   ```
-3. **Veritabanı Ayarları**: `appsettings.json` dosyasında bağlantı dizesini güncelleyin.
-4. **Migration ve DB Oluşturma**:
-   ```
-   dotnet ef database update
-   ```
-5. **API'yi Başlatın**:
-   ```
-   dotnet run --project TermProject.Api
-   ```
-6. **Swagger**: `https://localhost:7149/swagger` adresinden API dokümantasyonuna erişin.
-
-### Frontend
-
-1. **Gereksinimler**: Modern bir tarayıcı.
-2. **Başlatma**: `TermProject_Frontend` klasörünü bir HTTP sunucusunda (ör. Live Server, IIS, nginx) çalıştırın.
-3. **Ana Sayfa**: `homepages/home.html` dosyasını açın.
-
----
-
 ## Backend Detayları
 
 - **Kimlik Doğrulama**: JWT tabanlı, login sonrası token localStorage'da tutulur.
@@ -132,68 +91,3 @@ NoteLand, üniversite öğrencilerinin ders notlarını paylaşabildiği, beğen
 5. **Not Ekle**: PDF dosyası yüklenir, başlık ve açıklama girilir.
 6. **Profil**: Kullanıcı bilgileri ve yüklediği notlar.
 
----
-
-## API ve Örnekler
-
-### Kimlik Doğrulama
-
-```http
-POST /api/User/login
-{
-  "email": "kullanici@eposta.com",
-  "password": "sifre"
-}
-```
-
-### Not Listeleme
-
-```http
-GET /api/Note/course-notes/{courseId}
-Authorization: Bearer {token}
-```
-
-### Not Beğenme
-
-```http
-POST /api/NoteLike/like/{noteId}
-Authorization: Bearer {token}
-```
-
-### İstatistikler
-
-```http
-GET /api/Statistics
-```
-
----
-
-## Ekran Görüntüleri
-
-> Ekran görüntüleri ve demo GIF'leri buraya ekleyin.
-
----
-
-## Katkı Sağlama
-
-1. Fork'layın.
-2. Yeni bir branch oluşturun.
-3. Değişikliklerinizi commit'leyin.
-4. Pull request gönderin.
-
----
-
-## Lisans
-
-MIT License
-
----
-
-### Notlar
-
-- Proje tamamen açık kaynak ve geliştirilmeye açıktır.
-- Herhangi bir sorunda [issue](https://github.com/your-repo/issues) açabilirsiniz.
-
----
-
-Bu README, projenin tüm teknik detaylarını, kullanılan araçları ve işleyişini kapsamlı şekilde özetler. Daha fazla teknik detay veya kod örneği isterseniz belirtmeniz yeterli! 
