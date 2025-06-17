@@ -97,4 +97,4 @@ NoteLand, üniversite öğrencilerinin ders notlarını paylaşabildiği, beğen
 ![Image](https://github.com/user-attachments/assets/02896d45-3b42-4e2c-a194-9a430e44d53d)
 ![Image](https://github.com/user-attachments/assets/2c7b7f07-577e-48f4-9b70-df4690aa1df3)
 ![Image](https://github.com/user-attachments/assets/7d8b0683-4704-4c6d-bfae-f8611a53f37c)
-
+![Image](https://github.com/user-attachments/assets/c684a111-ef27-4b31-933b-64540148ecca)
